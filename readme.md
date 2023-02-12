@@ -141,7 +141,7 @@ Called once in each Frame. If `context.again` is set during the Frame, it will b
 
 ### `reset_update(context)`
 
-Called when you undo or reset the game state. This is useful for synchronizing non-data nodes with the changes to the game state caused by the undo or reset.
+Called when you undo or reset the game state. This is useful for synchronizing non-tile visuals with the changes to the game state caused by the undo or reset.
 
 ## Late Callbacks
 

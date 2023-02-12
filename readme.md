@@ -43,7 +43,7 @@ It works with Godot 3.5.1. I have not yet updated it to support Godot 4.
 
 # Anatomy of a Turn
 
-The main concept in PuzzleTree is that of a Turn. Turns update the game state. You can undo Turns.
+Turns are a core concept in PuzzleTree. Turns update the game state. You can undo Turns.
 
 Each key press triggers a Turn. Turns are made up of some number of Frames. Each Frame will do some processing of the game state, then render the changes to the grid layers. Processing happens in 'PuzzleTree Nodes': nodes with scripts which define special update functions. This is where you write your game logic.
 

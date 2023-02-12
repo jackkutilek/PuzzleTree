@@ -1,0 +1,105 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "Node2D",
+"class": "GPSDirectedTileMaps",
+"language": "GDScript",
+"path": "res://addons/PuzzleTree/utils/PTDirectedTileMaps.gd"
+}, {
+"base": "Camera2D",
+"class": "PTCamera",
+"language": "GDScript",
+"path": "res://addons/PuzzleTree/utils/PTCamera.gd"
+}, {
+"base": "Reference",
+"class": "PTEngine",
+"language": "GDScript",
+"path": "res://addons/PuzzleTree/core/PTEngine.gd"
+}, {
+"base": "Node2D",
+"class": "PTEntities",
+"language": "GDScript",
+"path": "res://addons/PuzzleTree/core/PTEntities.gd"
+}, {
+"base": "Node2D",
+"class": "PTGame",
+"language": "GDScript",
+"path": "res://addons/PuzzleTree/core/PTGame.gd"
+}, {
+"base": "Reference",
+"class": "PTGameState",
+"language": "GDScript",
+"path": "res://addons/PuzzleTree/core/PTGameState.gd"
+}, {
+"base": "Node2D",
+"class": "PTLayers",
+"language": "GDScript",
+"path": "res://addons/PuzzleTree/core/PTLayers.gd"
+}, {
+"base": "Node2D",
+"class": "PTMovement",
+"language": "GDScript",
+"path": "res://addons/PuzzleTree/utils/PTMovement.gd"
+}, {
+"base": "Node2D",
+"class": "PTPlayer",
+"language": "GDScript",
+"path": "res://addons/PuzzleTree/utils/PTPlayer.gd"
+}, {
+"base": "TileMap",
+"class": "PTTiles",
+"language": "GDScript",
+"path": "res://addons/PuzzleTree/core/PTTiles.gd"
+} ]
+_global_script_class_icons={
+"GPSDirectedTileMaps": "res://addons/PuzzleTree/icons/gpsdirectedtilemaps.png",
+"PTCamera": "res://addons/PuzzleTree/icons/PTCamera.png",
+"PTEngine": "",
+"PTEntities": "res://addons/PuzzleTree/icons/PTEntities.png",
+"PTGame": "res://addons/PuzzleTree/icons/PTGame.png",
+"PTGameState": "",
+"PTLayers": "res://addons/PuzzleTree/icons/PTLayers.png",
+"PTMovement": "res://addons/PuzzleTree/icons/PTMovement.png",
+"PTPlayer": "res://addons/PuzzleTree/icons/PTPlayer.png",
+"PTTiles": "res://addons/PuzzleTree/icons/PTTiles.png"
+}
+
+[application]
+
+config/name="PuzzleTree"
+run/main_scene="res://addons/PuzzleTree/examples/basic/basic.tscn"
+
+[autoload]
+
+Directions="*res://addons/PuzzleTree/utils/directions.gd"
+Inputs="*res://addons/PuzzleTree/utils/inputs.gd"
+
+[editor]
+
+script_templates_search_path="res://addons/PuzzleTree/script_templates/"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "res://addons/PuzzleTree/plugin.cfg" )
+
+[gui]
+
+common/drop_mouse_on_gui_input_disabled=true
+
+[physics]
+
+common/enable_pause_aware_picking=true
+
+[rendering]
+
+quality/driver/driver_name="GLES2"
+vram_compression/import_etc=true
+vram_compression/import_etc2=false

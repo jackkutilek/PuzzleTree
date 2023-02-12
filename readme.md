@@ -15,9 +15,9 @@ It works with Godot 3.5.1. I have not yet updated it to support Godot 4.
 
 # Quick-Start Guide
 
-1. Download PuzzleTree and place it in your Godot project folder. It should be at `[project root]/addons/PuzzleTree/`. Make sure that the `PuzzleTree` plugin is enabled in the Plugins menu (at `project`->`project settings`->`plugins`). This will do a few things:
+1. Download or clone PuzzleTree and copy `addons` into your godot project directory. This should place PuzzleTree at `[godot project root]/addons/PuzzleTree/`. Enable the `PuzzleTree` plugin in Godot's Plugins menu (at `project`->`project settings`->`plugins`). This will do a few things:
 
-- load the LDTK import plugin,
+- load the LDTK import plugin so Godot recognizes LDTK files,
 - add some autoload scripts to the project,
 - configure some display stretch settings,
 - and set the `script_templates` folder to the one in the plugin.

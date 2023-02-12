@@ -157,7 +157,8 @@ func _process(delta):
 				print("#-- LDTK project changes detected... reloading project --#")
 				load_project()
 	else:
-		engine._process(delta)
+		if engine != null:
+			engine._process(delta)
 
 func _draw():
 	draw_rect(Rect2(-10000,-10000,100000,100000), clear_color)

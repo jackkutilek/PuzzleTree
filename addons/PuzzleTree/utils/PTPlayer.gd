@@ -7,6 +7,7 @@ const Directions = preload("directions.gd")
 export var PlayerTile = 0
 export (String) var PlayerLayer = ""
 export (String) var ExtraCollisionLayers = ""
+export (bool) var HandleInput = true
 
 # --------------------------------------------------------------------------------------------------
 
@@ -33,12 +34,13 @@ func frame_update(context):
 	if layer == null:
 		return
 	
-	var pressed = Inputs.is_pressed_key(context.frame_key)
-	var key_dir = Inputs.get_key_dir(context.frame_key)
-	if pressed:
-		var movement := get_node("%PTMovement") as PTMovement
-		if movement != null:
-			movement.queue_move(layer, context.player_pos, key_dir, extra_layers)
+	if HandleInput:
+		var pressed = Inputs.is_pressed_key(context.frame_key)
+		var key_dir = Inputs.get_key_dir(context.frame_key)
+		if pressed:
+			var movement := get_node("%PTMovement") as PTMovement
+			if movement != null:
+				movement.queue_move(layer, context.player_pos, key_dir, extra_layers)
 
 # Called at the end of each turn
 func late_frame_update(context):

@@ -21,8 +21,17 @@ func set_level(id:int):
 			# load all levels
 			undo_stack.clear()
 			layers.clear_layers()
+			
+			var mincorner = Vector2.INF
+			var maxcorner = -Vector2.INF
+			
 			for def in ldtk_project_data.levels:
+				mincorner = Vector2(min(mincorner.x, def.worldX), min(mincorner.y, def.worldY))
+				maxcorner = Vector2(max(maxcorner.x, def.worldX+def.pxWid), max(maxcorner.y, def.worldY+def.pxHei))
 				layers.load_level_layers(def)
+			
+			context._level_width = (maxcorner.x - mincorner.x) / ldtk_project_data.defaultGridSize
+			context._level_height = (maxcorner.y - mincorner.y) / ldtk_project_data.defaultGridSize
 			
 		"LinearHorizontal", "LinearVertical":
 			var def = ldtk_project_data.levels[id]

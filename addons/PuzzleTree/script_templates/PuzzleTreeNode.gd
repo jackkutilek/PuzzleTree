@@ -4,11 +4,11 @@ extends %BASE%
 func init_update(context)%VOID_RETURN%:
 	pass
 
-# Called once during each turn
+# Called once during each frame
 func frame_update(context)%VOID_RETURN%:
 	pass
 
-# Called at the end of each turn
+# Called at the end of each frame
 func late_frame_update(context)%VOID_RETURN%:
 	pass
 

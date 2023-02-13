@@ -11,7 +11,7 @@ The toolkit is built as a plugin for Godot, and is made up of:
 - a script template to kick-start your game scripts
 - example projects for reference and inspiration
 
-It works with Godot 3.5.1. I have not yet updated it to support Godot 4.
+There is a bug in Godot 3.5.1 that prevents custom resources from being reloaded on change. It works with Godot 3.5.2. I have not yet implemented support for Godot 4.
 
 # Quick-Start Guide
 

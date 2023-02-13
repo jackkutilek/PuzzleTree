@@ -283,6 +283,7 @@ script = ExtResource( 7 )
 [node name="PTCamera" type="Camera2D" parent="."]
 current = true
 script = ExtResource( 3 )
+tile_size = 5.0
 
 [node name="PTMovement" type="Node2D" parent="."]
 unique_name_in_owner = true

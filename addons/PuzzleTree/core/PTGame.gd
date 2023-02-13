@@ -13,7 +13,6 @@ export (float)var key_repeat_interval = .2 setget set_key_repeat_interval
 export (float)var again_interval = .1 setget set_again_interval
 export (int)var log_level = 0 setget set_log_level
 
-var ldtk_project_last_modified = null
 var ldtk_project_data = null
 
 var is_ready = false
@@ -24,9 +23,19 @@ var engine: PTEngine
 func set_project(value):
 	if ldtk_project_resource == value:
 		return
+		
+	if Engine.editor_hint:
+		if ldtk_project_resource != null:
+			ldtk_project_resource.disconnect("changed", self, "ldtk_changed")
+			
 	ldtk_project_resource = value
 	if ldtk_project_resource == null:
 		return
+	
+	if Engine.editor_hint:
+		if not ldtk_project_resource.is_connected("changed", self, "ldtk_changed"):
+			ldtk_project_resource.connect("changed", self, "ldtk_changed")
+			print("#-- Watching for changes to LDTK project at ", ldtk_project_resource.resource_path, " --#")
 	
 	if Engine.editor_hint and is_ready:
 		print("#-- LDTK project set --#")
@@ -37,32 +46,27 @@ func reload_project(value):
 		print("#-- triggered LDTK project reload --#")
 		load_project()
 
+func ldtk_changed():
+	print("#-- LDTK project changes detected... reloading project --#")
+	load_project()
+
 func load_project():
 	if ldtk_project_resource == null or not is_ready or get_tree() == null:
+		print("#-- !! cannot load LDTK project !! --#")
 		return
+		
 	var resource_path = ldtk_project_resource.resource_path
-	var file = File.new()
-	if not file.file_exists(resource_path):
-		print("file not found: ", resource_path)
-		return
 	print("#-- loading project at ", resource_path, " --#")
 	
-	read_ldtk_project_data(file, resource_path)
+	ldtk_project_data = ldtk_project_resource.data
+	ldtk_project_data.path = resource_path
+	
 	initialize_layers_node()
 	initialize_engine()
 	initialize_camera_node()
 	engine.set_level(starting_level)
 
 # --------------------------------------------------------------------------------------------------
-
-func read_ldtk_project_data(file:File, resource_path:String):
-	var _err = file.open(resource_path, File.READ)
-	var file_text = file.get_as_text()
-	file.close()
-	
-	ldtk_project_last_modified = file.get_modified_time(resource_path)
-	ldtk_project_data = parse_json(file_text)
-	ldtk_project_data.path = resource_path
 
 func initialize_layers_node():
 	if Engine.editor_hint:
@@ -138,25 +142,11 @@ func _ready():
 	if ldtk_project_resource == null:
 		return
 		
-	if not Engine.editor_hint:
-		print("#-- game ready, loading project --#")
-		load_project()
+	print("#-- game ready, loading project --#")
+	load_project()
 
 func _process(delta):
-	if Engine.editor_hint:
-		if ldtk_project_resource == null or not is_ready:
-			return
-		var resource_path = ldtk_project_resource.resource_path
-		var file := File.new()
-		if file.file_exists(resource_path):
-			var last_modified := file.get_modified_time(resource_path)
-			if ldtk_project_last_modified == null:
-				print("#-- scene opened... reloading LDTK project --#")
-				load_project()
-			if last_modified > ldtk_project_last_modified:
-				print("#-- LDTK project changes detected... reloading project --#")
-				load_project()
-	else:
+	if not Engine.editor_hint:
 		if engine != null:
 			engine._process(delta)
 

@@ -346,6 +346,10 @@ Definition of the keys set at `context.frame_key`, and some helper methods for i
 - `is_pressed_key(key) -> boolean`
 - `get_key_dir(key) -> Direction`
 
+# Exporting
+
+Exporting to HTML5 with default settings should work without further configuration. I have not tested other builds.
+
 # Beyond the Grid
 
 Remember, this is still Godot. Nothing is stopping you from adding more non-grid nodes or game state - you can even update these outside of the frame steps by implementing Godot's usual `_process` callback. Just be careful to play nice with PuzzleTree Frames getting run, or getting cancelled, or the game state getting reset. You can react to these changes by handling the necessary update callbacks.

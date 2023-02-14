@@ -11,7 +11,7 @@ The toolkit is built as a plugin for Godot, and is made up of:
 - a script template to kick-start your game scripts
 - example projects for reference and inspiration
 
-There is a bug in Godot 3.5.1 that prevents custom resources from being reloaded on change. It works with Godot 3.5.2. I have not yet implemented support for Godot 4.
+There is a bug in Godot 3.5.1 that prevents custom resources from being reloaded on change (which is needed for PuzzleTree to update when the LDTK project file is changed). It works with Godot 3.5.2. I have not yet implemented support for Godot 4.
 
 # Quick-Start Guide
 
@@ -105,6 +105,8 @@ There are some reserved keys on the `context` Dictionary. They are used to commu
 
 # Using LDTK to define a level
 
+PuzzleTree defines an import plugin to allow LDTK files to be seen in the Godot FileSystem tab. It also will detect when the project has changed, and update the relevant nodes in your Godot scene.
+
 ## World Layouts
 
 PuzzleTree supports all LDTK world layouts: `Free`, `GridVania`, `Horizontal`, `Vertical`.
@@ -182,7 +184,7 @@ The root node of the game! It manages the engine and has some properties that al
 ### Properties
 
 - `Ldtk Project Resource`: a reference to the LDTK Project resource to initialize the game from
-- `Reload Ldtk Project`: check this property to force a reload of the LDTK project, in case you need to do that for some reason. Mostly it is helpful when developing the engine. It unsets itself after doing the reload.
+- `Reload Ldtk Project`: check this property to force a reload of the LDTK project, in case you need to do that for some reason. This _should_ happen automatically as the LDTK project is modified, so mostly it is helpful when developing the engine. It unsets itself after doing the reload.
 - `Starting Level`: the level index to load at game start.
 - `Clear Color`: the color to fill any letter-boxed regions of the screen
 - `Run Turns On Keyup`: check this to have the game run turns on key release, in addition to the usual key press turns. Release turns do not create entries in the undo history, but can modify state to be saved before the next key press turn.

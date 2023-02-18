@@ -69,7 +69,8 @@ func queue_input(input: String):
 		note_key_release(input)
 	if not run_turns_on_keyup and Inputs.is_released_key(input):
 		return
-	print("queue input ", input)
+	if log_level > 0:
+		print("queue input ", input)
 	queued.push_back(input)
 
 func get_queued_input():

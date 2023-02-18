@@ -12,7 +12,7 @@ func _enter_tree():
 
 # --------------------------------------------------------------------------------------------------
 
-func queue_move(layer: PTTiles, cell: Vector2, dir: int, extraCollisionLayers: Array = []):
+func queue_move(layer: PTTiles, cell: Vector2, dir: String, extraCollisionLayers: Array = []):
 	moves.append({layer=layer, cell=cell, dir=dir, extraCollisionLayers=extraCollisionLayers})
 
 func copy_move_to(move:Dictionary, cell: Vector2):

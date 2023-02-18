@@ -1,9 +1,6 @@
 extends Reference
 class_name PTEngine
 
-const Inputs = preload("../utils/inputs.gd")
-const Directions = preload("../utils/directions.gd")
-
 var log_level = 0
 
 var queued := []

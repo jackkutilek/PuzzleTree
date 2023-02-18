@@ -36,6 +36,16 @@ func get_bounds():
 			
 	return Rect2(mincell, maxcell-mincell+Vector2(1,1))
 
+func get_tile_layers():
+	var tilemaps = []
+	var to_check = get_parent().get_children()
+	while(to_check.size() > 0):
+		var check = to_check.pop_back()
+		if check is PTTiles:
+			tilemaps.append(check)
+		to_check.append_array(check.get_children())
+	return tilemaps
+	
 func get_entity_layers():
 	var entities = []
 	for child in get_children():

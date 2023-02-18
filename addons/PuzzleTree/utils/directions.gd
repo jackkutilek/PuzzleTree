@@ -1,6 +1,9 @@
 extends Node
 
-enum {UP, DOWN, LEFT, RIGHT}
+const LEFT = 'left'
+const RIGHT = 'right'
+const UP = 'up'
+const DOWN = 'down'
 
 const ALL_DIRS = [UP, DOWN, LEFT, RIGHT]
 
@@ -95,9 +98,9 @@ static func get_neighbor_cells(cell):
 
 # direction: [transpose, flipx, flipy]
 var dir_to_flips = {
-	LEFT:  [true,  false,  false],
-	RIGHT: [true,  true, false],
 	DOWN:  [false, false, true ],
+	RIGHT: [true,  true, false],
+	LEFT:  [true,  false,  false],
 	UP:    [false, false, false]
 }
 

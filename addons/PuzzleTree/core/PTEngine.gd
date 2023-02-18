@@ -65,13 +65,14 @@ func _unhandled_key_input(event: InputEventKey):
 			else:
 				queue_input(Inputs.RELEASE_RIGHT)
 
-func queue_input(input: int):
+func queue_input(input: String):
 	if Inputs.is_pressed_key(input):
 		note_key_press(input)
 	else:
 		note_key_release(input)
 	if not run_turns_on_keyup and Inputs.is_released_key(input):
 		return
+	print("queue input ", input)
 	queued.push_back(input)
 
 func get_queued_input():
@@ -143,16 +144,20 @@ func _process(delta:float):
 			var last_press = pressed_keys.back()
 			if time_since_last_press > key_repeat_interval:
 				if log_level > 0:
-					print("#-- REPEAT TURN ", Inputs.get_key_string(last_press), " --#")
-					print("#-- FIRST FRAME ", Inputs.get_key_string(last_press), " --#")
+					print("#-- REPEAT TURN ", last_press, " --#")
+					print("#-- FIRST FRAME ", last_press, " --#")
 				game_state.context.is_repeat_turn = true
 				update_key_state_in_context()
-				run_frame(last_press)
+				run_frame(Inputs.get_pressed_key(last_press))
 				time_since_last_press = 0
 
 
 func run_frame(frame_key):
 	var context = game_state.context
+	
+	# reset changed tiles
+	for layer in game_state.layers.get_tile_layers():
+		layer.reset_changed_cells()
 	
 	# apply turn reason to frame context
 	reset_control_flags(context)
@@ -283,7 +288,7 @@ func frame_update(context):
 		if node.has_method("frame_update"):
 			node.frame_update(context)
 	if not context.cancel and not context.finish_frame_early:
-		if log_level > 0:
+		if log_level > 1:
 			print("    #-- run late update --#")
 		for node in get_tree_nodes():
 			if context.cancel:

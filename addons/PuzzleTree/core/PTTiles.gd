@@ -22,13 +22,16 @@ func remove_tile_from_cell(tile, cell:Vector2, dir = null):
 	var dir_match = dir == null or get_dir_at_cell(cell) == dir
 	if tile_match and dir_match:
 		set_tile_at_cell(-1, cell)
-		var subtile = -1
 		if submap != null:
+			var subtile = -1
+			var subtile_dir = submap.get_dir_at_cell(cell)
 			subtile = submap._pull_tile_up_one_submap(cell)
-			set_tile_at_cell(subtile, cell)
+			if subtile == -1:
+				subtile_dir = null
+			set_tile_at_cell(subtile, cell, subtile_dir)
 	else:
 		if submap != null:
-			submap.remove_tile_from_cell(tile, cell)
+			submap.remove_tile_from_cell(tile, cell, dir)
 		else:
 			print("trying to remove tile from a tilemap that doesn't have it")
 
@@ -37,7 +40,8 @@ func replace_tile_at_cell(replace, with, cell, replace_dir=null, with_dir=null):
 	stack_tile_at_cell(with, cell, with_dir)
 
 func clear_cell(cell:Vector2):
-	set_cellv(cell, -1)
+	_changed_cells[cell] = -1
+	set_tile_at_cell(-1, cell)
 	if submap != null:
 		submap.clear_cell(cell)
 
@@ -78,10 +82,17 @@ func is_empty_at_cell(cell:Vector2):
 		return false
 	return true
 
-func has_tile_at_cell(tile, cell:Vector2):
+func has_tile_at_cell(tile, cell:Vector2, dir = null):
 	if get_cellv(cell) == tile:
-		return true
-	if submap != null and submap.has_tile_at_cell(tile, cell):
+		if dir == null:
+			return true
+		var xflip = is_cell_x_flipped(int(cell.x), int(cell.y))
+		var yflip = is_cell_y_flipped(int(cell.x), int(cell.y))
+		var transpose = is_cell_transposed(int(cell.x), int(cell.y))
+		var tile_dir = Directions.get_tile_dir(xflip, yflip, transpose)
+		if tile_dir == dir:
+			return true
+	if submap != null and submap.has_tile_at_cell(tile, cell, dir):
 		return true
 	return false
 
@@ -97,12 +108,18 @@ func get_cells_with_tile(tile):
 				cells.append(subcell)
 	return cells
 
+var _changed_cells: Dictionary
+
+func get_changed_cells():
+	return _changed_cells.keys()
+	
 # --------------------------------------------------------------------------------------------------
 
 func get_tile_at_cell(cell:Vector2):
 	return get_cellv(cell)
 
 func set_tile_at_cell(tile, cell:Vector2, dir = null):
+	_changed_cells[cell] = tile
 	if dir != null:
 		var settings = Directions.get_tile_settings(dir)
 		set_cellv(cell, tile, settings.flipx, settings.flipy, settings.transpose)
@@ -115,7 +132,9 @@ func get_dir_at_cell(cell:Vector2):
 	var transpose = is_cell_transposed(int(cell.x), int(cell.y))
 	var dir = Directions.get_tile_dir(xflip, yflip, transpose)
 	return dir
-	
+
+func reset_changed_cells():
+	_changed_cells.clear()
 
 # --------------------------------------------------------------------------------------------------
 
@@ -125,7 +144,8 @@ func _spawn_submap():
 	submap.copy_tilemap_settings_from(self)
 	submap.name = name + "+1"
 	add_child(submap)
-	submap.set_owner(get_tree().get_edited_scene_root())
+	if get_tree() != null:
+		submap.set_owner(get_tree().get_edited_scene_root())
 	self.set_display_folded(true)
 
 func _pull_tile_up_one_submap(cell):
@@ -134,8 +154,11 @@ func _pull_tile_up_one_submap(cell):
 		return -1
 	
 	if submap != null:
+		var subtile_dir = submap.get_dir_at_cell(cell)
 		var subtile = submap._pull_tile_up_one_submap(cell)
-		set_tile_at_cell(subtile, cell)
+		if subtile == -1:
+			subtile_dir = null
+		set_tile_at_cell(subtile, cell, subtile_dir)
 	else:
 		set_tile_at_cell(-1, cell)
 	return tile
@@ -156,3 +179,17 @@ func get_root_map():
 		return parentmap.get_root_map()
 	else:
 		return self
+
+func get_stack_at_cell(cell: Vector2):
+	return _get_stack_at_cell(cell, "")
+func _get_stack_at_cell(cell: Vector2, stack_string: String):
+	var tile = get_tile_at_cell(cell)
+	var dir = get_dir_at_cell(cell)
+	if tile != -1:
+		var new_string = stack_string + String(tile) + "." + dir + " "
+		if submap != null:
+			return submap._get_stack_at_cell(cell, new_string)
+		else:
+			return new_string
+	else:
+		return stack_string + ". "

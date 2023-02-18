@@ -4,7 +4,15 @@ const Directions = preload("directions.gd")
 
 # --------------------------------------------------------------------------------------------------
 
-enum {PRESS_UP, PRESS_DOWN, PRESS_LEFT, PRESS_RIGHT, RELEASE_UP, RELEASE_DOWN, RELEASE_LEFT, RELEASE_RIGHT, AGAIN}
+const PRESS_UP = 'press up'
+const PRESS_DOWN = 'press down'
+const PRESS_LEFT = 'press left'
+const PRESS_RIGHT = 'press right'
+const RELEASE_UP = 'release up'
+const RELEASE_DOWN = 'release down'
+const RELEASE_LEFT = 'release left'
+const RELEASE_RIGHT = 'release right'
+const AGAIN = 'again'
 
 # --------------------------------------------------------------------------------------------------
 
@@ -32,6 +40,19 @@ static func get_key_dir(key):
 			return Directions.RIGHT
 		PRESS_LEFT, RELEASE_LEFT:
 			return Directions.LEFT
+		_:
+			return null
+
+static func get_pressed_key(dir):
+	match dir:
+		Directions.LEFT:
+			return PRESS_LEFT
+		Directions.RIGHT:
+			return PRESS_RIGHT
+		Directions.UP:
+			return PRESS_UP
+		Directions.DOWN:
+			return PRESS_DOWN
 		_:
 			return null
 

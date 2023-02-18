@@ -89,6 +89,7 @@ func initialize_engine():
 	engine.again_interval = again_interval
 	engine.key_repeat_interval = key_repeat_interval
 	engine.log_level = log_level
+	engine.set_level(starting_level)
 
 func initialize_camera_node():
 	if Engine.editor_hint:
@@ -112,6 +113,7 @@ func initialize_camera_node():
 
 func set_level(value):
 	if ldtk_project_data == null:
+		starting_level = value
 		return
 	if value >= ldtk_project_data.levels.size():
 		value = ldtk_project_data.levels.size()-1
@@ -170,4 +172,4 @@ func set_again_interval(value):
 func set_log_level(value):
 	log_level = value
 	if engine != null:
-		engine.log_level = value
+		engine.log_level = float(value)

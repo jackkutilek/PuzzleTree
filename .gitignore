@@ -11,3 +11,9 @@ export_presets.cfg
 .vscode/
 
 *.import
+
+addons/gut/
+.gut*
+gut*
+asset_lib_icon.png
+BigFont*

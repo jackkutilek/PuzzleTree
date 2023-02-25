@@ -12,6 +12,11 @@ const RELEASE_UP = 'release up'
 const RELEASE_DOWN = 'release down'
 const RELEASE_LEFT = 'release left'
 const RELEASE_RIGHT = 'release right'
+
+const MOUSE_DOWN = 'mouse down'
+const MOUSE_UP = 'mouse up'
+const MOUSE_MOVE = 'mouse move'
+
 const AGAIN = 'again'
 
 # --------------------------------------------------------------------------------------------------
@@ -25,6 +30,12 @@ static func is_pressed_key(key):
 static func is_released_key(key):
 	match key:
 		RELEASE_DOWN, RELEASE_UP, RELEASE_RIGHT, RELEASE_LEFT:
+			return true
+	return false
+
+static func is_mouse_key(key):
+	match key:
+		MOUSE_DOWN, MOUSE_UP, MOUSE_MOVE:
 			return true
 	return false
 

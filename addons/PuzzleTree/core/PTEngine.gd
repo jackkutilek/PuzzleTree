@@ -8,6 +8,8 @@ var pressed_keys := []
 var key_repeat_interval := 1.0
 var time_since_last_press := 0.0
 var run_turns_on_keyup := false
+var mouse_cell = Vector2()
+var mouse_is_down = false
 
 var again_interval := 1.0
 var time_since_last_frame := 0.0
@@ -27,18 +29,22 @@ func _unhandled_key_input(event: InputEventKey):
 			KEY_Z:
 				abort_turn()
 				game_state.undo()
+				return true
 			KEY_R:
 				abort_turn()
 				game_state.reset()
+				return true
 			KEY_BRACKETLEFT:
 				abort_turn()
 				prev_level()
+				return true
 			KEY_BRACKETRIGHT:
 				abort_turn()
 				next_level()
+				return true
 	
 	if event.is_echo():
-		return
+		return false
 
 	match event.scancode:
 		KEY_UP, KEY_W:
@@ -46,31 +52,67 @@ func _unhandled_key_input(event: InputEventKey):
 				queue_input(Inputs.PRESS_UP)
 			else:
 				queue_input(Inputs.RELEASE_UP)
+			return true
 		KEY_DOWN, KEY_S:
 			if event.pressed:
 				queue_input(Inputs.PRESS_DOWN)
 			else:
 				queue_input(Inputs.RELEASE_DOWN)
+			return true
 		KEY_LEFT, KEY_A:
 			if event.pressed:
 				queue_input(Inputs.PRESS_LEFT)
 			else:
 				queue_input(Inputs.RELEASE_LEFT)
+			return true
 		KEY_RIGHT, KEY_D:
 			if event.pressed:
 				queue_input(Inputs.PRESS_RIGHT)
 			else:
 				queue_input(Inputs.RELEASE_RIGHT)
+			return true
+	
+	return false
+
+func _unhandled_input(event: InputEvent):
+	if event is InputEventMouseButton:
+		if event.button_index == 1:
+			update_mouse_cell()
+			if event.is_pressed():
+				queue_input(Inputs.MOUSE_DOWN)
+			else:
+				queue_input(Inputs.MOUSE_UP)
+			return true
+	
+	if event is InputEventMouseMotion:
+		var old_cell = mouse_cell
+		update_mouse_cell()
+		if old_cell != mouse_cell:
+			queue_input(Inputs.MOUSE_MOVE)
+
+func update_mouse_cell():
+	var layer = game_state.layers.get_child(0) as TileMap
+	var mouse_pos = layer.get_global_mouse_position()
+	var local_position = layer.to_local(mouse_pos)
+	mouse_cell = layer.world_to_map(local_position)
 
 func queue_input(input: String):
 	if Inputs.is_pressed_key(input):
 		note_key_press(input)
 	else:
 		note_key_release(input)
+		
 	if not run_turns_on_keyup and Inputs.is_released_key(input):
 		return
+		
+	if input == Inputs.MOUSE_DOWN:
+		mouse_is_down = true
+	elif input == Inputs.MOUSE_UP:
+		mouse_is_down = false
+		
 	if log_level > 0:
 		print("queue input ", input)
+		
 	queued.push_back(input)
 
 func get_queued_input():
@@ -164,7 +206,7 @@ func run_frame(frame_key):
 	if not frame_key == Inputs.AGAIN:
 		turn_start_state = game_state.gather_state()
 	
-	if Inputs.is_pressed_key(frame_key):
+	if Inputs.is_pressed_key(frame_key) or frame_key == Inputs.MOUSE_DOWN:
 		if not context.nosave:
 			state_to_save = turn_start_state
 			if log_level > 0:
@@ -243,6 +285,9 @@ func update_key_state_in_context():
 	var context = game_state.context
 	context.pressed_keys = []
 	context.pressed_keys.append_array(pressed_keys)
+	
+	context.mouse_cell = mouse_cell
+	context.mouse_is_down = mouse_is_down
 	
 
 func _on_game_state_state_loaded():

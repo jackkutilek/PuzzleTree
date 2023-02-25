@@ -157,7 +157,14 @@ func _draw():
 
 func _unhandled_key_input(event):
 	if not Engine.editor_hint:
-		engine._unhandled_key_input(event)
+		if engine._unhandled_key_input(event):
+			get_tree().set_input_as_handled()
+
+func _unhandled_input(event):
+	if not Engine.editor_hint:
+		if engine._unhandled_input(event):
+			get_tree().set_input_as_handled()
+	
 
 func set_key_repeat_interval(value):
 	key_repeat_interval = value

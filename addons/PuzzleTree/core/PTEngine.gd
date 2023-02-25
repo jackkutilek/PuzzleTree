@@ -161,16 +161,24 @@ func abort_turn():
 	
 # ---------------------------------------------------------
 
+func get_count_of_queued_presses():
+	var count = 0
+	for key in queued:
+		if Inputs.is_pressed_key(key) or key == Inputs.MOUSE_DOWN:
+			count += 1
+	return count
+
 func _process(delta:float):
 	time_since_last_frame += delta
 	time_since_last_press += delta
 	
-	var frame_time = again_interval
+	var queued_press_count = get_count_of_queued_presses()
+	var frame_time = again_interval * 1/(1+queued_press_count)
 	if againing:
 		# run an again turn
 		if time_since_last_frame > frame_time:
 			if logger.log_level > 0:
-				print("  #-- AGAIN FRAME --#")
+				print("  #-- AGAIN FRAME in ", time_since_last_frame, " -- threshold: ", frame_time, " --#")
 			game_state.context.is_repeat_turn = false
 			run_frame(Inputs.AGAIN)
 	else:

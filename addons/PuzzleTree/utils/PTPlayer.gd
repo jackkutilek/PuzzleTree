@@ -1,9 +1,6 @@
 extends Node2D
 class_name PTPlayer, "../icons/PTPlayer.png"
 
-const Inputs = preload("inputs.gd") 
-const Directions = preload("directions.gd") 
-
 export var PlayerTile = 0
 export (String) var PlayerLayer = ""
 export (String) var ExtraCollisionLayers = ""

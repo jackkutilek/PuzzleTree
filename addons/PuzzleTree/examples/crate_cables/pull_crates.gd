@@ -1,7 +1,6 @@
 extends Node2D
 
 const Tiles = preload("tiles.gd")
-const Directions = preload("../../utils/directions.gd")
 
 onready var main = get_node("%Main")
 

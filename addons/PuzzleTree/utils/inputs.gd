@@ -1,7 +1,5 @@
 extends Node
 
-const Directions = preload("directions.gd")
-
 # --------------------------------------------------------------------------------------------------
 
 const PRESS_UP = 'press up'

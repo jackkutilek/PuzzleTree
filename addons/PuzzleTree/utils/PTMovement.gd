@@ -2,8 +2,6 @@ tool
 extends Node2D
 class_name PTMovement, "../icons/PTMovement.png"
 
-const Directions = preload("../utils/directions.gd")
-
 var moves = []
 var moves_made = []
 

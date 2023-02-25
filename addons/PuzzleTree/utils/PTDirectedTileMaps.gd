@@ -1,8 +1,6 @@
 extends Node2D
 class_name GPSDirectedTileMaps, "../icons/gpsdirectedtilemaps.png"
 
-const Directions = preload("../utils/directions.gd")
-
 export var tile_set: TileSet
 export var cell_size: Vector2 = Vector2(5,5)
 

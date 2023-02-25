@@ -1,7 +1,5 @@
 extends Node2D
 
-const Directions = preload("../../utils/directions.gd")
-
 const Tiles = preload("tiles.gd")
 
 func frame_update(context:Dictionary):

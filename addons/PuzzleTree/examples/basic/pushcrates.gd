@@ -1,7 +1,5 @@
 extends Node2D
 
-const Directions = preload("../../utils/directions.gd")
-
 const TILE_PLAYER = 3
 const TILE_CRATE = 4
 

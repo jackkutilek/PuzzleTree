@@ -1,8 +1,6 @@
 extends Reference
 class_name PTEngine
 
-var log_level = 0
-
 var queued := []
 var pressed_keys := []
 var key_repeat_interval := 1.0
@@ -21,6 +19,8 @@ var state_to_save = null
 var root: Node2D
 var game_state: PTGameState
 var ldtk_project_data = null
+
+var logger = preload("logger.tres")
 
 # ---------------------------------------------------------
 
@@ -114,7 +114,7 @@ func queue_input(input: String):
 	elif input == Inputs.MOUSE_UP:
 		mouse_is_down = false
 		
-	if log_level > 0:
+	if logger.log_level > 0:
 		print("queue input ", input)
 		
 	queued.push_back(input)
@@ -143,7 +143,7 @@ func note_key_release(input):
 func force_release_keys(keys):
 	for dir in keys:
 		if pressed_keys.has(dir):
-			if log_level > 0:
+			if logger.log_level > 0:
 				print("force released ", Directions.get_dir_string(dir))
 			pressed_keys.erase(dir)
 			
@@ -169,7 +169,7 @@ func _process(delta:float):
 	if againing:
 		# run an again turn
 		if time_since_last_frame > frame_time:
-			if log_level > 0:
+			if logger.log_level > 0:
 				print("  #-- AGAIN FRAME --#")
 			game_state.context.is_repeat_turn = false
 			run_frame(Inputs.AGAIN)
@@ -177,7 +177,7 @@ func _process(delta:float):
 		var next = get_queued_input()
 		if next != null:
 			# process the queued input
-			if log_level > 0:
+			if logger.log_level > 0:
 				print("#-- BEGIN TURN ", Inputs.get_key_string(next), " --#")
 				print("#-- FIRST FRAME ", Inputs.get_key_string(next), " --#")
 			game_state.context.is_repeat_turn = false
@@ -187,7 +187,7 @@ func _process(delta:float):
 			# check for key repeat turn
 			var last_press = pressed_keys.back()
 			if time_since_last_press > key_repeat_interval:
-				if log_level > 0:
+				if logger.log_level > 0:
 					print("#-- REPEAT TURN ", last_press, " --#")
 					print("#-- FIRST FRAME ", last_press, " --#")
 				game_state.context.is_repeat_turn = true
@@ -213,10 +213,10 @@ func run_frame(frame_key):
 	if Inputs.is_pressed_key(frame_key) or frame_key == Inputs.MOUSE_DOWN:
 		if not context.nosave:
 			state_to_save = turn_start_state
-			if log_level > 0:
+			if logger.log_level > 0:
 				print("turn start state set")
 		if context.nosave:
-			if log_level > 0:
+			if logger.log_level > 0:
 				print("nosave reset to false")
 			context.nosave = false
 	
@@ -233,13 +233,13 @@ func run_frame(frame_key):
 		force_release_keys(context.force_release_keys)
 		context.force_release_keys.clear()
 	
-	if log_level > 0:
+	if logger.log_level > 0:
 		if context.nosave:
 			print("no save")
 	
 	if context.cancel:
 		game_state.load_state(turn_start_state)
-		if log_level > 0:
+		if logger.log_level > 0:
 			print("#-- CANCEL TURN --#")
 			print("#----#")
 	else:
@@ -250,16 +250,16 @@ func run_frame(frame_key):
 			
 			if turn_made_changes:
 				game_state.save_state(state_to_save)
-				if log_level > 0:
+				if logger.log_level > 0:
 					print("state saved")
 				
 			if context.checkpoint:
 				game_state.set_checkpoint(end_state)
-				if log_level > 0:
+				if logger.log_level > 0:
 					print("checkpoint set")
 			
 			state_to_save = null
-			if log_level > 0:
+			if logger.log_level > 0:
 				print("cleared turn start state")
 				print("#-- END TURN --#")
 				print("#----#")
@@ -325,25 +325,25 @@ func reset_update():
 func frame_update(context):
 	for node in get_tree_nodes():
 		if context.cancel:
-			if log_level > 0:
+			if logger.log_level > 0:
 				print("    cancel")
 			break
 		if context.finish_frame_early:
-			if log_level > 0:
+			if logger.log_level > 0:
 				print("    finish early")
 			break
 		if node.has_method("frame_update"):
 			node.frame_update(context)
 	if not context.cancel and not context.finish_frame_early:
-		if log_level > 1:
+		if logger.log_level > 1:
 			print("    #-- run late update --#")
 		for node in get_tree_nodes():
 			if context.cancel:
-				if log_level > 0:
+				if logger.log_level > 0:
 					print("    cancel")
 				break
 			if context.finish_frame_early:
-				if log_level > 0:
+				if logger.log_level > 0:
 					print("    finish early")
 				break
 			if node.has_method("late_frame_update"):
@@ -372,11 +372,11 @@ func set_level(id):
 	if game_state.current_level_id != id:
 		game_state.set_level(id)
 		if not Engine.editor_hint:
-			if log_level > 0:
+			if logger.log_level > 0:
 				print("init update")
 			init_update()
 			game_state.save_state(game_state.gather_state())
-			if log_level > 0:
+			if logger.log_level > 0:
 				print("init update saved")
 
 func next_level():

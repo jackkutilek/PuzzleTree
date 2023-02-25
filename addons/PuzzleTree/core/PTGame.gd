@@ -19,6 +19,8 @@ var ldtk_project_data = null
 var is_ready = false
 var engine: PTEngine
 
+var logger = preload("logger.tres")
+
 # --------------------------------------------------------------------------------------------------
 
 func set_project(value):
@@ -90,7 +92,6 @@ func initialize_engine():
 	engine.enable_mouse_turns = enable_mouse_turns
 	engine.again_interval = again_interval
 	engine.key_repeat_interval = key_repeat_interval
-	engine.log_level = log_level
 	engine.set_level(starting_level)
 
 func initialize_camera_node():
@@ -180,5 +181,4 @@ func set_again_interval(value):
 
 func set_log_level(value):
 	log_level = value
-	if engine != null:
-		engine.log_level = float(value)
+	logger.log_level = value

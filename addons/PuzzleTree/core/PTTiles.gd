@@ -2,7 +2,7 @@ extends TileMap
 
 class_name PTTiles, "../icons/PTTiles.png"
 
-const Directions = preload("../utils/directions.gd")
+var logger = preload("logger.tres")
 
 var submap
 var parentmap
@@ -33,7 +33,8 @@ func remove_tile_from_cell(tile, cell:Vector2, dir = null):
 		if submap != null:
 			submap.remove_tile_from_cell(tile, cell, dir)
 		else:
-			print("trying to remove tile from a tilemap that doesn't have it")
+			if logger.log_level > 2:
+				print("trying to remove tile from a tilemap that doesn't have it")
 
 func replace_tile_at_cell(replace, with, cell, replace_dir=null, with_dir=null):
 	remove_tile_from_cell(replace, cell, replace_dir)

@@ -9,6 +9,7 @@ export(int) var starting_level = 0 setget set_level
 export(Color) var clear_color = Color.gray
 
 export var run_turns_on_keyup = false
+export var enable_mouse_turns = false
 export (float)var key_repeat_interval = .2 setget set_key_repeat_interval
 export (float)var again_interval = .1 setget set_again_interval
 export (int)var log_level = 0 setget set_log_level
@@ -86,6 +87,7 @@ func initialize_engine():
 	engine = PTEngine.new()
 	engine.initialize(self, $PTLayers)
 	engine.run_turns_on_keyup = run_turns_on_keyup
+	engine.enable_mouse_turns = enable_mouse_turns
 	engine.again_interval = again_interval
 	engine.key_repeat_interval = key_repeat_interval
 	engine.log_level = log_level

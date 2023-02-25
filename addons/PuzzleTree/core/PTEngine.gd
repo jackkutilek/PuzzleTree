@@ -10,6 +10,7 @@ var time_since_last_press := 0.0
 var run_turns_on_keyup := false
 var mouse_cell = Vector2()
 var mouse_is_down = false
+var enable_mouse_turns = false
 
 var again_interval := 1.0
 var time_since_last_frame := 0.0
@@ -103,6 +104,9 @@ func queue_input(input: String):
 		note_key_release(input)
 		
 	if not run_turns_on_keyup and Inputs.is_released_key(input):
+		return
+	
+	if not enable_mouse_turns and Inputs.is_mouse_key(input):
 		return
 		
 	if input == Inputs.MOUSE_DOWN:

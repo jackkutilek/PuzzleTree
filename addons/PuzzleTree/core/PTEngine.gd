@@ -173,14 +173,17 @@ func _process(delta:float):
 	time_since_last_press += delta
 	
 	var queued_press_count = get_count_of_queued_presses()
-	var frame_time = again_interval * 1/(1+queued_press_count)
+	var frame_acceleration = 1.0/(1+queued_press_count)
+	var frame_time = again_interval * frame_acceleration
 	if againing:
-		# run an again turn
 		if time_since_last_frame > frame_time:
-			if logger.log_level > 0:
-				print("  #-- AGAIN FRAME in ", time_since_last_frame, " -- threshold: ", frame_time, " --#")
-			game_state.context.is_repeat_turn = false
-			run_frame(Inputs.AGAIN)
+			var available_time = time_since_last_frame
+			# add delta (again) to give a little more room to run frames... just feels better with this, I can't explain how it works
+			available_time += delta
+			var again_time = 0
+			while againing and (again_time + frame_time) < available_time:
+				run_again_frame(frame_time)
+				again_time += frame_time
 	else:
 		var next = get_queued_input()
 		if next != null:
@@ -203,6 +206,11 @@ func _process(delta:float):
 				run_frame(Inputs.get_pressed_key(last_press))
 				time_since_last_press = 0
 
+func run_again_frame(frame_time):
+	if logger.log_level > 0:
+		print("  #-- AGAIN FRAME in ", time_since_last_frame, " -- threshold: ", frame_time, " --#")
+	game_state.context.is_repeat_turn = false
+	run_frame(Inputs.AGAIN)
 
 func run_frame(frame_key):
 	var context = game_state.context

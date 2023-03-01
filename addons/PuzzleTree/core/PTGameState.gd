@@ -14,7 +14,7 @@ signal state_loaded
 # --------------------------------------------------------------------------------------------------
 
 func set_level(id:int):
-	current_level_id = -1
+	current_level_id = id
 	
 	match ldtk_project_data.worldLayout:
 		"GridVania", "Free":
@@ -38,7 +38,6 @@ func set_level(id:int):
 			undo_stack.clear()
 			layers.clear_layers()
 			layers.load_level_layers(def)
-			current_level_id = id
 			
 			context._level_width = def.pxWid / ldtk_project_data.defaultGridSize
 			context._level_height = def.pxHei / ldtk_project_data.defaultGridSize

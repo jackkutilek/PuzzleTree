@@ -22,6 +22,7 @@ var ldtk_project_data = null
 
 var logger = preload("logger.tres")
 
+const MAX_FRAMES_PER_PROCESS = 4
 # ---------------------------------------------------------
 
 func _unhandled_key_input(event: InputEventKey):
@@ -177,13 +178,13 @@ func _process(delta:float):
 	var frame_time = again_interval * frame_acceleration
 	if againing:
 		if time_since_last_frame > frame_time:
-			var available_time = time_since_last_frame
-			# add delta (again) to give a little more room to run frames... just feels better with this, I can't explain how it works
-			available_time += delta
+			var available_time = time_since_last_frame + delta
 			var again_time = 0
-			while againing and (again_time + frame_time) < available_time:
+			var count = 0
+			while againing and (again_time + frame_time) < available_time and count < MAX_FRAMES_PER_PROCESS:
 				run_again_frame(frame_time)
 				again_time += frame_time
+				count += 1
 	else:
 		var next = get_queued_input()
 		if next != null:

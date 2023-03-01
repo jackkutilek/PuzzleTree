@@ -1524,13 +1524,13 @@ script = ExtResource( 8 )
 [node name="PTCamera" type="Camera2D" parent="."]
 offset = Vector2( 0.5, 0.5 )
 current = true
-zoom = Vector2( 0.000660066, 0.000660066 )
 script = ExtResource( 3 )
 tile_size = 5.0
 mode = "scripted"
+target_size = Vector2( 11, 11 )
 eased_follow = true
 camera_speed = 10
-snap_size = 11.0
+snap_size = Vector2( 11, 11 )
 
 [node name="PTMovement" type="Node2D" parent="."]
 unique_name_in_owner = true

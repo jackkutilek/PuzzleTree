@@ -93,6 +93,7 @@ run/main_scene="res://addons/PuzzleTree/examples/basic/basic.tscn"
 
 Directions="*res://addons/PuzzleTree/utils/directions.gd"
 Inputs="*res://addons/PuzzleTree/utils/inputs.gd"
+logger="*res://addons/PuzzleTree/core/logger.gd"
 
 [editor]
 

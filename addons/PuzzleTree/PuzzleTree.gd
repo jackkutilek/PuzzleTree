@@ -12,6 +12,7 @@ func _enter_tree() -> void:
 	
 	add_autoload_singleton("Directions", full_path("utils/directions.gd"))
 	add_autoload_singleton("Inputs", full_path("utils/inputs.gd"))
+	add_autoload_singleton("logger", full_path("core/logger.gd"))
 	
 	ProjectSettings.set_setting("editor/script_templates_search_path", "res://addons/PuzzleTree/script_templates/")
 	ProjectSettings.save()
@@ -23,3 +24,4 @@ func _exit_tree() -> void:
 	
 	remove_autoload_singleton("Directions")
 	remove_autoload_singleton("Inputs")
+	remove_autoload_singleton("logger")

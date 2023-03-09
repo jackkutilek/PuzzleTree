@@ -19,8 +19,6 @@ var ldtk_project_data = null
 var is_ready = false
 var engine: PTEngine
 
-var logger = preload("logger.tres")
-
 # --------------------------------------------------------------------------------------------------
 
 func set_project(value):

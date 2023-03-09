@@ -20,8 +20,6 @@ var root: Node2D
 var game_state: PTGameState
 var ldtk_project_data = null
 
-var logger = preload("logger.tres")
-
 const MAX_FRAMES_PER_PROCESS = 4
 # ---------------------------------------------------------
 

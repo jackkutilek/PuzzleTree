@@ -2,8 +2,6 @@ extends TileMap
 
 class_name PTTiles, "../icons/PTTiles.png"
 
-var logger = preload("logger.tres")
-
 var submap
 var parentmap
 

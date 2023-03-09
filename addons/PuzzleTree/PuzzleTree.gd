@@ -14,8 +14,6 @@ func _enter_tree() -> void:
 	add_autoload_singleton("Inputs", full_path("utils/inputs.gd"))
 	
 	ProjectSettings.set_setting("editor/script_templates_search_path", "res://addons/PuzzleTree/script_templates/")
-	ProjectSettings.set_setting("display/window/stretch/mode", "disabled")
-	ProjectSettings.set_setting("display/window/stretch/aspect", "ignore")
 	ProjectSettings.save()
 
 

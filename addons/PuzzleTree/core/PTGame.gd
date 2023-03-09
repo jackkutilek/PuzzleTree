@@ -99,9 +99,6 @@ func initialize_camera_node():
 		for node in get_tree_nodes():
 			if node.get_class() == "Camera2D":
 				print("#-- camera already exists, will not create PTCamera --#")
-				if has_node("PTCamera"):
-					var camera = get_node("PTCamera")
-					camera.tile_size = ldtk_project_data.defaultGridSize
 				return
 		
 		var camera = PTCamera.new()

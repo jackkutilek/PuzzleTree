@@ -11,8 +11,6 @@ The toolkit is built as a plugin for Godot, and is made up of:
 - a script template to kick-start your game scripts
 - example projects for reference and inspiration
 
-There is a bug in Godot 3.5.1 that prevents custom resources from being reloaded on change (which is needed for PuzzleTree to update when the LDTK project file is changed). It works with Godot 3.5.2. I have not yet implemented support for Godot 4.
-
 # Quick-Start Guide
 
 1. Download or clone PuzzleTree and copy `addons` into your godot project directory. This should place PuzzleTree at `[godot project root]/addons/PuzzleTree/`. Enable the `PuzzleTree` plugin in Godot's Plugins menu (at `project`->`project settings`->`plugins`). This will do a few things:

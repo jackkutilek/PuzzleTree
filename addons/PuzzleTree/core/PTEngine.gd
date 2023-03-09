@@ -154,7 +154,8 @@ func force_release_keys(keys):
 				if key_dir != dir:
 					new_queue.append(key)
 			queued = new_queue
-				
+	
+	update_key_state_in_context()
 
 func abort_turn():
 	force_release_keys(pressed_keys)

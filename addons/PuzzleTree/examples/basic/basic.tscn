@@ -5,11 +5,11 @@
 [ext_resource type="Script" path="res://addons/PuzzleTree/utils/PTPlayer.gd" id="4"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/core/PTTiles.gd" id="4_skr4i"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/core/PTLayers.gd" id="5"]
-[ext_resource type="Texture2D" uid="uid://r37niuq44i0u" path="res://addons/PuzzleTree/examples/basic/basic.png" id="5_6h6x1"]
+[ext_resource type="Texture2D" uid="uid://bar2ohd068573" path="res://addons/PuzzleTree/examples/basic/basic.png" id="5_6h6x1"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/utils/PTMovement.gd" id="6"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/basic/pushcrates.gd" id="7"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/basic/wincheck.gd" id="8"]
-[ext_resource type="Resource" uid="uid://85wwp31lalqr" path="res://addons/PuzzleTree/examples/basic/basic.ldtk" id="9"]
+[ext_resource type="Resource" uid="uid://bena6rl8l4ulk" path="res://addons/PuzzleTree/examples/basic/basic.ldtk" id="9"]
 
 [node name="PTGame" type="Node2D"]
 texture_filter = 1

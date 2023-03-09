@@ -12,11 +12,12 @@
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/crate_cables/push_crates.gd" id="10"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/crate_cables/pull_crates.gd" id="11"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/crate_cables/checkpoint.gd" id="12"]
-[ext_resource type="Resource" uid="uid://cgeyy1nlx4q2q" path="res://addons/PuzzleTree/examples/crate_cables/crate_cables.ldtk" id="13"]
-[ext_resource type="Texture2D" uid="uid://cu1abwqv2op5j" path="res://addons/PuzzleTree/examples/crate_cables/spritesheet.png" id="14"]
+[ext_resource type="Resource" uid="uid://35ugbs8lhq4d" path="res://addons/PuzzleTree/examples/crate_cables/crate_cables.ldtk" id="13"]
+[ext_resource type="Texture2D" uid="uid://4ql8ye3aplf3" path="res://addons/PuzzleTree/examples/crate_cables/spritesheet.png" id="14"]
 
 [node name="PTGame" type="Node2D"]
 texture_filter = 1
+scale = Vector2(10, 10)
 script = ExtResource("2")
 ldtk_project_resource = ExtResource("13")
 clear_color = Color(0.6, 0.733333, 0.6, 1)
@@ -220,6 +221,7 @@ script = ExtResource("8")
 
 [node name="PTCamera" type="Camera2D" parent="."]
 script = ExtResource("3")
+tile_size = 50
 mode = "scripted"
 target_size = Vector2(11, 11)
 eased_follow = true

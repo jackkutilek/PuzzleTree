@@ -6,93 +6,25 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
-config_version=4
-
-_global_script_classes=[ {
-"base": "Node2D",
-"class": "GPSDirectedTileMaps",
-"language": "GDScript",
-"path": "res://addons/PuzzleTree/utils/PTDirectedTileMaps.gd"
-}, {
-"base": "Reference",
-"class": "GutHookScript",
-"language": "GDScript",
-"path": "res://addons/gut/hook_script.gd"
-}, {
-"base": "Node",
-"class": "GutTest",
-"language": "GDScript",
-"path": "res://addons/gut/test.gd"
-}, {
-"base": "Camera2D",
-"class": "PTCamera",
-"language": "GDScript",
-"path": "res://addons/PuzzleTree/utils/PTCamera.gd"
-}, {
-"base": "Reference",
-"class": "PTEngine",
-"language": "GDScript",
-"path": "res://addons/PuzzleTree/core/PTEngine.gd"
-}, {
-"base": "Node2D",
-"class": "PTEntities",
-"language": "GDScript",
-"path": "res://addons/PuzzleTree/core/PTEntities.gd"
-}, {
-"base": "Node2D",
-"class": "PTGame",
-"language": "GDScript",
-"path": "res://addons/PuzzleTree/core/PTGame.gd"
-}, {
-"base": "Reference",
-"class": "PTGameState",
-"language": "GDScript",
-"path": "res://addons/PuzzleTree/core/PTGameState.gd"
-}, {
-"base": "Node2D",
-"class": "PTLayers",
-"language": "GDScript",
-"path": "res://addons/PuzzleTree/core/PTLayers.gd"
-}, {
-"base": "Node2D",
-"class": "PTMovement",
-"language": "GDScript",
-"path": "res://addons/PuzzleTree/utils/PTMovement.gd"
-}, {
-"base": "Node2D",
-"class": "PTPlayer",
-"language": "GDScript",
-"path": "res://addons/PuzzleTree/utils/PTPlayer.gd"
-}, {
-"base": "TileMap",
-"class": "PTTiles",
-"language": "GDScript",
-"path": "res://addons/PuzzleTree/core/PTTiles.gd"
-} ]
-_global_script_class_icons={
-"GPSDirectedTileMaps": "res://addons/PuzzleTree/icons/gpsdirectedtilemaps.png",
-"GutHookScript": "",
-"GutTest": "",
-"PTCamera": "res://addons/PuzzleTree/icons/PTCamera.png",
-"PTEngine": "",
-"PTEntities": "res://addons/PuzzleTree/icons/PTEntities.png",
-"PTGame": "res://addons/PuzzleTree/icons/PTGame.png",
-"PTGameState": "",
-"PTLayers": "res://addons/PuzzleTree/icons/PTLayers.png",
-"PTMovement": "res://addons/PuzzleTree/icons/PTMovement.png",
-"PTPlayer": "res://addons/PuzzleTree/icons/PTPlayer.png",
-"PTTiles": "res://addons/PuzzleTree/icons/PTTiles.png"
-}
+config_version=5
 
 [application]
 
 config/name="PuzzleTree"
 run/main_scene="res://addons/PuzzleTree/examples/basic/basic.tscn"
+config/features=PackedStringArray("4.0")
 
 [autoload]
 
 Directions="*res://addons/PuzzleTree/utils/directions.gd"
 Inputs="*res://addons/PuzzleTree/utils/inputs.gd"
+logger="*res://addons/PuzzleTree/core/logger.gd"
+
+[display]
+
+window/size/viewport_width=1000
+window/size/viewport_height=1000
+window/stretch/mode="viewport"
 
 [editor]
 
@@ -100,7 +32,7 @@ script_templates_search_path="res://addons/PuzzleTree/script_templates/"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/PuzzleTree/plugin.cfg" )
+enabled=PackedStringArray("res://addons/PuzzleTree/plugin.cfg")
 
 [gui]
 

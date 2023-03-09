@@ -1,17 +1,18 @@
 [gd_scene load_steps=10 format=3 uid="uid://deqtbigt5dp0n"]
 
 [ext_resource type="Script" path="res://addons/PuzzleTree/core/PTGame.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://6hyk7x2yy1r7" path="res://addons/PuzzleTree/examples/sokodrag/tileset.png" id="2"]
+[ext_resource type="Texture2D" uid="uid://cmipbvry7t13s" path="res://addons/PuzzleTree/examples/sokodrag/tileset.png" id="2"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/core/PTTiles.gd" id="3"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/utils/PTCamera.gd" id="4"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/core/PTLayers.gd" id="5"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/core/PTEntities.gd" id="6"]
-[ext_resource type="Resource" uid="uid://dqpgcg2lx1yis" path="res://addons/PuzzleTree/examples/sokodrag/sokodrag.ldtk" id="7"]
+[ext_resource type="Resource" uid="uid://bm2te1x3abicm" path="res://addons/PuzzleTree/examples/sokodrag/sokodrag.ldtk" id="7"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/sokodrag/drag.gd" id="8"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/sokodrag/cursor.gd" id="9"]
 
 [node name="PTGame" type="Node2D"]
 texture_filter = 1
+scale = Vector2(10, 10)
 script = ExtResource("1")
 ldtk_project_resource = ExtResource("7")
 enable_mouse_turns = true
@@ -57,6 +58,7 @@ entities = [{
 offset = Vector2(0.5, 0.5)
 zoom = Vector2(0.000660066, 0.000660066)
 script = ExtResource("4")
+tile_size = 50
 
 [node name="cursor" type="Node2D" parent="."]
 script = ExtResource("9")

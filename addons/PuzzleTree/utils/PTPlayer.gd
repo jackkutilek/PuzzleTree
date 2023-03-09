@@ -1,10 +1,11 @@
+@icon("../icons/PTPlayer.png")
 extends Node2D
-class_name PTPlayer, "../icons/PTPlayer.png"
+class_name PTPlayer
 
-export var PlayerTile = 0
-export (String) var PlayerLayer = ""
-export (String) var ExtraCollisionLayers = ""
-export (bool) var HandleInput = true
+@export var PlayerTile = 0
+@export var PlayerLayer = ""
+@export var ExtraCollisionLayers = ""
+@export var HandleInput = true
 
 # --------------------------------------------------------------------------------------------------
 

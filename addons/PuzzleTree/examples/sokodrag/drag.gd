@@ -1,6 +1,6 @@
 extends Node2D
 
-onready var grid = get_node("%Grid")
+@onready var grid = get_node("%Grid")
 
 const CRATE = 2
 

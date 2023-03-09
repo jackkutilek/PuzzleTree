@@ -1,8 +1,9 @@
+@icon("../icons/PTEntities.png")
 extends Node2D
 
-class_name PTEntities, "../icons/PTEntities.png"
+class_name PTEntities
 
-export var entities := []
+@export var entities := []
 
 
 
@@ -10,12 +11,12 @@ func clear_layer():
 	entities.clear()
 
 func load_level(layer_def, level_def):
-	var tile_offset = Vector2(level_def.worldX, level_def.worldY)/layer_def.__gridSize
+	var tile_offset := Vector2i(level_def.worldX/layer_def.__gridSize, level_def.worldY/layer_def.__gridSize)
 	
 	for entity in layer_def.entityInstances:
 		var new_entity = {}
 		new_entity.id = entity.__identifier
-		new_entity.cell = Vector2(entity.__grid[0], entity.__grid[1]) + tile_offset
+		new_entity.cell = Vector2i(entity.__grid[0], entity.__grid[1]) + tile_offset
 		new_entity.width = entity.width/layer_def.__gridSize
 		new_entity.height = entity.height/layer_def.__gridSize
 		for fi in entity.fieldInstances:
@@ -31,11 +32,11 @@ func load_level(layer_def, level_def):
 					for p in fi.__value:
 						new_entity[field_id].push_back(p)
 				"Point":
-					new_entity[field_id] = Vector2(fi.__value.cx, fi.__value.cy)
+					new_entity[field_id] = Vector2i(fi.__value.cx, fi.__value.cy)
 				"Array<Point>":
 					new_entity[field_id] = []
 					for p in fi.__value:
-						new_entity[field_id].push_back(Vector2(p.cx, p.cy)+tile_offset)
+						new_entity[field_id].push_back(Vector2i(p.cx, p.cy)+tile_offset)
 			
 		entities.push_back(new_entity)
 
@@ -44,6 +45,8 @@ func deep_clone(dict):
 		return dict
 	elif dict is Vector2:
 		return Vector2(dict.x, dict.y)
+	elif dict is Vector2i:
+		return Vector2i(dict.x, dict.y)
 	elif dict is Dictionary:
 		var clone = {}
 		for key in dict.keys():

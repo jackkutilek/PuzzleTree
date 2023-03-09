@@ -1,15 +1,15 @@
-extends TileMap
+@icon("../icons/PTTiles.png")
 
-class_name PTTiles, "../icons/PTTiles.png"
+extends PTTileMap
 
-var logger = preload("logger.tres")
+class_name PTTiles
 
 var submap
 var parentmap
 
 # --------------------------------------------------------------------------------------------------
 
-func stack_tile_at_cell(tile, cell: Vector2, dir = null):
+func stack_tile_at_cell(tile, cell: Vector2i, dir = null):
 	if any_tile_at_cell(cell):
 		if submap == null:
 			_spawn_submap()
@@ -17,7 +17,7 @@ func stack_tile_at_cell(tile, cell: Vector2, dir = null):
 	else:
 		set_tile_at_cell(tile, cell, dir)
 
-func remove_tile_from_cell(tile, cell:Vector2, dir = null):
+func remove_tile_from_cell(tile, cell:Vector2i, dir = null):
 	var tile_match = get_cellv(cell) == tile
 	var dir_match = dir == null or get_dir_at_cell(cell) == dir
 	if tile_match and dir_match:
@@ -40,7 +40,7 @@ func replace_tile_at_cell(replace, with, cell, replace_dir=null, with_dir=null):
 	remove_tile_from_cell(replace, cell, replace_dir)
 	stack_tile_at_cell(with, cell, with_dir)
 
-func clear_cell(cell:Vector2):
+func clear_cell(cell:Vector2i):
 	_changed_cells[cell] = -1
 	set_tile_at_cell(-1, cell)
 	if submap != null:
@@ -53,11 +53,11 @@ func clear_layer():
 
 # --------------------------------------------------------------------------------------------------
 
-func get_tiles_at_cell(cell:Vector2):
+func get_tiles_at_cell(cell:Vector2i):
 	var tiles = []
 	get_tiles_at_cell_recursive(cell, tiles)
 	return tiles
-func get_tiles_at_cell_recursive(cell:Vector2, tiles:Array):
+func get_tiles_at_cell_recursive(cell:Vector2i, tiles:Array):
 	var tile = get_tile_at_cell(cell)
 	if tile != -1:
 		tiles.append(tile)
@@ -65,7 +65,7 @@ func get_tiles_at_cell_recursive(cell:Vector2, tiles:Array):
 			submap.get_tiles_at_cell_recursive(cell, tiles)
 	return tiles
 
-func get_tile_dir_at_cell(tile, cell:Vector2):
+func get_tile_dir_at_cell(tile, cell:Vector2i):
 	if get_tile_at_cell(cell) == tile:
 		var xflip = is_cell_x_flipped(int(cell.x), int(cell.y))
 		var yflip = is_cell_y_flipped(int(cell.x), int(cell.y))
@@ -76,14 +76,14 @@ func get_tile_dir_at_cell(tile, cell:Vector2):
 		return submap.get_tile_dir_at_cell(tile, cell)
 	return null
 
-func is_empty_at_cell(cell:Vector2):
+func is_empty_at_cell(cell:Vector2i):
 	if get_cellv(cell) != -1:
 		return false
 	if submap != null and not submap.is_empty_at_cell(cell):
 		return false
 	return true
 
-func has_tile_at_cell(tile, cell:Vector2, dir = null):
+func has_tile_at_cell(tile, cell:Vector2i, dir = null):
 	if get_cellv(cell) == tile:
 		if dir == null:
 			return true
@@ -97,11 +97,11 @@ func has_tile_at_cell(tile, cell:Vector2, dir = null):
 		return true
 	return false
 
-func any_tile_at_cell(cell:Vector2):
+func any_tile_at_cell(cell:Vector2i):
 	return not is_empty_at_cell(cell)
 
 func get_cells_with_tile(tile):
-	var cells = get_used_cells_by_id(tile)
+	var cells = get_used_cells(tile)
 	if submap != null:
 		var subcells = submap.get_cells_with_tile(tile)
 		for subcell in subcells:
@@ -116,10 +116,10 @@ func get_changed_cells():
 	
 # --------------------------------------------------------------------------------------------------
 
-func get_tile_at_cell(cell:Vector2):
+func get_tile_at_cell(cell:Vector2i):
 	return get_cellv(cell)
 
-func set_tile_at_cell(tile, cell:Vector2, dir = null):
+func set_tile_at_cell(tile, cell:Vector2i, dir = null):
 	_changed_cells[cell] = tile
 	if dir != null:
 		var settings = Directions.get_tile_settings(dir)
@@ -127,7 +127,7 @@ func set_tile_at_cell(tile, cell:Vector2, dir = null):
 	else:
 		set_cellv(cell, tile)
 
-func get_dir_at_cell(cell:Vector2):
+func get_dir_at_cell(cell:Vector2i):
 	var xflip = is_cell_x_flipped(int(cell.x), int(cell.y))
 	var yflip = is_cell_y_flipped(int(cell.x), int(cell.y))
 	var transpose = is_cell_transposed(int(cell.x), int(cell.y))
@@ -181,13 +181,13 @@ func get_root_map():
 	else:
 		return self
 
-func get_stack_at_cell(cell: Vector2):
+func get_stack_at_cell(cell: Vector2i):
 	return _get_stack_at_cell(cell, "")
-func _get_stack_at_cell(cell: Vector2, stack_string: String):
+func _get_stack_at_cell(cell: Vector2i, stack_string: String):
 	var tile = get_tile_at_cell(cell)
 	var dir = get_dir_at_cell(cell)
 	if tile != -1:
-		var new_string = stack_string + String(tile) + "." + dir + " "
+		var new_string = stack_string + String.num(tile) + "." + dir + " "
 		if submap != null:
 			return submap._get_stack_at_cell(cell, new_string)
 		else:

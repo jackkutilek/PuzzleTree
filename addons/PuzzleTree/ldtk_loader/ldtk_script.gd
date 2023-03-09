@@ -1,8 +1,9 @@
-tool
+@tool
 extends Resource
 
-export(Dictionary) var data setget set_data
+@export var data: Dictionary : set = set_data
 
 func set_data(value):
-	data = value
-	emit_changed()
+	if value != data:
+		data = value
+		emit_changed()

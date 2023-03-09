@@ -1,4 +1,4 @@
-extends Reference
+extends RefCounted
 class_name PTEngine
 
 var queued := []
@@ -6,7 +6,7 @@ var pressed_keys := []
 var key_repeat_interval := 1.0
 var time_since_last_press := 0.0
 var run_turns_on_keyup := false
-var mouse_cell = Vector2()
+var mouse_cell = Vector2i()
 var mouse_is_down = false
 var enable_mouse_turns = false
 
@@ -20,14 +20,12 @@ var root: Node2D
 var game_state: PTGameState
 var ldtk_project_data = null
 
-var logger = preload("logger.tres")
-
 const MAX_FRAMES_PER_PROCESS = 4
 # ---------------------------------------------------------
 
-func _unhandled_key_input(event: InputEventKey):
+func _unhandled_key_input(event: InputEvent):
 	if event.pressed:
-		match event.scancode:
+		match event.keycode:
 			KEY_Z:
 				abort_turn()
 				game_state.undo()
@@ -48,7 +46,7 @@ func _unhandled_key_input(event: InputEventKey):
 	if event.is_echo():
 		return false
 
-	match event.scancode:
+	match event.keycode:
 		KEY_UP, KEY_W:
 			if event.pressed:
 				queue_input(Inputs.PRESS_UP)
@@ -93,10 +91,10 @@ func _unhandled_input(event: InputEvent):
 			queue_input(Inputs.MOUSE_MOVE)
 
 func update_mouse_cell():
-	var layer = game_state.layers.get_child(0) as TileMap
+	var layer = game_state.layers.get_child(0) as PTTileMap
 	var mouse_pos = layer.get_global_mouse_position()
 	var local_position = layer.to_local(mouse_pos)
-	mouse_cell = layer.world_to_map(local_position)
+	mouse_cell = Vector2i(layer.local_to_map(local_position))
 
 func queue_input(input: String):
 	if Inputs.is_pressed_key(input):
@@ -263,7 +261,7 @@ func run_frame(frame_key):
 		if state_to_save != null and not context.again:
 			# end of turn
 			var end_state = game_state.gather_state()
-			var turn_made_changes = not deep_equal(state_to_save, end_state)
+			var turn_made_changes = state_to_save != end_state
 			
 			if turn_made_changes:
 				game_state.save_state(state_to_save)
@@ -282,7 +280,7 @@ func run_frame(frame_key):
 				print("#----#")
 	
 	if context.winning:
-		yield(root.get_tree().create_timer(1), "timeout")
+		await root.get_tree().create_timer(1).timeout
 		next_level()
 	
 	again_interval = context.again_interval
@@ -388,7 +386,7 @@ func set_level(id):
 	
 	if game_state.current_level_id != id:
 		game_state.set_level(id)
-		if not Engine.editor_hint:
+		if not Engine.is_editor_hint():
 			if logger.log_level > 0:
 				print("init update")
 			init_update()
@@ -409,4 +407,4 @@ func initialize(pRoot: Node2D, layers: PTLayers):
 	ldtk_project_data = layers.ldtk_project_data
 	game_state = PTGameState.new()
 	game_state.initialize(layers)
-	var _err = game_state.connect("state_loaded", self, "_on_game_state_state_loaded")
+	var _err = game_state.connect("state_loaded",_on_game_state_state_loaded)

@@ -1,13 +1,14 @@
+@icon("../icons/PTCamera.png")
 extends Camera2D
-class_name PTCamera, "../icons/PTCamera.png"
+class_name PTCamera
 
-export var tile_size = 5
-export(String, "auto", "scripted") var mode = "auto"
+@export var tile_size = 5
+@export_enum("auto", "scripted") var mode:String = "auto"
 
-export var target_size = Vector2(10,10)
-export var eased_follow = false
-export var camera_speed = 1
-export(Vector2) var snap_size = Vector2(0,0)
+@export var target_size = Vector2(10,10)
+@export var eased_follow = false
+@export var camera_speed = 1
+@export var snap_size: Vector2 = Vector2(0,0)
 
 var level_size = Vector2(1,1)
 var target = Vector2(0,0)
@@ -64,9 +65,10 @@ func _process(delta):
 
 func _ready():
 	randomize()
-	noise.seed = randi()
-	noise.period = 4
-	noise.octaves = 2
+	noise = FastNoiseLite.new()
+	noise.seed = randi()%2000
+	noise.frequency = 1/4.0
+	noise.fractal_octaves = 2
 
 # --------------------------------------------------------------------------------------------------
 
@@ -93,42 +95,44 @@ func update_level_size(context):
 	level_size = Vector2(width, height)
 
 func get_target_zoom():
-	var size = get_viewport().size
-	var zoomx = target_size.x * tile_size / size.x
-	var zoomy = target_size.y * tile_size / size.y
-	var z = max(zoomx, zoomy)
+	var size = get_viewport().get_visible_rect().size
+	var zoomx = size.x / (target_size.x * tile_size)
+	var zoomy = size.y / (target_size.y * tile_size)
+	var z = min(zoomx, zoomy)
 	return Vector2(z,z)
 
 func fit_to_level():
-	var size = get_viewport().size
+	var size = get_viewport().get_visible_rect().size
 	var zoomx = level_size.x / size.x
 	var zoomy = level_size.y / size.y
 	var z = max(zoomx, zoomy)
-	zoom = Vector2(z,z)
+	zoom = Vector2(1/z,1/z)
 	follow_offset = Vector2(level_size.x/2, level_size.y/2)
 
 # ----------------------------------------------------------------------------------------------
 
-export var decay = 0.8  # How quickly the shaking stops [0, 1].
-export var max_offset = Vector2(100, 75)  # Maximum hor/ver shake in pixels.
-export var max_roll = 0.1  # Maximum rotation in radians (use sparingly).
+@export var decay = 0.8  # How quickly the shaking stops [0, 1].
+@export var max_offset = Vector2(100, 75)  # Maximum hor/ver shake in pixels.
+@export var max_roll = 0.1  # Maximum rotation in radians (use sparingly).
 
 var trauma = 0.0  # Current shake strength.
 var trauma_power = 2  # Trauma exponent. Use [2, 3].
 
-onready var noise = OpenSimplexNoise.new()
+var noise: FastNoiseLite
 var noise_y = 0
 var shake_offset = Vector2(0,0)
 
 func shake(amount):
-	print("shake ", amount)
 	trauma = amount
 	noise_y = 0
 
 func _shake():
 	var amount = pow(trauma, trauma_power)
 	noise_y += 1
-	rotation = max_roll * amount * noise.get_noise_2d(noise.seed, noise_y)
-	shake_offset.x = max_offset.x * amount * noise.get_noise_2d(noise.seed*2, noise_y)
-	shake_offset.y = max_offset.y * amount * noise.get_noise_2d(noise.seed*3, noise_y)
+	var a = noise.get_noise_2d(noise.seed, noise_y)
+	var b = noise.get_noise_2d(noise.seed*2, noise_y)
+	var c = noise.get_noise_2d(noise.seed*3, noise_y)
+	rotation = max_roll * amount * a
+	shake_offset.x = max_offset.x * amount * b
+	shake_offset.y = max_offset.y * amount * c
 	pass

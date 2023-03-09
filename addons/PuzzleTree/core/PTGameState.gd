@@ -1,4 +1,4 @@
-extends Reference
+extends RefCounted
 
 class_name PTGameState
 
@@ -22,12 +22,12 @@ func set_level(id:int):
 			undo_stack.clear()
 			layers.clear_layers()
 			
-			var mincorner = Vector2.INF
-			var maxcorner = -Vector2.INF
+			var mincorner = Vector2i(1000000,1000000)
+			var maxcorner = -Vector2i(1000000,1000000)
 			
 			for def in ldtk_project_data.levels:
-				mincorner = Vector2(min(mincorner.x, def.worldX), min(mincorner.y, def.worldY))
-				maxcorner = Vector2(max(maxcorner.x, def.worldX+def.pxWid), max(maxcorner.y, def.worldY+def.pxHei))
+				mincorner = Vector2i(min(mincorner.x, def.worldX), min(mincorner.y, def.worldY))
+				maxcorner = Vector2i(max(maxcorner.x, def.worldX+def.pxWid), max(maxcorner.y, def.worldY+def.pxHei))
 				layers.load_level_layers(def)
 			
 			context._level_width = (maxcorner.x - mincorner.x) / ldtk_project_data.defaultGridSize
@@ -77,7 +77,7 @@ func load_state(data):
 # --------------------------------------------------------------------------------------------------
 
 func state_hasnt_changed():
-	return deep_equal(undo_stack.back(), gather_state())
+	return undo_stack.back() == gather_state()
 
 func drop_last_state():
 	undo_stack.pop_back()

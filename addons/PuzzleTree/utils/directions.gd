@@ -9,7 +9,7 @@ const ALL_DIRS = [UP, DOWN, LEFT, RIGHT]
 
 # --------------------------------------------------------------------------------------------------
 
-static func get_dir_string(dir):
+func get_dir_string(dir):
 	match dir:
 		UP:
 			return "UP"
@@ -20,7 +20,7 @@ static func get_dir_string(dir):
 		RIGHT:
 			return "RIGHT"
 
-static func is_perpendicular_to(dir, to):
+func is_perpendicular_to(dir, to):
 	match dir:
 		UP, DOWN:
 			return to == LEFT or to == RIGHT
@@ -29,7 +29,7 @@ static func is_perpendicular_to(dir, to):
 
 # --------------------------------------------------------------------------------------------------
 
-static func opposite(dir):
+func opposite(dir):
 	match dir:
 		UP:
 			return DOWN
@@ -40,7 +40,7 @@ static func opposite(dir):
 		RIGHT:
 			return LEFT
 
-static func rotate_cw(dir):
+func rotate_cw(dir):
 	match dir:
 		UP:
 			return RIGHT
@@ -51,7 +51,7 @@ static func rotate_cw(dir):
 		RIGHT:
 			return DOWN
 			
-static func rotate_ccw(dir):
+func rotate_ccw(dir):
 	match dir:
 		UP:
 			return LEFT
@@ -64,7 +64,7 @@ static func rotate_ccw(dir):
 
 # --------------------------------------------------------------------------------------------------
 
-static func shift_coords(x,y,dir):
+func shift_coords(x,y,dir):
 	match dir:
 		UP:
 			return [x,y-1]
@@ -75,18 +75,18 @@ static func shift_coords(x,y,dir):
 		RIGHT:
 			return [x+1,y]
 
-static func shift_cell(cell, dir):
+func shift_cell(cell, dir):
 	match dir:
 		UP:
-			return Vector2(cell.x,cell.y-1)
+			return Vector2i(cell.x,cell.y-1)
 		DOWN:
-			return Vector2(cell.x,cell.y+1)
+			return Vector2i(cell.x,cell.y+1)
 		LEFT:
-			return Vector2(cell.x-1,cell.y)
+			return Vector2i(cell.x-1,cell.y)
 		RIGHT:
-			return Vector2(cell.x+1,cell.y)
+			return Vector2i(cell.x+1,cell.y)
 
-static func get_neighbor_cells(cell):
+func get_neighbor_cells(cell):
 	return {
 		left=shift_cell(cell, LEFT),
 		right = shift_cell(cell, RIGHT),
@@ -104,7 +104,7 @@ var dir_to_flips = {
 	UP:    [false, false, false]
 }
 
-static func get_tile_settings(dir):
+func get_tile_settings(dir):
 	var flipx
 	var flipy
 	var transpose
@@ -127,7 +127,7 @@ static func get_tile_settings(dir):
 			transpose = false
 	return {flipx= flipx, flipy= flipy, transpose= transpose}
 
-static func get_tile_dir(flipx, flipy, transpose):
+func get_tile_dir(flipx, flipy, transpose):
 	if not flipx and flipy and not transpose:
 		return DOWN
 	if flipx and not flipy and transpose:

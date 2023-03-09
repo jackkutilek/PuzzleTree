@@ -2,9 +2,9 @@ extends Node2D
 
 const Tiles = preload("tiles.gd")
 
-onready var main = get_node("%Main")
-onready var targets = get_node("%Targets")
-onready var gates = get_node("%Gates")
+@onready var main = get_node("%Main")
+@onready var targets = get_node("%Targets")
+@onready var gates = get_node("%Gates")
 
 var nodes: PTTiles
 

@@ -19,19 +19,19 @@ const AGAIN = 'again'
 
 # --------------------------------------------------------------------------------------------------
 
-static func is_pressed_key(key):
+func is_pressed_key(key):
 	match key:
 		PRESS_DOWN, PRESS_UP, PRESS_RIGHT, PRESS_LEFT:
 			return true
 	return false
 	
-static func is_released_key(key):
+func is_released_key(key):
 	match key:
 		RELEASE_DOWN, RELEASE_UP, RELEASE_RIGHT, RELEASE_LEFT:
 			return true
 	return false
 
-static func is_mouse_key(key):
+func is_mouse_key(key):
 	match key:
 		MOUSE_DOWN, MOUSE_UP, MOUSE_MOVE:
 			return true
@@ -39,7 +39,7 @@ static func is_mouse_key(key):
 
 # --------------------------------------------------------------------------------------------------
 
-static func get_key_dir(key):
+func get_key_dir(key):
 	match key:
 		PRESS_UP, RELEASE_UP:
 			return Directions.UP
@@ -52,7 +52,7 @@ static func get_key_dir(key):
 		_:
 			return null
 
-static func get_pressed_key(dir):
+func get_pressed_key(dir):
 	match dir:
 		Directions.LEFT:
 			return PRESS_LEFT
@@ -65,7 +65,7 @@ static func get_pressed_key(dir):
 		_:
 			return null
 
-static func get_key_string(key):
+func get_key_string(key):
 	match key:
 		PRESS_UP:
 			return "PRESS_UP"

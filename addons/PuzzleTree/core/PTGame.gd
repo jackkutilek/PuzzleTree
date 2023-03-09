@@ -1,25 +1,25 @@
-tool
+@tool
+@icon("../icons/PTGame.png")
+
 extends Node2D
-class_name PTGame, "../icons/PTGame.png"
+class_name PTGame
 
-export(Resource) var ldtk_project_resource setget set_project
-export var reload_ldtk_project = false setget reload_project
+@export var ldtk_project_resource: Resource : set = set_project
+@export var reload_ldtk_project = false : set = reload_project
 
-export(int) var starting_level = 0 setget set_level
-export(Color) var clear_color = Color.gray
+@export var starting_level: int = 0 : set = set_level
+@export var clear_color: Color = Color.GRAY
 
-export var run_turns_on_keyup = false
-export var enable_mouse_turns = false
-export (float)var key_repeat_interval = .2 setget set_key_repeat_interval
-export (float)var again_interval = .1 setget set_again_interval
-export (int)var log_level = 0 setget set_log_level
+@export var run_turns_on_keyup = false
+@export var enable_mouse_turns = false
+@export var key_repeat_interval:float = .2 : set = set_key_repeat_interval
+@export var again_interval:float = .1 : set = set_again_interval
+@export var log_level:int = 0 : set = set_log_level
 
 var ldtk_project_data = null
 
 var is_ready = false
 var engine: PTEngine
-
-var logger = preload("logger.tres")
 
 # --------------------------------------------------------------------------------------------------
 
@@ -27,25 +27,25 @@ func set_project(value):
 	if ldtk_project_resource == value:
 		return
 		
-	if Engine.editor_hint:
+	if Engine.is_editor_hint():
 		if ldtk_project_resource != null:
-			ldtk_project_resource.disconnect("changed", self, "ldtk_changed")
+			ldtk_project_resource.disconnect("changed",ldtk_changed)
 			
 	ldtk_project_resource = value
 	if ldtk_project_resource == null:
 		return
 	
-	if Engine.editor_hint:
-		if not ldtk_project_resource.is_connected("changed", self, "ldtk_changed"):
-			ldtk_project_resource.connect("changed", self, "ldtk_changed")
+	if Engine.is_editor_hint():
+		if not ldtk_project_resource.is_connected("changed",ldtk_changed):
+			ldtk_project_resource.connect("changed",ldtk_changed)
 			print("#-- Watching for changes to LDTK project at ", ldtk_project_resource.resource_path, " --#")
 	
-	if Engine.editor_hint and is_ready:
+	if Engine.is_editor_hint() and is_ready:
 		print("#-- LDTK project set --#")
 		load_project()
 
 func reload_project(value):
-	if Engine.editor_hint and value:
+	if Engine.is_editor_hint() and value:
 		print("#-- triggered LDTK project reload --#")
 		load_project()
 
@@ -72,7 +72,7 @@ func load_project():
 # --------------------------------------------------------------------------------------------------
 
 func initialize_layers_node():
-	if Engine.editor_hint:
+	if Engine.is_editor_hint():
 		var layers = get_node("PTLayers")
 		if layers != null:
 			remove_child(layers)
@@ -95,7 +95,7 @@ func initialize_engine():
 	engine.set_level(starting_level)
 
 func initialize_camera_node():
-	if Engine.editor_hint:
+	if Engine.is_editor_hint():
 		for node in get_tree_nodes():
 			if node.get_class() == "Camera2D":
 				print("#-- camera already exists, will not create PTCamera --#")
@@ -151,7 +151,7 @@ func _ready():
 	load_project()
 
 func _process(delta):
-	if not Engine.editor_hint:
+	if not Engine.is_editor_hint():
 		if engine != null:
 			engine._process(delta)
 
@@ -159,14 +159,14 @@ func _draw():
 	draw_rect(Rect2(-10000,-10000,100000,100000), clear_color)
 
 func _unhandled_key_input(event):
-	if not Engine.editor_hint:
+	if not Engine.is_editor_hint():
 		if engine._unhandled_key_input(event):
-			get_tree().set_input_as_handled()
+			get_viewport().set_input_as_handled()
 
 func _unhandled_input(event):
-	if not Engine.editor_hint:
+	if not Engine.is_editor_hint():
 		if engine._unhandled_input(event):
-			get_tree().set_input_as_handled()
+			get_viewport().set_input_as_handled()
 	
 
 func set_key_repeat_interval(value):

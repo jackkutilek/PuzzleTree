@@ -1,6 +1,6 @@
 extends Node2D
 
-onready var gates = get_node("%Gates")
+@onready var gates = get_node("%Gates")
 
 func init_update(context):
 	context.miny = 0

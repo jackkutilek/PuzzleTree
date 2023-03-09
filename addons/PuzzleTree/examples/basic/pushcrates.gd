@@ -13,6 +13,6 @@ func frame_update(context:Dictionary):
 		if crate_is_at(dest):
 			movement.queue_move(colliders, dest, move.dir)
 
-func crate_is_at(cell:Vector2):
+func crate_is_at(cell:Vector2i):
 	var colliders = get_node("%Colliders")
 	return colliders.has_tile_at_cell(TILE_CRATE, cell)

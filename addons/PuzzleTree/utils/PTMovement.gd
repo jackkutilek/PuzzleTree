@@ -1,6 +1,7 @@
-tool
+@tool
+@icon("../icons/PTMovement.png")
 extends Node2D
-class_name PTMovement, "../icons/PTMovement.png"
+class_name PTMovement
 
 var moves = []
 var moves_made = []
@@ -10,16 +11,16 @@ func _enter_tree():
 
 # --------------------------------------------------------------------------------------------------
 
-func queue_move(layer: PTTiles, cell: Vector2, dir: String, extraCollisionLayers: Array = []):
+func queue_move(layer: PTTiles, cell: Vector2i, dir: String, extraCollisionLayers: Array = []):
 	moves.append({layer=layer, cell=cell, dir=dir, extraCollisionLayers=extraCollisionLayers})
 
-func copy_move_to(move:Dictionary, cell: Vector2):
+func copy_move_to(move:Dictionary, cell: Vector2i):
 	moves.append({layer=move.layer, cell=cell, dir=move.dir, extraCollisionLayers=move.extraCollisionLayers})
 
-func has_move_at(layer: PTTiles, cell: Vector2):
+func has_move_at(layer: PTTiles, cell: Vector2i):
 	return get_move_at(layer, cell) != null
 
-func get_move_at(layer: PTTiles, cell: Vector2):
+func get_move_at(layer: PTTiles, cell: Vector2i):
 	for move in moves:
 		if move.layer == layer and move.cell == cell:
 			return move
@@ -28,7 +29,7 @@ func get_move_at(layer: PTTiles, cell: Vector2):
 func unqueue_move(move):
 	moves.erase(move)
 
-func unqueue_move_at(layer: PTTiles, cell: Vector2):
+func unqueue_move_at(layer: PTTiles, cell: Vector2i):
 	var move = get_move_at(layer, cell)
 	unqueue_move(move)
 
@@ -57,7 +58,7 @@ func frame_update(_context):
 	moves.clear()
 
 
-func layers_are_empty(layer:PTTiles, extra_layers:Array, cell: Vector2):
+func layers_are_empty(layer:PTTiles, extra_layers:Array, cell: Vector2i):
 	if layer.any_tile_at_cell(cell):
 		return false
 	for extra_layer in extra_layers:

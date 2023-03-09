@@ -1,5 +1,6 @@
+@icon("../icons/PTLayers.png")
 extends Node2D
-class_name PTLayers, "../icons/PTLayers.png"
+class_name PTLayers
 
 var ldtk_project_data = null
 
@@ -12,14 +13,14 @@ func get_tilemaps():
 	var to_check = get_parent().get_children()
 	while(to_check.size() > 0):
 		var check = to_check.pop_back()
-		if check is TileMap:
+		if check is PTTileMap:
 			tilemaps[check.get_path()] = check
 		to_check.append_array(check.get_children())
 	return tilemaps
 
 func get_bounds():
-	var mincell = Vector2(0,0)
-	var maxcell = Vector2(0,0)
+	var mincell = Vector2i(0,0)
+	var maxcell = Vector2i(0,0)
 	var tilemaps = get_tilemaps()
 	for map in tilemaps:
 		for cell in map.get_used_cells():
@@ -34,7 +35,7 @@ func get_bounds():
 				maxcell.x = max(maxcell.x, cell.x)
 				maxcell.y = max(maxcell.y, cell.y)
 			
-	return Rect2(mincell, maxcell-mincell+Vector2(1,1))
+	return Rect2(mincell, maxcell-mincell+Vector2i(1,1))
 
 func get_tile_layers():
 	var tilemaps = []
@@ -63,11 +64,10 @@ func serialize_tilemaps():
 		var map_data = {}
 		for cell in map.get_used_cells():
 			var tile = map.get_cellv(cell)
-			var autotile = map.get_cell_autotile_coord(cell.x, cell.y)
 			var transpose = map.is_cell_transposed(cell.x,cell.y)
 			var flipx = map.is_cell_x_flipped(cell.x, cell.y)
 			var flipy = map.is_cell_y_flipped(cell.x, cell.y)
-			map_data[cell] = [tile, autotile, transpose, flipx, flipy]
+			map_data[cell] = [tile, transpose, flipx, flipy]
 		serialized_data[map.get_path()] = map_data
 	
 	for entities in get_entity_layers():
@@ -86,11 +86,10 @@ func deserialize_tilemaps(serialized_data):
 			for cell in map_data.keys():
 				var entry = map_data[cell]
 				var tile = entry[0]
-				var autotile = entry[1]
-				var transpose = entry[2]
-				var flipx = entry[3]
-				var flipy = entry[4]
-				map.set_cellv(cell,tile,flipx, flipy, transpose, autotile)
+				var transpose = entry[1]
+				var flipx = entry[2]
+				var flipy = entry[3]
+				map.set_cellv(cell,tile,flipx, flipy, transpose)
 	
 	for entities in get_entity_layers():
 		entities.deserialize(serialized_data[entities.get_path()])
@@ -120,11 +119,11 @@ func load_level_layers(level_def):
 			var layer_node = get_node("%" + layer.__identifier) as PTTiles
 			if layer.has("gridTiles"):
 				for tile in layer.gridTiles:
-					var cell = Vector2((tile.px[0] + offsetX)/layer_def.gridSize, (tile.px[1] + offsetY)/layer_def.gridSize)
+					var cell = Vector2i((tile.px[0] + offsetX)/layer_def.gridSize, (tile.px[1] + offsetY)/layer_def.gridSize)
 					layer_node.stack_tile_at_cell(tile.t, cell)
 			if layer.has("autoLayerTiles"):
 				for tile in layer.autoLayerTiles:
-					var cell = Vector2((tile.px[0] + offsetX)/layer_def.gridSize, (tile.px[1] + offsetY)/layer_def.gridSize)
+					var cell = Vector2i((tile.px[0] + offsetX)/layer_def.gridSize, (tile.px[1] + offsetY)/layer_def.gridSize)
 					layer_node.stack_tile_at_cell(tile.t, cell)
 
 func get_layer_def(uid):
@@ -137,9 +136,9 @@ func get_layer_def(uid):
 
 func set_ldtk_project(pldtk_project):
 	ldtk_project_data = pldtk_project
-	if Engine.editor_hint:
+	if Engine.is_editor_hint():
 		var path = ldtk_project_data.path
-		var rel_base = path.substr(0,path.find_last("/")+1)
+		var rel_base = path.substr(0,path.rfind("/")+1)
 		parse_tilesets(rel_base)
 		parse_layers()
 
@@ -148,18 +147,7 @@ func parse_tilesets(ldtk_project_location):
 	
 	for tileset_def in ldtk_project_data.defs.tilesets:
 		var texture = load(ldtk_project_location + tileset_def.relPath)
-		
-		var ts = TileSet.new()
-		var tile_y_count = tileset_def.pxHei/tileset_def.tileGridSize
-		var tile_x_count = tileset_def.pxWid/tileset_def.tileGridSize
-		for y in range(tile_y_count):
-			for x in range(tile_x_count):
-				var id = y*tile_x_count + x
-				ts.create_tile(id)
-				ts.tile_set_texture(id, texture)
-				ts.tile_set_region(id, Rect2(Vector2(x*tileset_def.tileGridSize, y*tileset_def.tileGridSize), Vector2(tileset_def.tileGridSize, tileset_def.tileGridSize)))
-		
-		tilesets_by_uid[tileset_def.uid] = ts
+		tilesets_by_uid[tileset_def.uid] = texture
 
 func parse_layers():
 	for layer in get_children():
@@ -175,10 +163,9 @@ func parse_layers():
 func create_layer(layer_def):
 	var new_layer = PTTiles.new()
 	new_layer.name = layer_def.identifier
-	new_layer.cell_size = Vector2(layer_def.gridSize, layer_def.gridSize)
+	new_layer.cell_size = layer_def.gridSize
 	new_layer.unique_name_in_owner = true
 	new_layer.tile_set = tilesets_by_uid[layer_def.tilesetDefUid]
-	new_layer.cell_custom_transform = Transform2D.IDENTITY
 	add_child(new_layer)
 	new_layer.set_owner(get_tree().get_edited_scene_root())
 

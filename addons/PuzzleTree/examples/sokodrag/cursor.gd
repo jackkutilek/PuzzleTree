@@ -4,8 +4,8 @@ const CRATE = 2
 const CURSOR = 6
 const CURSOR_ACTIVE = 7
 
-onready var grid = get_node("%Grid")
-onready var lines = get_node("%Lines")
+@onready var grid = get_node("%Grid")
+@onready var lines = get_node("%Lines")
 
 # Called once when a level starts
 func init_update(context):

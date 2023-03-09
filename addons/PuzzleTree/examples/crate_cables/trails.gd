@@ -2,9 +2,9 @@ extends Node2D
 
 const Tiles = preload("tiles.gd")
 
-onready var main = get_node("%Main")
-onready var floor_layer = get_node("%Floor")
-onready var movement = get_node("%PTMovement")
+@onready var main = get_node("%Main")
+@onready var floor_layer = get_node("%Floor")
+@onready var movement = get_node("%PTMovement")
 
 var trails: PTTiles
 
@@ -31,7 +31,7 @@ func late_frame_update(_context):
 				floor_layer.stack_tile_at_cell(Tiles.PLAYER_STEP, move.cell)
 	pass
 
-func crate_is_at(cell:Vector2):
+func crate_is_at(cell:Vector2i):
 	for crate_tile in [Tiles.CRATE, Tiles.CRATE_WIRED]:
 		if main.has_tile_at_cell(crate_tile, cell):
 			return true

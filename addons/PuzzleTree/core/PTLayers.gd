@@ -8,12 +8,12 @@ var tilesets_by_uid = {}
 
 # --------------------------------------------------------------------------------------------------
 
-func get_tilemaps():
+func get_tilemaps() -> Dictionary:
 	var tilemaps = {}
 	var to_check = get_parent().get_children()
 	while(to_check.size() > 0):
 		var check = to_check.pop_back()
-		if check is PTTileMap:
+		if check is TileMap:
 			tilemaps[check.get_path()] = check
 		to_check.append_array(check.get_children())
 	return tilemaps
@@ -23,7 +23,7 @@ func get_bounds():
 	var maxcell = Vector2i(0,0)
 	var tilemaps = get_tilemaps()
 	for map in tilemaps:
-		for cell in map.get_used_cells():
+		for cell in map.get_used_cells(0):
 			if mincell == null:
 				mincell = cell
 			else:
@@ -58,16 +58,14 @@ func get_entity_layers():
 
 func serialize_tilemaps():
 	var tilemaps = get_tilemaps()
-	
+	var maps = tilemaps.values() as Array[TileMap]
 	var serialized_data = {}
-	for map in tilemaps.values():
+	for map in maps:
 		var map_data = {}
-		for cell in map.get_used_cells():
-			var tile = map.get_cellv(cell)
-			var transpose = map.is_cell_transposed(cell.x,cell.y)
-			var flipx = map.is_cell_x_flipped(cell.x, cell.y)
-			var flipy = map.is_cell_y_flipped(cell.x, cell.y)
-			map_data[cell] = [tile, transpose, flipx, flipy]
+		for cell in map.get_used_cells(0):
+			var tile = map.get_cell_atlas_coords(0, cell)
+			var alt = map.get_cell_alternative_tile(0, cell)
+			map_data[cell] = [tile, alt]
 		serialized_data[map.get_path()] = map_data
 	
 	for entities in get_entity_layers():
@@ -86,10 +84,8 @@ func deserialize_tilemaps(serialized_data):
 			for cell in map_data.keys():
 				var entry = map_data[cell]
 				var tile = entry[0]
-				var transpose = entry[1]
-				var flipx = entry[2]
-				var flipy = entry[3]
-				map.set_cellv(cell,tile,flipx, flipy, transpose)
+				var alt = entry[1]
+				map.set_cell(0, cell, 0, tile, alt)
 	
 	for entities in get_entity_layers():
 		entities.deserialize(serialized_data[entities.get_path()])
@@ -98,7 +94,7 @@ func deserialize_tilemaps(serialized_data):
 
 func clear_layers():
 	for layer in get_children():
-		layer.clear_layer()
+		layer.clear_map()
 
 func load_level_layers(level_def):
 	
@@ -146,8 +142,39 @@ func parse_tilesets(ldtk_project_location):
 	tilesets_by_uid.clear()
 	
 	for tileset_def in ldtk_project_data.defs.tilesets:
-		var texture = load(ldtk_project_location + tileset_def.relPath)
-		tilesets_by_uid[tileset_def.uid] = texture
+		var tile_size = Vector2i(tileset_def.tileGridSize, tileset_def.tileGridSize)
+		
+		var tileset = TileSet.new()
+		tileset.tile_size = tile_size
+		
+		var source = TileSetAtlasSource.new()
+		source.texture = load(ldtk_project_location + tileset_def.relPath)
+		source.texture_region_size = tile_size
+		
+		var tile_y_count = tileset_def.pxHei/tileset_def.tileGridSize
+		var tile_x_count = tileset_def.pxWid/tileset_def.tileGridSize
+		for y in range(tile_y_count):
+			for x in range(tile_x_count):
+				var atlas_id = Vector2i(x, y)
+				source.create_tile(atlas_id, Vector2i(1,1))
+				for di in [1,2,3]:
+					source.create_alternative_tile(atlas_id)
+					var data = source.get_tile_data(atlas_id, di)
+					var settings = dir_index_to_flips[di]
+					data.transpose = settings[0]
+					data.flip_h = settings[1]
+					data.flip_v = settings[2]
+					
+		tileset.add_source(source)
+		tilesets_by_uid[tileset_def.uid] = tileset
+
+# index: [transpose, flipx, flipy]
+var dir_index_to_flips = [
+	[false, false, false], # UP
+	[false, false, true ], # DOWN
+	[true,  false,  false], # LEFT
+	[true,  true, false] # RIGHT
+]
 
 func parse_layers():
 	for layer in get_children():
@@ -163,7 +190,6 @@ func parse_layers():
 func create_layer(layer_def):
 	var new_layer = PTTiles.new()
 	new_layer.name = layer_def.identifier
-	new_layer.cell_size = layer_def.gridSize
 	new_layer.unique_name_in_owner = true
 	new_layer.tile_set = tilesets_by_uid[layer_def.tilesetDefUid]
 	add_child(new_layer)

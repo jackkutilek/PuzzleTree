@@ -7,7 +7,7 @@ class_name PTEntities
 
 
 
-func clear_layer():
+func clear_map():
 	entities.clear()
 
 func load_level(layer_def, level_def):

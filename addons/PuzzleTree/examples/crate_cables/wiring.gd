@@ -46,11 +46,11 @@ func get_node_tile(color):
 			return -1
 
 func rewire_crates():
-	$wires.clear_layer()
-	$nodes.clear_layer()
+	$wires.clear_map()
+	$nodes.clear_map()
 	
 	# reset crate tiles
-	for cell in main.get_used_cells():
+	for cell in main.get_all_used_cells():
 		if main.has_tile_at_cell(Tiles.CRATE_WIRED, cell):
 			main.replace_tile_at_cell(Tiles.CRATE_WIRED, Tiles.CRATE, cell)
 	

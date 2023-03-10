@@ -91,7 +91,7 @@ func _unhandled_input(event: InputEvent):
 			queue_input(Inputs.MOUSE_MOVE)
 
 func update_mouse_cell():
-	var layer = game_state.layers.get_child(0) as PTTileMap
+	var layer = game_state.layers.get_child(0) as TileMap
 	var mouse_pos = layer.get_global_mouse_position()
 	var local_position = layer.to_local(mouse_pos)
 	mouse_cell = Vector2i(layer.local_to_map(local_position))

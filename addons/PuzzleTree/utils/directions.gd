@@ -8,6 +8,19 @@ const DOWN = 'down'
 const ALL_DIRS = [UP, DOWN, LEFT, RIGHT]
 
 # --------------------------------------------------------------------------------------------------
+func dir_from_index(index:int):
+	return ALL_DIRS[index]
+
+func get_dir_index(dir):
+	match dir:
+		UP:
+			return 0
+		DOWN:
+			return 1
+		LEFT:
+			return 2
+		RIGHT:
+			return 3
 
 func get_dir_string(dir):
 	match dir:
@@ -95,6 +108,13 @@ func get_neighbor_cells(cell):
 	}
 
 # --------------------------------------------------------------------------------------------------
+# index: [transpose, flipx, flipy]
+var dir_index_to_flips = [
+	[false, false, false], # UP
+	[false, false, true ], # DOWN
+	[true,  false,  false], # LEFT
+	[true,  true, false] # RIGHT
+]
 
 # direction: [transpose, flipx, flipy]
 var dir_to_flips = {

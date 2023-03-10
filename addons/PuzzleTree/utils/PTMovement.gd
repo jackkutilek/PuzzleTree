@@ -42,15 +42,16 @@ func frame_update(_context):
 	while did_move:
 		did_move = false
 		for move in moves:
-			var layer = move.layer
+			var layer = move.layer as PTTiles
 			var cell = move.cell
 			var dir = move.dir
 			var dest_cell = Directions.shift_cell(cell, dir)
 			
 			if layers_are_empty(layer, move.extraCollisionLayers, dest_cell):
-				var tile = layer.get_cellv(cell)
-				layer.set_cellv(cell, -1)
-				layer.set_cellv(dest_cell, tile)
+				var tile = layer.get_tile_at_cell(cell)
+				var tile_dir = layer.get_dir_at_cell(cell)
+				layer.clear_cell(cell)
+				layer.stack_tile_at_cell(tile, dest_cell, tile_dir)
 				moves.erase(move)
 				moves_made.push_back(move)
 				did_move = true

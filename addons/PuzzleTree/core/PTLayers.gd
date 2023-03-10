@@ -192,6 +192,13 @@ func create_layer(layer_def):
 	new_layer.name = layer_def.identifier
 	new_layer.unique_name_in_owner = true
 	new_layer.tile_set = tilesets_by_uid[layer_def.tilesetDefUid]
+	
+	# adjust tilemap to fix bug with odd grid sizes
+	# https://github.com/godotengine/godot/issues/62911
+	var offsetx = 0 if new_layer.tile_set.tile_size.x % 2 == 0 else -.5
+	var offsety = 0 if new_layer.tile_set.tile_size.y % 2 == 0 else -.5
+	new_layer.translate(Vector2(offsetx, offsety))
+	
 	add_child(new_layer)
 	new_layer.set_owner(get_tree().get_edited_scene_root())
 

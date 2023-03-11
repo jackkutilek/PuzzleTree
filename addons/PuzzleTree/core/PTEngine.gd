@@ -99,13 +99,18 @@ func update_mouse_cell():
 func queue_input(input: String):
 	if Inputs.is_pressed_key(input):
 		note_key_press(input)
-	else:
+	elif Inputs.is_released_key(input):
 		note_key_release(input)
-		
+	
 	if not run_turns_on_keyup and Inputs.is_released_key(input):
 		return
 	
 	if not enable_mouse_turns and Inputs.is_mouse_key(input):
+		return
+		
+	if Inputs.is_released_key(input) and not pressed_keys.has(Inputs.get_key_dir(input)):
+		return
+	if input == Inputs.MOUSE_UP and not mouse_is_down:
 		return
 		
 	if input == Inputs.MOUSE_DOWN:
@@ -155,8 +160,21 @@ func force_release_keys(keys):
 	
 	update_key_state_in_context()
 
+func force_release_mouse():
+	if mouse_is_down:
+		mouse_is_down = false
+	
+		var new_queue = []
+		for key in queued:
+			if not Inputs.is_mouse_key(key):
+				new_queue.append(key)
+		queued = new_queue
+		
+	update_key_state_in_context()
+
 func abort_turn():
 	force_release_keys(pressed_keys)
+	force_release_mouse()
 	againing = false
 	
 # ---------------------------------------------------------
@@ -249,6 +267,10 @@ func run_frame(frame_key):
 		force_release_keys(context.force_release_keys)
 		context.force_release_keys.clear()
 	
+	if context.force_release_mouse:
+		force_release_mouse()
+		context.force_release_mouse = false
+	
 	if logger.log_level > 0:
 		if context.nosave:
 			print("no save")
@@ -297,6 +319,7 @@ func reset_control_flags(context):
 	context.checkpoint = false
 	context.force_release_all_keys = false
 	context.force_release_keys = []
+	context.force_release_mouse = false
 	
 	context.again_interval = again_interval
 	context.key_repeat_interval = key_repeat_interval

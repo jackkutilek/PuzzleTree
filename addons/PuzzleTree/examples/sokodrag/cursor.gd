@@ -10,6 +10,7 @@ const CURSOR_ACTIVE = 7
 # Called once when a level starts
 func init_update(context):
 	context.cursor_cell = null
+	context.previous_mouse_cell = null
 	context.dragging = false
 	pass
 
@@ -21,6 +22,9 @@ func frame_update(context):
 	
 	if context.frame_key == Inputs.MOUSE_UP:
 		context.dragging = false
+	
+	if context.frame_key == Inputs.MOUSE_MOVE:
+		context.previous_mouse_cell = context.cursor_cell
 	pass
 
 # Called at the end of each frame

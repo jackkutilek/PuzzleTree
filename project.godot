@@ -34,6 +34,10 @@ script_templates_search_path="res://addons/PuzzleTree/script_templates/"
 
 enabled=PackedStringArray("res://addons/PuzzleTree/plugin.cfg")
 
+[filesystem]
+
+import/blender/enabled=false
+
 [gui]
 
 common/drop_mouse_on_gui_input_disabled=true
@@ -44,6 +48,7 @@ common/enable_pause_aware_picking=true
 
 [rendering]
 
+renderer/rendering_method="gl_compatibility"
 quality/driver/driver_name="GLES2"
 vram_compression/import_etc=true
 vram_compression/import_etc2=false

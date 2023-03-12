@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://deqtbigt5dp0n"]
+[gd_scene load_steps=13 format=3 uid="uid://deqtbigt5dp0n"]
 
 [ext_resource type="Script" path="res://addons/PuzzleTree/core/PTGame.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://cmipbvry7t13s" path="res://addons/PuzzleTree/examples/sokodrag/tileset.png" id="2"]
@@ -9,8 +9,9 @@
 [ext_resource type="Resource" uid="uid://bm2te1x3abicm" path="res://addons/PuzzleTree/examples/sokodrag/sokodrag.ldtk" id="7"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/sokodrag/drag.gd" id="8"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/sokodrag/cursor.gd" id="9"]
+[ext_resource type="Script" path="res://addons/PuzzleTree/examples/sokodrag/grass.gd" id="10_oayge"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_bewxp"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cb3bn"]
 texture = ExtResource("2")
 texture_region_size = Vector2i(5, 5)
 0:0/next_alternative_id = 4
@@ -239,9 +240,9 @@ texture_region_size = Vector2i(5, 5)
 4:4/3/flip_h = true
 4:4/3/transpose = true
 
-[sub_resource type="TileSet" id="TileSet_cio3h"]
+[sub_resource type="TileSet" id="TileSet_w4osv"]
 tile_size = Vector2i(5, 5)
-sources/0 = SubResource("TileSetAtlasSource_bewxp")
+sources/0 = SubResource("TileSetAtlasSource_cb3bn")
 
 [node name="PTGame" type="Node2D"]
 texture_filter = 1
@@ -249,6 +250,7 @@ scale = Vector2(10, 10)
 script = ExtResource("1")
 ldtk_project_resource = ExtResource("7")
 enable_mouse_turns = true
+again_interval = 0.03
 
 [node name="PTLayers" type="Node2D" parent="."]
 script = ExtResource("5")
@@ -256,7 +258,7 @@ script = ExtResource("5")
 [node name="BG" type="TileMap" parent="PTLayers"]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-tile_set = SubResource("TileSet_cio3h")
+tile_set = SubResource("TileSet_w4osv")
 format = 2
 layer_0/tile_data = PackedInt32Array(0, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 5, 0, 0, 65536, 0, 0, 65537, 0, 0, 65538, 0, 0, 65539, 0, 0, 65540, 0, 0, 65541, 0, 0, 131072, 0, 0, 131073, 0, 0, 131074, 0, 0, 131075, 0, 0, 131076, 0, 0, 131077, 0, 0, 196608, 0, 0, 196609, 0, 0, 196610, 0, 0, 196611, 0, 0, 196612, 0, 0, 196613, 0, 0, 262144, 0, 0, 262145, 0, 0, 262146, 0, 0, 262147, 0, 0, 262148, 0, 0, 262149, 0, 0, 327680, 0, 0, 327681, 0, 0, 327682, 0, 0, 327683, 0, 0, 327684, 0, 0, 327685, 0, 0, 393216, 0, 0, 393217, 0, 0, 393218, 0, 0, 393219, 0, 0, 393220, 0, 0, 393221, 0, 0)
 script = ExtResource("3")
@@ -264,20 +266,20 @@ script = ExtResource("3")
 [node name="Reach" type="TileMap" parent="PTLayers"]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-tile_set = SubResource("TileSet_cio3h")
+tile_set = SubResource("TileSet_w4osv")
 format = 2
 script = ExtResource("3")
 
 [node name="Grid" type="TileMap" parent="PTLayers"]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-tile_set = SubResource("TileSet_cio3h")
+tile_set = SubResource("TileSet_w4osv")
 format = 2
 layer_0/tile_data = PackedInt32Array(0, 262144, 0, 1, 262144, 0, 2, 262144, 0, 3, 262144, 0, 65536, 262144, 0, 65538, 196608, 0, 65539, 262144, 0, 131072, 262144, 0, 131075, 262144, 0, 131076, 262144, 0, 131077, 262144, 0, 196608, 262144, 0, 196609, 196608, 0, 196613, 262144, 0, 262144, 262144, 0, 262147, 131072, 0, 262149, 262144, 0, 327680, 262144, 0, 327683, 262144, 0, 327684, 262144, 0, 327685, 262144, 0, 393216, 262144, 0, 393217, 262144, 0, 393218, 262144, 0, 393219, 262144, 0)
 script = ExtResource("3")
 
 [node name="Grid+1" type="TileMap" parent="PTLayers/Grid"]
-tile_set = SubResource("TileSet_cio3h")
+tile_set = SubResource("TileSet_w4osv")
 format = 2
 layer_0/tile_data = PackedInt32Array(196609, 131072, 0)
 script = ExtResource("3")
@@ -285,19 +287,19 @@ script = ExtResource("3")
 [node name="Lines" type="TileMap" parent="PTLayers"]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-tile_set = SubResource("TileSet_cio3h")
+tile_set = SubResource("TileSet_w4osv")
 format = 2
 script = ExtResource("3")
 
 [node name="Start" type="Node2D" parent="PTLayers"]
 unique_name_in_owner = true
 script = ExtResource("6")
-entities = [{
+entities = Array[Dictionary]([{
 "cell": Vector2i(2, 4),
 "height": 1.0,
 "id": "Start",
 "width": 1.0
-}]
+}])
 
 [node name="PTCamera" type="Camera2D" parent="."]
 offset = Vector2(0.5, 0.5)
@@ -310,3 +312,6 @@ script = ExtResource("9")
 
 [node name="drag" type="Node2D" parent="cursor"]
 script = ExtResource("8")
+
+[node name="grass" type="Node2D" parent="."]
+script = ExtResource("10_oayge")

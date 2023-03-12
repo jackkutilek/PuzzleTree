@@ -184,6 +184,8 @@ func get_count_of_queued_presses():
 	for key in queued:
 		if Inputs.is_pressed_key(key) or key == Inputs.MOUSE_DOWN:
 			count += 1
+		if key == Inputs.MOUSE_MOVE and mouse_is_down:
+			count += 1
 	return count
 
 func _process(delta:float):

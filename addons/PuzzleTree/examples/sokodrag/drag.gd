@@ -14,6 +14,7 @@ func frame_update(context):
 		if cell_is_free(context.mouse_cell):
 			grid.remove_tile_from_cell(CRATE, context.previous_mouse_cell)
 			grid.stack_tile_at_cell(CRATE, context.mouse_cell)
+			context.next_player_cell = context.previous_mouse_cell
 		else:
 			context.force_release_mouse = true
 			context.dragging = false

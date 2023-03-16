@@ -11,17 +11,27 @@ The toolkit is built as a plugin for Godot, and is made up of:
 - a script template to kick-start your game scripts
 - example projects for reference and inspiration
 
+## Features Overview
+
+- Sprites can be any size (unlike PuzzleScript)
+- Define multiple tilemap layers. Stack multiple tiles in each cell in each layer.
+- Keeps your LDTK project and game scene in sync automatically
+- Supports both Keyboard and Mouse input events
+- Input buffering with dynamic execution speed to keep input the queue length short
+- Built-in undo & reset
+
+PuzzleTree is a work in progress! I am adding to it as needed to support my current game projects.
+
 # Quick-Start Guide
 
 1. Download or clone PuzzleTree and copy `addons` into your godot project directory. This should place PuzzleTree at `[godot project root]/addons/PuzzleTree/`. Enable the `PuzzleTree` plugin in Godot's Plugins menu (at `project`->`project settings`->`plugins`). This will do a few things:
 
 - load the LDTK import plugin so Godot recognizes LDTK files,
 - add some autoload scripts to the project,
-- configure some display stretch settings,
 - and set the `script_templates` folder to the one in the plugin.
 
-2. Select `Project` -> `Reload current project` to reload the project. Godot needs a reload to recognize custom icons for the custom classes.
-3. Create a new scene with a root PTGame node.
+2. Select `Project` -> `Reload current project` to reload the project. Godot needs a reload to recognize custom icons for the custom classes. Not strictly necessary, but it is nice to have.
+3. Create a new scene with a root `PTGame` node.
 4. Draw a tileset image in your drawing program of choice, and save it in your Godot project folder. (or copy one from the examples)
 5. Create an LDTK project and save it in your Godot project folder. In LDTK:
 
@@ -33,31 +43,36 @@ The toolkit is built as a plugin for Godot, and is made up of:
 - add some wall tiles,
 - and add a player tile.
 
-6. In Godot, set the "LDTK Project Resource" property on the PTGame node to your LDTK project. (Drag the project file from the Files tab onto the property field.) This will automatically parse your LDTK project and create some child nodes under the PTGame node.
-7. Add PTPlayer and PTMovement nodes under the PTGame node. On the PTPlayer node, specify your player tile index and player layer. You can ignore 'Extra Collision Layers' for now.
+6. In Godot, set the `LDTK Project Resource` property on the `PTGame` node to your LDTK project. (Drag the project file from the `Files` tab onto the property field.) This will automatically parse your LDTK project and create some child nodes under the `PTGame` node.
+7. Add `PTPlayer` and `PTMovement` nodes under the `PTGame` node. On the `PTPlayer` node, specify your player tile index and player layer. You can ignore 'Extra Collision Layers' for now.
 8. Play your scene. Move your player around! Undo! Reset!
 9. Next, add more nodes with scripts to the scene to further define the game's behavior. (tip: use the 'PuzzleTree Node' script template)
 10. Browse the examples for some more ideas on getting started.
 
-# Anatomy of a Turn
+# Turns
 
-Turns are a core concept in PuzzleTree. Turns update the game state. You can undo Turns.
+Turns are a core concept in PuzzleTree. Turns update the game state. You can undo Turns. Each key press or mouse click triggers a Turn.
 
-Each key press triggers a Turn. Turns are made up of some number of Frames. Each Frame will do some processing of the game state, then render the changes to the grid layers. Processing happens in 'PuzzleTree Nodes': nodes with scripts which define special update functions. This is where you write your game logic.
+Turns are made up of some number of Frames. Each Frame will do some processing of the game state, then render the changes to the grid layers. Processing happens in 'PuzzleTree Nodes': nodes with scripts which define special update functions. This is where you write your game logic. All nodes are updated in tree order, using a DFS traversal.
 
 Frames can request an update to happen again, which queues an 'again frame'. Among other things, this allows for some animations to happen within a single Turn (or in other words: in response to a single input).
 
-Inputs are queued, so any input received during an again frame will fire after the again frames finish.
+Inputs are queued, so any input received during a turn will fire after the all again frames have finished. The wait time between again frames can be customized, and will automatically shorten as needed to get through a long input queue.
 
 Key repeat is also built in. Holding a key down will fire repeated turns at a specified interval, until the key is released.
 
 A sample turn execution:
 
-> input -> frame updates -> render -> again? -> frame updates -> render -> again? -> finished
+```mermaid
+flowchart LR
 
-All nodes are updated in tree order, using a DFS traversal.
+input((input)) --> frame1[frame updates] --> render1[render] --> again1{again?} --> frame2[frame updates] --> render2[render] --> again2{again?} --> finished([finished])
 
-The `again interval` and `key repeat interval` can be configured on the PTGame node. You can also specify if you want Turns run on key release events in addition to key press events. Key release Turns do not save to the undo stack - their changes are treated as a continuation of the previous Turn.
+```
+
+The `again interval` and `key repeat interval` can be configured on the `PTGame` node. You can also specify if you want Turns run on key release events in addition to key press events.
+
+Key release Turns do not save to the undo stack - their changes are treated as a continuation of the previous Turn. Same goes for Mouse move or Mouse release Turns.
 
 # The Game State
 
@@ -79,6 +94,10 @@ There are some reserved keys on the `context` Dictionary. They are used to commu
 
 `context.is_repeat_turn`: this is `true` when the running turn is a 'repeat turn' - triggered by a held key press.
 
+`context.mouse_cell`: the cell that the mouse currently points to.
+
+`context.mouse_is_down`: this is `true` when the mouse button is down.
+
 ### Script-set Reserved Keys
 
 `context.again`: you can queue another turn with no input by setting this to `true`.
@@ -91,9 +110,11 @@ There are some reserved keys on the `context` Dictionary. They are used to commu
 
 `context.checkpoint`: set to `true` to set a checkpoint at the end of this turn. This makes reset load this turn's end state instead of the state from after the level load (and initial update).
 
-`context.force_release_keys`: an array of key [Directions](#directions) to 'force release' at the end of the frame, without running a release turn. This will also prevent key repeats, since the engine will think the key is not pressed anymore.
+`context.force_release_keys`: an array of key [Directions](#directions) to 'force release' at the end of the frame, without queuing a release turn. This will also prevent key repeats, since the engine will think the key is not pressed anymore.
 
 `context.force_release_all_keys`: set to `true` to force release all keys at the end of this frame. This is just shorthand for adding `Directions.ALL_DIRS` to `context.force_release_keys`.
+
+`context.force_release_mouse`: set to `true` to force release the mouse button at the end of this frame, without queuing a release turn.
 
 `context.no_save`: set to `true` to prevent saving the results of this turn in the undo stack. Useful for turns that animate certain visual feedback (when you can't move into a wall, etc.) without polluting the undo stack with superficial state changes.
 
@@ -185,7 +206,8 @@ The root node of the game! It manages the engine and has some properties that al
 - `Reload Ldtk Project`: check this property to force a reload of the LDTK project, in case you need to do that for some reason. This _should_ happen automatically as the LDTK project is modified, so mostly it is helpful when developing the engine. It unsets itself after doing the reload.
 - `Starting Level`: the level index to load at game start.
 - `Clear Color`: the color to fill any letter-boxed regions of the screen
-- `Run Turns On Keyup`: check this to have the game run turns on key release, in addition to the usual key press turns. Release turns do not create entries in the undo history, but can modify state to be saved before the next key press turn.
+- `Run Turns On Keyup`: check this to have the game run turns on key release, in addition to the usual key press turns. Release Turns do not create entries in the undo history, but can modify state to be saved before the next Key/Mouse press Turn.
+- `Enable Mouse Turns`: check this to have the game run turns on mouse events: when the mouse is pressed, released, or when it moves into a new cell. Move and Release Turns do not create entries in the undo history, but can modify state to be saved before the next Key/Mouse press Turn.
 - `Key Repeat Interval`: time in seconds between repeat turns run while a key is held down.
 - `Again Interval`: time in seconds between successive again frames.
 - `Log Level`: increase this number to get increasingly verbose logging from the engine. Logs are currently a bit limited; what gets logged at each level will evolve in future versions of PuzzleTree.
@@ -210,49 +232,49 @@ I've outlined some of the most useful PTTiles functions below. See `PuzzleTree/c
 
 ### Modifying the Layer
 
-`stack_tile_at_cell(tile :int, cell :Vector2, dir? :Direction)`
+`stack_tile_at_cell(tile :int, cell :Vector2i, dir? :Direction)`
 
 Stacks a tile at the given cell, rotated by the given direction.
 
 If the cell is empty, it places it in the top-level tilemap node. If a tile already exists at the cell, the tile will be placed in the lowest empty child tilemap. If none are empty (or there are no child tilemaps yet!), it will create one.
 
-`remove_tile_at_cell(tile :int, cell :Vector2, dir? :Direction)`
+`remove_tile_at_cell(tile :int, cell :Vector2i, dir? :Direction)`
 
 Removes the lowest copy of the tile from the stack at the given cell. If dir is provided, then the lowest copy of the tile that matches the given direction will be removed.
 
-`replace_tile_at_cell(replace :int, with :int, cell :Vector2, replace_dir? :Direction, with_dir? :Direction)`
+`replace_tile_at_cell(replace :int, with :int, cell :Vector2i, replace_dir? :Direction, with_dir? :Direction)`
 
 Replaces the lowest (rotated) tile with the given (rotated) tile. This actually removes 'replace' and adds 'with' onto the cell's tile stack.
 
-`clear_cell(cell :Vector2)`
+`clear_cell(cell :Vector2i)`
 
 Empties the tile stack at the given cell.
 
 ### Examining the Layer
 
-`get_tiles_at_cell(cell :Vector2) -> int[]`
+`get_tiles_at_cell(cell :Vector2i) -> int[]`
 
 Returns an array of tile id's corresponding to the tiles in the cell's tile stack.
 
-`get_tile_dir_at_cell(tile :int, cell :Vector2) -> Direction`
+`get_tile_dir_at_cell(tile :int, cell :Vector2i) -> Direction`
 
 Gets the direction of the lowest instance of the tile in the cell's tile stack.
 
-`is_empty_at_cell(cell :Vector2) -> boolean`
+`is_empty_at_cell(cell :Vector2i) -> boolean`
 
 Returns `true` if the cell's tile stack is empty.
 
-`has_tile_at_cell(tile :int, cell :Vector2) -> boolean`
+`has_tile_at_cell(tile :int, cell :Vector2i) -> boolean`
 
 Returns `true` if the tile is in the cell's tile stack.
 
-`get_cells_with_tile(tile :int) -> Vector2[]`
+`get_cells_with_tile(tile :int) -> Vector2i[]`
 
 Returns an array of all cells that have at least one instance of the given tile in their tile stack.
 
-`get_used_cells() -> Vector2[]`
+`get_used_cells() -> Vector2i[]`
 
-This one is actually just Godot's TileMap function! But it works for the Layer since any cell that has a tile in it will have some tile in the layer's root TileMap, and the PTTiles node _is_ the layer's root TileMap node.
+Returns an array of all cells that have at least one tile in their tile stack.
 
 ### Layer Management
 
@@ -268,7 +290,7 @@ A layer corresponding to one of the Entities defined in the LDTK project. It mai
 
 After level load, each entity's dictionary has:
 
-- `cell :Vector2` (pivot cell)
+- `cell :Vector2i` (pivot cell)
 - `width :int` (in cells)
 - `height :int` (in cells)
 - and any defined fields, keyed on their identifier, of the following types (single or array):
@@ -276,7 +298,7 @@ After level load, each entity's dictionary has:
   - `:int`
   - `:float`
   - `:string`
-  - `:Vector2` (cell coordinate)
+  - `:Vector2i` (cell coordinate)
 
 with values as defined on the entities in each level. I will implement other value types as needed.
 
@@ -305,6 +327,8 @@ PuzzleTree will automatically create a PTCamera node the first time an LDTK proj
 - `Camera Speed`: how quickly the camera should elastically follow the `camera pos`
 - `Snap Size`: snap the camera to a sparse grid of positions, with the distance (in tiles) between positions defined by the Snap Size. This can be used to get a camera that 'flicks' between level screens that are laid out in a regular grid (using the GridVania LDTK project format, for example).
 
+There are also a handful of properties for configuring screen shake.
+
 ## PTPlayer
 
 This node applies inputs as queued movements to instances of the specified tile in the specified layer.
@@ -314,6 +338,7 @@ This node applies inputs as queued movements to instances of the specified tile 
 - `Player Layer`: the name of the PTTiles that has your player tile
 - `Player Tile`: the index of a tile in the tileset associated with the Player Layer.
 - `Extra Collision Layers`: a list of layer names separated by commas, which should be included in collision checks in addition to Player Layer.
+- `Handle Input`: set this to `false` to disable input handling. In this state, `PTPlayer` will only update `context.player_pos` and `context.camera_pos` to follow the specified player tile.
 
 ## PTMovement
 
@@ -323,14 +348,14 @@ Currently it very basic and un-optimized, but it gets the job done and is a quic
 
 # Helper Scripts
 
-PuzzleTree also has some helper scripts that are not nodes or script classes. They simply define some enums and helper methods which are useful when writing your scripts. PuzzleTree will configure the project to autoload these scripts as singletons, so they are ready to use in your game scripts.
+PuzzleTree also has some helper scripts that are not nodes or script classes. They simply define some enums and helper methods which are useful when writing your scripts. PuzzleTree will configure the project to auto-load these scripts as singletons, so they are ready to use in your game scripts.
 
 ## Directions
 
 Definition of grid directions, and some helpers for working with these directions, such as:
 
 - `Directions.UP`
-- `shift_cell(cell :Vector2, dir :Direction) -> Vector2`
+- `shift_cell(cell :Vector2i, dir :Direction) -> Vector2i`
 - `opposite(dir :Direction) -> Direction`
 - `rotate_cw(dir :Direction) -> Direction`
 - etc.

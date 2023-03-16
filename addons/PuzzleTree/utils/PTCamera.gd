@@ -110,7 +110,7 @@ func fit_to_level():
 	follow_offset = Vector2(level_size.x/2, level_size.y/2)
 
 # ----------------------------------------------------------------------------------------------
-
+@export_category("Screen Shake")
 @export var decay = 0.8  # How quickly the shaking stops [0, 1].
 @export var max_offset = Vector2(100, 75)  # Maximum hor/ver shake in pixels.
 @export var max_roll = 0.1  # Maximum rotation in radians (use sparingly).

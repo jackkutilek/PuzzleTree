@@ -42,6 +42,9 @@ func _unhandled_key_input(event: InputEvent):
 				abort_turn()
 				next_level()
 				return true
+			KEY_ESCAPE:
+				root.get_tree().quit()
+				return true
 	
 	if event.is_echo():
 		return false

@@ -28,7 +28,7 @@ window/stretch/mode="viewport"
 
 [editor]
 
-script_templates_search_path="res://addons/PuzzleTree/script_templates/"
+script/templates_search_path="res://addons/PuzzleTree/script_templates/"
 
 [editor_plugins]
 

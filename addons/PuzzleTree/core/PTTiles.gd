@@ -177,7 +177,7 @@ func _pull_tile_up_one_submap(cell):
 		var subtile_dir = submap.get_dir_at_cell(cell)
 		var subtile = submap._pull_tile_up_one_submap(cell)
 		if subtile == -1:
-			subtile_dir = null
+			subtile_dir = "any"
 		set_tile_at_cell(subtile, cell, subtile_dir)
 	else:
 		set_tile_at_cell(-1, cell)

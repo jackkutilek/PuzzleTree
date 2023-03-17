@@ -95,9 +95,10 @@ func _unhandled_input(event: InputEvent):
 
 func update_mouse_cell():
 	var layer = game_state.layers.get_child(0) as TileMap
-	var mouse_pos = layer.get_global_mouse_position()
-	var local_position = layer.to_local(mouse_pos)
-	mouse_cell = Vector2i(layer.local_to_map(local_position))
+	assert(layer is TileMap)
+	var global = layer.get_global_mouse_position()
+	var local = layer.to_local(global) - Vector2(.5,.5)
+	mouse_cell = layer.local_to_map(local)
 
 func queue_input(input: String):
 	if Inputs.is_pressed_key(input):

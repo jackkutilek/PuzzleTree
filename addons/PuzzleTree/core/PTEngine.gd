@@ -91,16 +91,20 @@ func _unhandled_input(event: InputEvent):
 		var old_cell = mouse_cell
 		update_mouse_cell()
 		if old_cell != mouse_cell:
+			# TODO add all cells in between old and new cells
 			queue_input(Inputs.MOUSE_MOVE)
 
 func update_mouse_cell():
-	var layer = game_state.layers.get_child(0) as TileMap
-	assert(layer is TileMap)
+	var layer = game_state.layers.get_child(0) as PTTiles
+	assert(layer is PTTiles)
 	var global = layer.get_global_mouse_position()
 	var local = layer.to_local(global) - Vector2(.5,.5)
 	mouse_cell = layer.local_to_map(local)
 
 func queue_input(input: String):
+	if game_state.context.winning:
+		return	# don't queue input during win wait time
+	
 	if Inputs.is_pressed_key(input):
 		note_key_press(input)
 	elif Inputs.is_released_key(input):
@@ -111,12 +115,12 @@ func queue_input(input: String):
 	
 	if not enable_mouse_turns and Inputs.is_mouse_key(input):
 		return
-		
+	
 	if Inputs.is_released_key(input) and not pressed_keys.has(Inputs.get_key_dir(input)):
 		return
 	if input == Inputs.MOUSE_UP and not mouse_is_down:
 		return
-		
+	
 	if input == Inputs.MOUSE_DOWN:
 		mouse_is_down = true
 	elif input == Inputs.MOUSE_UP:
@@ -309,7 +313,11 @@ func run_frame(frame_key):
 				print("#----#")
 	
 	if context.winning:
+		force_release_keys(Directions.ALL_DIRS)
+		force_release_mouse()
+		queued.clear()
 		await root.get_tree().create_timer(1).timeout
+		context.winning = false
 		next_level()
 	
 	again_interval = context.again_interval
@@ -396,12 +404,12 @@ func frame_update(context):
 
 # ---------------------------------------------------------
 
-func get_tree_nodes():
-	var nodes = []
+func get_tree_nodes()->Array[Node]:
+	var nodes:Array[Node] = []
 	get_tree_nodes_recursive(root, nodes)
 	return nodes
 
-func get_tree_nodes_recursive(node, collected_nodes):
+func get_tree_nodes_recursive(node: Node, collected_nodes: Array[Node]):
 	collected_nodes.push_back(node)
 	for child in node.get_children():
 		get_tree_nodes_recursive(child, collected_nodes)

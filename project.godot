@@ -13,12 +13,18 @@ config_version=5
 config/name="PuzzleTree"
 run/main_scene="res://addons/PuzzleTree/examples/basic/basic.tscn"
 config/features=PackedStringArray("4.0")
+config/icon="res://addons/PuzzleTree/icons/icon.png"
 
 [autoload]
 
 Directions="*res://addons/PuzzleTree/utils/directions.gd"
 Inputs="*res://addons/PuzzleTree/utils/inputs.gd"
 logger="*res://addons/PuzzleTree/core/logger.gd"
+PTTileSets="*res://addons/PuzzleTree/core/PTTileSets.gd"
+
+[debug]
+
+gdscript/warnings/unsafe_method_access=1
 
 [display]
 

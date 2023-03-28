@@ -1,167 +1,15 @@
-[gd_scene load_steps=13 format=3 uid="uid://cqkait8bljy7b"]
+[gd_scene load_steps=11 format=3 uid="uid://cqkait8bljy7b"]
 
 [ext_resource type="Script" path="res://addons/PuzzleTree/core/PTGame.gd" id="2"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/utils/PTCamera.gd" id="3"]
+[ext_resource type="Script" path="res://addons/PuzzleTree/core/PTLayers.gd" id="3_6g6uy"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/utils/PTPlayer.gd" id="4"]
-[ext_resource type="Texture2D" uid="uid://bar2ohd068573" path="res://addons/PuzzleTree/examples/basic/basic.png" id="4_dkhxs"]
-[ext_resource type="Script" path="res://addons/PuzzleTree/core/PTLayers.gd" id="5"]
-[ext_resource type="Script" path="res://addons/PuzzleTree/core/PTTiles.gd" id="5_ybud1"]
+[ext_resource type="Script" path="res://addons/PuzzleTree/core/PTTiles.gd" id="4_yt37k"]
+[ext_resource type="Texture2D" uid="uid://bar2ohd068573" path="res://addons/PuzzleTree/examples/basic/basic.png" id="5_hecp3"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/utils/PTMovement.gd" id="6"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/basic/pushcrates.gd" id="7"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/basic/wincheck.gd" id="8"]
 [ext_resource type="Resource" uid="uid://bena6rl8l4ulk" path="res://addons/PuzzleTree/examples/basic/basic.ldtk" id="9"]
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_opoii"]
-texture = ExtResource("4_dkhxs")
-texture_region_size = Vector2i(5, 5)
-0:0/next_alternative_id = 4
-0:0/0 = 0
-0:0/1 = 1
-0:0/1/flip_v = true
-0:0/2 = 2
-0:0/2/transpose = true
-0:0/3 = 3
-0:0/3/flip_h = true
-0:0/3/transpose = true
-1:0/next_alternative_id = 4
-1:0/0 = 0
-1:0/1 = 1
-1:0/1/flip_v = true
-1:0/2 = 2
-1:0/2/transpose = true
-1:0/3 = 3
-1:0/3/flip_h = true
-1:0/3/transpose = true
-2:0/next_alternative_id = 4
-2:0/0 = 0
-2:0/1 = 1
-2:0/1/flip_v = true
-2:0/2 = 2
-2:0/2/transpose = true
-2:0/3 = 3
-2:0/3/flip_h = true
-2:0/3/transpose = true
-3:0/next_alternative_id = 4
-3:0/0 = 0
-3:0/1 = 1
-3:0/1/flip_v = true
-3:0/2 = 2
-3:0/2/transpose = true
-3:0/3 = 3
-3:0/3/flip_h = true
-3:0/3/transpose = true
-0:1/next_alternative_id = 4
-0:1/0 = 0
-0:1/1 = 1
-0:1/1/flip_v = true
-0:1/2 = 2
-0:1/2/transpose = true
-0:1/3 = 3
-0:1/3/flip_h = true
-0:1/3/transpose = true
-1:1/next_alternative_id = 4
-1:1/0 = 0
-1:1/1 = 1
-1:1/1/flip_v = true
-1:1/2 = 2
-1:1/2/transpose = true
-1:1/3 = 3
-1:1/3/flip_h = true
-1:1/3/transpose = true
-2:1/next_alternative_id = 4
-2:1/0 = 0
-2:1/1 = 1
-2:1/1/flip_v = true
-2:1/2 = 2
-2:1/2/transpose = true
-2:1/3 = 3
-2:1/3/flip_h = true
-2:1/3/transpose = true
-3:1/next_alternative_id = 4
-3:1/0 = 0
-3:1/1 = 1
-3:1/1/flip_v = true
-3:1/2 = 2
-3:1/2/transpose = true
-3:1/3 = 3
-3:1/3/flip_h = true
-3:1/3/transpose = true
-0:2/next_alternative_id = 4
-0:2/0 = 0
-0:2/1 = 1
-0:2/1/flip_v = true
-0:2/2 = 2
-0:2/2/transpose = true
-0:2/3 = 3
-0:2/3/flip_h = true
-0:2/3/transpose = true
-1:2/next_alternative_id = 4
-1:2/0 = 0
-1:2/1 = 1
-1:2/1/flip_v = true
-1:2/2 = 2
-1:2/2/transpose = true
-1:2/3 = 3
-1:2/3/flip_h = true
-1:2/3/transpose = true
-2:2/next_alternative_id = 4
-2:2/0 = 0
-2:2/1 = 1
-2:2/1/flip_v = true
-2:2/2 = 2
-2:2/2/transpose = true
-2:2/3 = 3
-2:2/3/flip_h = true
-2:2/3/transpose = true
-3:2/next_alternative_id = 4
-3:2/0 = 0
-3:2/1 = 1
-3:2/1/flip_v = true
-3:2/2 = 2
-3:2/2/transpose = true
-3:2/3 = 3
-3:2/3/flip_h = true
-3:2/3/transpose = true
-0:3/next_alternative_id = 4
-0:3/0 = 0
-0:3/1 = 1
-0:3/1/flip_v = true
-0:3/2 = 2
-0:3/2/transpose = true
-0:3/3 = 3
-0:3/3/flip_h = true
-0:3/3/transpose = true
-1:3/next_alternative_id = 4
-1:3/0 = 0
-1:3/1 = 1
-1:3/1/flip_v = true
-1:3/2 = 2
-1:3/2/transpose = true
-1:3/3 = 3
-1:3/3/flip_h = true
-1:3/3/transpose = true
-2:3/next_alternative_id = 4
-2:3/0 = 0
-2:3/1 = 1
-2:3/1/flip_v = true
-2:3/2 = 2
-2:3/2/transpose = true
-2:3/3 = 3
-2:3/3/flip_h = true
-2:3/3/transpose = true
-3:3/next_alternative_id = 4
-3:3/0 = 0
-3:3/1 = 1
-3:3/1/flip_v = true
-3:3/2 = 2
-3:3/2/transpose = true
-3:3/3 = 3
-3:3/3/flip_h = true
-3:3/3/transpose = true
-
-[sub_resource type="TileSet" id="TileSet_1hhe4"]
-tile_size = Vector2i(5, 5)
-sources/0 = SubResource("TileSetAtlasSource_opoii")
 
 [node name="PTGame" type="Node2D"]
 texture_filter = 1
@@ -171,31 +19,25 @@ ldtk_project_resource = ExtResource("9")
 clear_color = Color(0.117647, 0.541176, 0.298039, 1)
 
 [node name="PTLayers" type="Node2D" parent="."]
-script = ExtResource("5")
+script = ExtResource("3_6g6uy")
 
-[node name="Background" type="TileMap" parent="PTLayers"]
+[node name="Background" type="Node2D" parent="PTLayers"]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-tile_set = SubResource("TileSet_1hhe4")
-format = 2
-layer_0/tile_data = PackedInt32Array(0, 0, 0, 1, 0, 0, 2, 0, 0, 3, 0, 0, 4, 0, 0, 5, 0, 0, 65536, 0, 0, 65537, 0, 0, 65538, 0, 0, 65539, 0, 0, 65540, 0, 0, 65541, 0, 0, 131072, 0, 0, 131073, 0, 0, 131074, 0, 0, 131075, 0, 0, 131076, 0, 0, 131077, 0, 0, 196608, 0, 0, 196609, 0, 0, 196610, 0, 0, 196611, 0, 0, 196612, 0, 0, 196613, 0, 0, 262144, 0, 0, 262145, 0, 0, 262146, 0, 0, 262147, 0, 0, 262148, 0, 0, 262149, 0, 0, 327680, 0, 0, 327681, 0, 0, 327682, 0, 0, 327683, 0, 0, 327684, 0, 0, 327685, 0, 0, 393216, 0, 0, 393217, 0, 0, 393218, 0, 0, 393219, 0, 0, 393220, 0, 0, 393221, 0, 0)
-script = ExtResource("5_ybud1")
+script = ExtResource("4_yt37k")
+texture = ExtResource("5_hecp3")
 
-[node name="Targets" type="TileMap" parent="PTLayers"]
+[node name="Targets" type="Node2D" parent="PTLayers"]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-tile_set = SubResource("TileSet_1hhe4")
-format = 2
-layer_0/tile_data = PackedInt32Array(65538, 65536, 0, 196609, 65536, 0)
-script = ExtResource("5_ybud1")
+script = ExtResource("4_yt37k")
+texture = ExtResource("5_hecp3")
 
-[node name="Colliders" type="TileMap" parent="PTLayers"]
+[node name="Colliders" type="Node2D" parent="PTLayers"]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-tile_set = SubResource("TileSet_1hhe4")
-format = 2
-layer_0/tile_data = PackedInt32Array(0, 131072, 0, 1, 131072, 0, 2, 131072, 0, 3, 131072, 0, 65536, 131072, 0, 65539, 131072, 0, 131072, 131072, 0, 131075, 131072, 0, 131076, 131072, 0, 131077, 131072, 0, 196608, 131072, 0, 196609, 0, 1, 196613, 131072, 0, 262144, 131072, 0, 262146, 196608, 0, 262147, 0, 1, 262149, 131072, 0, 327680, 131072, 0, 327683, 131072, 0, 327684, 131072, 0, 327685, 131072, 0, 393216, 131072, 0, 393217, 131072, 0, 393218, 131072, 0, 393219, 131072, 0)
-script = ExtResource("5_ybud1")
+script = ExtResource("4_yt37k")
+texture = ExtResource("5_hecp3")
 
 [node name="PTPlayer" type="Node2D" parent="."]
 script = ExtResource("4")

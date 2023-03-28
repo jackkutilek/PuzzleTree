@@ -48,8 +48,8 @@ func frame_update(_context):
 			var dest_cell = Directions.shift_cell(cell, dir)
 			
 			if layers_are_empty(layer, move.extraCollisionLayers, dest_cell):
-				var tile = layer.get_tile_at_cell(cell)
-				var tile_dir = layer.get_dir_at_cell(cell)
+				var tile = layer.get_tiles_at_cell(cell)[0]
+				var tile_dir = layer.get_tile_dir_at_cell(tile, cell)
 				layer.clear_cell(cell)
 				layer.stack_tile_at_cell(tile, dest_cell, tile_dir)
 				moves.erase(move)

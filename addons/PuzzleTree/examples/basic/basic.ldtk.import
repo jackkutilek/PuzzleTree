@@ -1,0 +1,14 @@
+[remap]
+
+importer="ldtk.project"
+type="Resource"
+uid="uid://bena6rl8l4ulk"
+path="res://.godot/imported/basic.ldtk-9984a213ff6b4fed5b39cf598565bd35.tres"
+
+[deps]
+
+source_file="res://addons/PuzzleTree/examples/basic/basic.ldtk"
+dest_files=["res://.godot/imported/basic.ldtk-9984a213ff6b4fed5b39cf598565bd35.tres"]
+
+[params]
+

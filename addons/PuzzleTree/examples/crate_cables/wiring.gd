@@ -10,9 +10,6 @@ var nodes: PTTiles
 
 # Called once when a level starts
 func init_update(_context):
-	$nodes.copy_tilemap_settings_from(main)
-	$wires.copy_tilemap_settings_from(main)
-	
 	rewire_crates()
 
 func any_crate_exists_at(layer, cell):

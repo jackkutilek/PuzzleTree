@@ -90,10 +90,11 @@ func gather_state():
 	var data = {map_data = map_data, context_data = context_data}
 	return data
 
+const IGNORED_CONTEXT_KEYS = ["frame_key", "again"]
 func clone_context(context_obj):
 	var context_data = {}
 	for k in context_obj:
-		if k == 'key' or k == "again":
+		if IGNORED_CONTEXT_KEYS.has(k):
 			continue
 		if typeof(context_obj[k]) == TYPE_ARRAY:
 			context_data[k] = context_obj[k].duplicate()

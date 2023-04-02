@@ -35,6 +35,9 @@ func _unhandled_key_input(event: InputEvent):
 				abort_turn()
 				game_state.reset()
 				return true
+			KEY_C:
+				game_state.redo()
+				return true
 			KEY_BRACKETLEFT:
 				abort_turn()
 				prev_level()

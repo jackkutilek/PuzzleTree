@@ -9,6 +9,7 @@ var context:Dictionary = {}
 var layers: PTLayers
 
 var undo_stack = []
+var redo_stack = []
 signal state_loaded
 
 # --------------------------------------------------------------------------------------------------
@@ -19,12 +20,13 @@ func set_level(id:int):
 	if ldtk_project_data == null:
 		return
 	
+	undo_stack.clear()
+	redo_stack.clear()
+	layers.clear_layers()
+	
 	match ldtk_project_data.worldLayout:
 		"GridVania", "Free":
 			# load all levels
-			undo_stack.clear()
-			layers.clear_layers()
-			
 			var mincorner = Vector2i(1000000,1000000)
 			var maxcorner = -Vector2i(1000000,1000000)
 			
@@ -38,8 +40,6 @@ func set_level(id:int):
 			
 		"LinearHorizontal", "LinearVertical":
 			var def = ldtk_project_data.levels[id]
-			undo_stack.clear()
-			layers.clear_layers()
 			layers.load_level_layers(def)
 			
 			context._level_width = def.pxWid / ldtk_project_data.defaultGridSize
@@ -48,10 +48,21 @@ func set_level(id:int):
 func undo():
 	if undo_stack.size() > 1:
 		print("undo")
+		redo_stack.push_back(gather_state())
 		var data = undo_stack.pop_back()
 		load_state(data)
 	else:
 		print("undo stack is empty")
+		pass
+
+func redo():
+	if redo_stack.size() > 0:
+		print("redo")
+		undo_stack.push_back(gather_state())
+		var data = redo_stack.pop_back()
+		load_state(data)
+	else:
+		print("redo stack is empty")
 		pass
 	
 func reset():
@@ -67,6 +78,7 @@ func set_checkpoint(data):
 
 func save_state(data):
 	undo_stack.push_back(data)
+	redo_stack.clear()
 
 func load_state(data):
 	context = {}

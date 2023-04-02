@@ -11,6 +11,9 @@ const RELEASE_DOWN = 'release down'
 const RELEASE_LEFT = 'release left'
 const RELEASE_RIGHT = 'release right'
 
+const PRESS_ACTION = 'action'
+const RELEASE_ACTION = 'action'
+
 const MOUSE_DOWN = 'mouse down'
 const MOUSE_UP = 'mouse up'
 const MOUSE_MOVE = 'mouse move'
@@ -21,13 +24,13 @@ const AGAIN = 'again'
 
 func is_pressed_key(key):
 	match key:
-		PRESS_DOWN, PRESS_UP, PRESS_RIGHT, PRESS_LEFT:
+		PRESS_DOWN, PRESS_UP, PRESS_RIGHT, PRESS_LEFT, PRESS_ACTION:
 			return true
 	return false
 	
 func is_released_key(key):
 	match key:
-		RELEASE_DOWN, RELEASE_UP, RELEASE_RIGHT, RELEASE_LEFT:
+		RELEASE_DOWN, RELEASE_UP, RELEASE_RIGHT, RELEASE_LEFT, RELEASE_ACTION:
 			return true
 	return false
 

@@ -75,6 +75,12 @@ func _unhandled_key_input(event: InputEvent):
 			else:
 				queue_input(Inputs.RELEASE_RIGHT)
 			return true
+		KEY_SPACE, KEY_X:
+			if event.pressed:
+				queue_input(Inputs.PRESS_ACTION)
+			else:
+				queue_input(Inputs.RELEASE_ACTION)
+			return true
 	
 	return false
 

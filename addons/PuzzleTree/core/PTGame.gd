@@ -103,11 +103,11 @@ func initialize_camera_node():
 		
 		var camera = PTCamera.new()
 		camera.name = "PTCamera"
-		camera.current = true
 		camera.tile_size = ldtk_project_data.defaultGridSize
 		add_child(camera)
 		move_child(camera, 1)
 		camera.set_owner(get_tree().get_edited_scene_root())
+		camera.make_current()
 
 # --------------------------------------------------------------------------------------------------
 

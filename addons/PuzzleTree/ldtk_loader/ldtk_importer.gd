@@ -26,6 +26,8 @@ func _get_save_extension():
 func _get_resource_type():
 	return "Resource"
 
+func _get_priority():
+	return 1.0
 
 func _import(source_file: String, save_path: String, options: Dictionary, platform_variants: Array[String], gen_files: Array[String]):
 	var project = Resource.new()

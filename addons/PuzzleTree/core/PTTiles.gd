@@ -102,14 +102,16 @@ func has_tile_at_cell(tile: int, cell:Vector2i, dir:String = "any"):
 
 func get_cells_with_tile(tile: int):
 	var atlas = _tile_to_atlas(tile)
-	return _get_cells_with_tile_recrusive(atlas, 0, [])
-func _get_cells_with_tile_recrusive(atlas: Vector2i, layer:int, cells: Array[int]):
+	var cells: Array[Vector2i] = []
+	_get_cells_with_tile_recursive(atlas, 0, cells)
+	return cells
+func _get_cells_with_tile_recursive(atlas: Vector2i, layer:int, cells: Array[Vector2i]):
 	var layer_cells = tile_map.get_used_cells_by_id(layer, 0, atlas)
 	for layer_cell in layer_cells:
 		if not cells.has(layer_cell):
-			cells.append(layer_cell)
+			cells.push_back(layer_cell)
 	if is_layer_valid(layer+1):
-		_get_cells_with_tile_recrusive(atlas, layer+1, cells)
+		_get_cells_with_tile_recursive(atlas, layer+1, cells)
 
 var _changed_cells: Dictionary
 

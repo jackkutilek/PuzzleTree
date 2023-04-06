@@ -48,7 +48,6 @@ func late_frame_update(context):
 	store_player_position(context, layer)
 
 func store_player_position(context: Dictionary, layer: PTTiles):
-	for cell in layer.get_all_used_cells():
-		if layer.has_tile_at_cell(PlayerTile, cell):
-			context.player_pos = cell
-			context.camera_pos = context.player_pos
+	for cell in layer.get_cells_with_tile(PlayerTile):
+		context.player_pos = cell
+		context.camera_pos = context.player_pos

@@ -16,6 +16,9 @@ signal state_loaded
 func set_level(id:int):
 	current_level_id = id
 	
+	if ldtk_project_data == null:
+		return
+	
 	match ldtk_project_data.worldLayout:
 		"GridVania", "Free":
 			# load all levels
@@ -108,4 +111,5 @@ func clone_context(context_obj):
 
 func initialize(ptLayers: PTLayers):
 	layers = ptLayers
-	ldtk_project_data = layers.ldtk_project_data
+	if layers != null:
+		ldtk_project_data = layers.ldtk_project_data

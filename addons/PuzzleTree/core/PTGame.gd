@@ -6,7 +6,7 @@ class_name PTGame
 
 @export var ldtk_project_resource: Resource : set = set_project
 @export var reload_ldtk_project = false : set = reload_project
-
+@export var base_tile_size: Vector2i = Vector2i(5,5)
 @export var starting_level: int = 0 : set = set_level
 @export var clear_color: Color = Color.GRAY
 
@@ -54,15 +54,16 @@ func ldtk_changed():
 	load_project()
 
 func load_project():
-	if ldtk_project_resource == null or not is_ready or get_tree() == null:
+	if not is_ready or get_tree() == null:
 		print("#-- !! cannot load LDTK project !! --#")
 		return
-		
-	var resource_path = ldtk_project_resource.resource_path
-	print("#-- loading project at ", resource_path, " --#")
 	
-	ldtk_project_data = ldtk_project_resource.data
-	ldtk_project_data.path = resource_path
+	if ldtk_project_resource != null:
+		var resource_path = ldtk_project_resource.resource_path
+		print("#-- loading project at ", resource_path, " --#")
+		
+		ldtk_project_data = ldtk_project_resource.data
+		ldtk_project_data.path = resource_path
 	
 	initialize_layers_node()
 	initialize_engine()
@@ -76,12 +77,14 @@ func initialize_layers_node():
 		var layers = get_node("PTLayers")
 		if layers != null:
 			remove_child(layers)
-		
-		layers = PTLayers.new()
+	
+	if not has_node("PTLayers"):
+		var  layers = PTLayers.new()
 		layers.name = "PTLayers"
 		add_child(layers)
 		move_child(layers, 0)
-		layers.set_owner(get_tree().get_edited_scene_root())
+		if Engine.is_editor_hint():
+			layers.set_owner(get_tree().get_edited_scene_root())
 	
 	$PTLayers.set_ldtk_project(ldtk_project_data)
 
@@ -92,10 +95,15 @@ func initialize_engine():
 	engine.enable_mouse_turns = enable_mouse_turns
 	engine.again_interval = again_interval
 	engine.key_repeat_interval = key_repeat_interval
+	engine.base_tile_size = base_tile_size
 	engine.set_level(starting_level)
 
 func initialize_camera_node():
 	if Engine.is_editor_hint():
+		if get_viewport().get_camera_2d() != null:
+			print("#-- camera already exists, will not create PTCamera --#")
+			return
+		
 		for node in get_tree_nodes():
 			if node.get_class() == "Camera2D":
 				print("#-- camera already exists, will not create PTCamera --#")
@@ -140,9 +148,6 @@ func get_tree_nodes_recursive(node, collected_nodes):
 
 func _ready():
 	is_ready = true
-	
-	if ldtk_project_resource == null:
-		return
 		
 	print("#-- game ready, loading project --#")
 	load_project()

@@ -10,6 +10,7 @@ var mouse_cell = Vector2i()
 var mouse_is_down = false
 var enable_mouse_turns = false
 
+var base_tile_size:Vector2i = Vector2i(5,5)
 var again_interval := 1.0
 var time_since_last_frame := 0.0
 var againing := false
@@ -95,11 +96,12 @@ func _unhandled_input(event: InputEvent):
 			queue_input(Inputs.MOUSE_MOVE)
 
 func update_mouse_cell():
-	var layer = game_state.layers.get_child(0) as PTTiles
-	assert(layer is PTTiles)
-	var global = layer.get_global_mouse_position()
-	var local = layer.to_local(global) - Vector2(.5,.5)
-	mouse_cell = layer.local_to_map(local)
+	var global = root.get_global_mouse_position()
+	var local = root.to_local(global) - Vector2(.5,.5)
+	mouse_cell = local_to_map(local)
+
+func local_to_map(local:Vector2)->Vector2i:
+	return Vector2i(int(local.x/base_tile_size.x), int(local.y/base_tile_size.y))
 
 func queue_input(input: String):
 	if game_state.context.winning:
@@ -417,8 +419,11 @@ func get_tree_nodes_recursive(node: Node, collected_nodes: Array[Node]):
 # ---------------------------------------------------------
 
 func set_level(id):
-	if id >= ldtk_project_data.levels.size():
-		id = ldtk_project_data.levels.size()-1
+	var levels_size = 1
+	if ldtk_project_data != null:
+		levels_size = ldtk_project_data.levels.size()
+	if id >= levels_size:
+		id = levels_size-1
 	if id < 0:
 		id = 0
 	

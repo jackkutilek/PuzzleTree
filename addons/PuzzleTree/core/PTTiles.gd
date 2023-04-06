@@ -243,9 +243,8 @@ func _get_relative_scale()->Vector2:
 	var game = _get_PTGame()
 	if game == null:
 		return Vector2(1,1)
-	var sample_tile_layer = game.get_node("PTLayers").get_child(0) as PTTiles
-	var sample_size = sample_tile_layer.tile_size
-	var scale = Vector2(float(sample_size.x)/tile_size.x, float(sample_size.y)/tile_size.y)
+	var base_size = game.base_tile_size
+	var scale = Vector2(float(base_size.x)/tile_size.x, float(base_size.y)/tile_size.y)
 	return scale
 
 func _get_PTGame()->PTGame:

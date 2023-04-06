@@ -20,21 +20,18 @@ clear_color = Color(0.117647, 0.541176, 0.298039, 1)
 [node name="Background" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-scale = Vector2(1, 1)
 script = ExtResource("8_6i7da")
 texture = ExtResource("5_hecp3")
 
 [node name="Targets" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-scale = Vector2(1, 1)
 script = ExtResource("8_6i7da")
 texture = ExtResource("5_hecp3")
 
 [node name="Colliders" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-scale = Vector2(1, 1)
 script = ExtResource("8_6i7da")
 texture = ExtResource("5_hecp3")
 

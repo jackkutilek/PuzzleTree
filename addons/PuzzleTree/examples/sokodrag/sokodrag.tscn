@@ -1,11 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://deqtbigt5dp0n"]
+[gd_scene load_steps=10 format=3 uid="uid://deqtbigt5dp0n"]
 
 [ext_resource type="Script" path="res://addons/PuzzleTree/core/PTGame.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://cmipbvry7t13s" path="res://addons/PuzzleTree/examples/sokodrag/tileset.png" id="2"]
-[ext_resource type="Script" path="res://addons/PuzzleTree/core/PTTiles.gd" id="3"]
+[ext_resource type="Script" path="res://addons/PuzzleTree/core/LDTKTiles.gd" id="3_lc2a7"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/utils/PTCamera.gd" id="4"]
-[ext_resource type="Script" path="res://addons/PuzzleTree/core/PTLayers.gd" id="5"]
-[ext_resource type="Script" path="res://addons/PuzzleTree/core/PTEntities.gd" id="6"]
+[ext_resource type="Script" path="res://addons/PuzzleTree/core/LDTKEntities.gd" id="5_3wsuk"]
 [ext_resource type="Resource" uid="uid://bm2te1x3abicm" path="res://addons/PuzzleTree/examples/sokodrag/sokodrag.ldtk" id="7"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/sokodrag/drag.gd" id="8"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/sokodrag/cursor.gd" id="9"]
@@ -21,36 +20,33 @@ enable_mouse_turns = true
 key_repeat_interval = 0.1
 again_interval = 0.03
 
-[node name="PTLayers" type="Node2D" parent="."]
-script = ExtResource("5")
-
-[node name="BG" type="Node2D" parent="PTLayers"]
+[node name="BG" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-script = ExtResource("3")
+script = ExtResource("3_lc2a7")
 texture = ExtResource("2")
 
-[node name="Reach" type="Node2D" parent="PTLayers"]
+[node name="Reach" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-script = ExtResource("3")
+script = ExtResource("3_lc2a7")
 texture = ExtResource("2")
 
-[node name="Grid" type="Node2D" parent="PTLayers"]
+[node name="Grid" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-script = ExtResource("3")
+script = ExtResource("3_lc2a7")
 texture = ExtResource("2")
 
-[node name="Lines" type="Node2D" parent="PTLayers"]
+[node name="Lines" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-script = ExtResource("3")
+script = ExtResource("3_lc2a7")
 texture = ExtResource("2")
 
-[node name="Start" type="Node2D" parent="PTLayers"]
+[node name="Start" type="Node2D" parent="."]
 unique_name_in_owner = true
-script = ExtResource("6")
+script = ExtResource("5_3wsuk")
 entities = Array[Dictionary]([{
 "cell": Vector2i(6, 3),
 "height": 1.0,

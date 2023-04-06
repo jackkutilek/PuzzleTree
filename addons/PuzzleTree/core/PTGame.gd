@@ -20,6 +20,7 @@ var ldtk_project_data = null
 
 var is_ready = false
 var engine: PTEngine
+var layers: PTLayers
 
 # --------------------------------------------------------------------------------------------------
 
@@ -46,11 +47,11 @@ func set_project(value):
 
 func reload_project(value):
 	if Engine.is_editor_hint() and value:
-		print("#-- triggered LDTK project reload --#")
+		print("#-- triggered LDTK project reload at ", Time.get_datetime_string_from_system(false, true) ," --#")
 		load_project()
 
 func ldtk_changed():
-	print("#-- LDTK project changes detected... reloading project --#")
+	print("#-- LDTK project changes detected at ", Time.get_datetime_string_from_system(false, true) ,"... reloading project --#")
 	load_project()
 
 func load_project():
@@ -60,10 +61,12 @@ func load_project():
 	
 	if ldtk_project_resource != null:
 		var resource_path = ldtk_project_resource.resource_path
-		print("#-- loading project at ", resource_path, " --#")
+		print("#-- loading LDTK project at ", resource_path, " --#")
 		
 		ldtk_project_data = ldtk_project_resource.data
 		ldtk_project_data.path = resource_path
+	else:
+		print("#-- loading non-LDTK project --#")
 	
 	initialize_layers_node()
 	initialize_engine()
@@ -73,24 +76,13 @@ func load_project():
 # --------------------------------------------------------------------------------------------------
 
 func initialize_layers_node():
-	if Engine.is_editor_hint():
-		var layers = get_node("PTLayers")
-		if layers != null:
-			remove_child(layers)
-	
-	if not has_node("PTLayers"):
-		var  layers = PTLayers.new()
-		layers.name = "PTLayers"
-		add_child(layers)
-		move_child(layers, 0)
-		if Engine.is_editor_hint():
-			layers.set_owner(get_tree().get_edited_scene_root())
-	
-	$PTLayers.set_ldtk_project(ldtk_project_data)
+	layers = PTLayers.new()
+	layers.root_node = self
+	layers.set_ldtk_project(ldtk_project_data)
 
-func initialize_engine():	
+func initialize_engine():
 	engine = PTEngine.new()
-	engine.initialize(self, $PTLayers)
+	engine.initialize(self, layers)
 	engine.run_turns_on_keyup = run_turns_on_keyup
 	engine.enable_mouse_turns = enable_mouse_turns
 	engine.again_interval = again_interval
@@ -101,19 +93,21 @@ func initialize_engine():
 func initialize_camera_node():
 	if Engine.is_editor_hint():
 		if get_viewport().get_camera_2d() != null:
-			print("#-- camera already exists, will not create PTCamera --#")
+			print("#-- active camera already exists, will not create PTCamera --#")
 			return
 		
 		for node in get_tree_nodes():
 			if node.get_class() == "Camera2D":
-				print("#-- camera already exists, will not create PTCamera --#")
+				print("#-- camera node already exists, will not create PTCamera --#")
+				node.make_current()
 				return
 		
+		print("#-- creating new PTCamera --#")
 		var camera = PTCamera.new()
 		camera.name = "PTCamera"
-		camera.tile_size = ldtk_project_data.defaultGridSize
+		if ldtk_project_data != null:
+			camera.tile_size = ldtk_project_data.defaultGridSize
 		add_child(camera)
-		move_child(camera, 1)
 		camera.set_owner(get_tree().get_edited_scene_root())
 		camera.make_current()
 

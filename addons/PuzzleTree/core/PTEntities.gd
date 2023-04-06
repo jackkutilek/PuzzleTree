@@ -1,3 +1,4 @@
+@tool
 @icon("../icons/PTEntities.png")
 extends Node2D
 

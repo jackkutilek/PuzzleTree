@@ -18,7 +18,6 @@ func _get_key(texture: Texture2D, tile_size: Vector2i)->String:
 	return "%d %d %d" % [texture.get_rid().get_id(), tile_size.x, tile_size.y]
 
 static func create_tileset(texture: Texture2D, tile_size: Vector2i)->TileSet:
-	print ("creating tileset")
 	var tileset = TileSet.new()
 	tileset.tile_size = tile_size
 	

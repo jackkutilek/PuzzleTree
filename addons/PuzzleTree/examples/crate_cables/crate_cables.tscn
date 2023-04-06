@@ -3,10 +3,10 @@
 [ext_resource type="Script" path="res://addons/PuzzleTree/core/PTTiles.gd" id="1"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/core/PTGame.gd" id="2"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/utils/PTCamera.gd" id="3"]
-[ext_resource type="Script" path="res://addons/PuzzleTree/core/PTLayers.gd" id="3_hajy0"]
+[ext_resource type="Script" path="res://addons/PuzzleTree/core/LDTKTiles.gd" id="3_owyiq"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/utils/PTPlayer.gd" id="4"]
 [ext_resource type="Texture2D" uid="uid://4ql8ye3aplf3" path="res://addons/PuzzleTree/examples/crate_cables/spritesheet.png" id="5_acyst"]
-[ext_resource type="Script" path="res://addons/PuzzleTree/core/PTEntities.gd" id="6_f5hcb"]
+[ext_resource type="Script" path="res://addons/PuzzleTree/core/LDTKEntities.gd" id="5_rrwea"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/utils/PTMovement.gd" id="7"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/crate_cables/trails.gd" id="8"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/crate_cables/wiring.gd" id="9"]
@@ -22,48 +22,52 @@ script = ExtResource("2")
 ldtk_project_resource = ExtResource("13")
 clear_color = Color(0.6, 0.733333, 0.6, 1)
 
-[node name="PTLayers" type="Node2D" parent="."]
-script = ExtResource("3_hajy0")
-
-[node name="Floor" type="Node2D" parent="PTLayers"]
+[node name="Floor" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-script = ExtResource("1")
+scale = Vector2(1, 1)
+script = ExtResource("3_owyiq")
 texture = ExtResource("5_acyst")
 
-[node name="ForestEdge" type="Node2D" parent="PTLayers"]
+[node name="ForestEdge" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-script = ExtResource("1")
+scale = Vector2(1, 1)
+script = ExtResource("3_owyiq")
 texture = ExtResource("5_acyst")
 
-[node name="Targets" type="Node2D" parent="PTLayers"]
+[node name="Targets" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-script = ExtResource("1")
+scale = Vector2(1, 1)
+script = ExtResource("3_owyiq")
 texture = ExtResource("5_acyst")
 
-[node name="Main" type="Node2D" parent="PTLayers"]
+[node name="Main" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-script = ExtResource("1")
+scale = Vector2(1, 1)
+script = ExtResource("3_owyiq")
 texture = ExtResource("5_acyst")
 
-[node name="TreeShadows" type="Node2D" parent="PTLayers"]
+[node name="TreeShadows" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-script = ExtResource("1")
+scale = Vector2(1, 1)
+script = ExtResource("3_owyiq")
 texture = ExtResource("5_acyst")
 
-[node name="Forest" type="Node2D" parent="PTLayers"]
+[node name="Forest" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-script = ExtResource("1")
+scale = Vector2(1, 1)
+script = ExtResource("3_owyiq")
 texture = ExtResource("5_acyst")
 
-[node name="Gates" type="Node2D" parent="PTLayers"]
+[node name="Gates" type="Node2D" parent="."]
 unique_name_in_owner = true
-script = ExtResource("6_f5hcb")
+scale = Vector2(1, 1)
+script = ExtResource("5_rrwea")
 entities = Array[Dictionary]([{
 "cell": Vector2i(5, 0),
 "height": 1.0,
@@ -186,10 +190,11 @@ entities = Array[Dictionary]([{
 "width": 1.0
 }])
 
-[node name="Numbers" type="Node2D" parent="PTLayers"]
+[node name="Numbers" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-script = ExtResource("1")
+scale = Vector2(1, 1)
+script = ExtResource("3_owyiq")
 texture = ExtResource("5_acyst")
 
 [node name="PTPlayer" type="Node2D" parent="."]

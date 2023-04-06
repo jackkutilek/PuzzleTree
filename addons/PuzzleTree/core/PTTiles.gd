@@ -1,3 +1,4 @@
+@tool
 @icon("../icons/PTTiles.png")
 
 extends Node2D
@@ -210,7 +211,7 @@ func _get_stack_at_cell(cell: Vector2i, layer:int, stack_string: String):
 
 # --------------------------------------------------------------------------------------------------
 
-func set_tileset(texture:Texture2D, tile_size: Vector2i):
+func set_tileset_from_texture(texture:Texture2D, tile_size: Vector2i):
 	self.texture = texture
 	self.tile_size = tile_size
 	if tile_map == null:
@@ -226,7 +227,7 @@ func _ready():
 		tile_map = get_node("tilemap") as TileMap
 	if tile_map == null:
 		_init_tilemap()
-		set_tileset(texture, tile_size)
+		set_tileset_from_texture(texture, tile_size)
 	
 	_update_scale()
 

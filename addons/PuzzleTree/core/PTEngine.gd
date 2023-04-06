@@ -246,7 +246,7 @@ func run_frame(frame_key):
 	var context = game_state.context
 	
 	# reset changed tiles
-	for layer in game_state.layers.get_tile_layers():
+	for layer in game_state.layers.get_tile_layers().values():
 		layer.reset_changed_cells()
 	
 	# apply turn reason to frame context

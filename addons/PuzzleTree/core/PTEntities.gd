@@ -4,7 +4,7 @@ extends Node2D
 
 class_name PTEntities
 
-@export var entities:Array[Dictionary] = []
+@export var entities:Array = []
 
 
 

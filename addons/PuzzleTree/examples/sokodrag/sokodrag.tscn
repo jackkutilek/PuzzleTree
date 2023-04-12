@@ -1,70 +1,126 @@
-[gd_scene load_steps=10 format=3 uid="uid://deqtbigt5dp0n"]
+[gd_scene load_steps=16 format=3 uid="uid://deqtbigt5dp0n"]
 
 [ext_resource type="Script" path="res://addons/PuzzleTree/core/PTGame.gd" id="1"]
+[ext_resource type="Script" path="res://addons/PuzzleTree/examples/sokodrag/gameCycler.gd" id="1_5d6ls"]
 [ext_resource type="Texture2D" uid="uid://cmipbvry7t13s" path="res://addons/PuzzleTree/examples/sokodrag/tileset.png" id="2"]
-[ext_resource type="Script" path="res://addons/PuzzleTree/core/LDTKTiles.gd" id="3_lc2a7"]
+[ext_resource type="Script" path="res://addons/PuzzleTree/core/PTTiles.gd" id="3"]
+[ext_resource type="Resource" uid="uid://boeugfnk42q87" path="res://addons/PuzzleTree/examples/sokodrag/sokodrag.ldtk" id="3_umyl8"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/utils/PTCamera.gd" id="4"]
-[ext_resource type="Script" path="res://addons/PuzzleTree/core/LDTKEntities.gd" id="5_3wsuk"]
-[ext_resource type="Resource" uid="uid://bm2te1x3abicm" path="res://addons/PuzzleTree/examples/sokodrag/sokodrag.ldtk" id="7"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/sokodrag/drag.gd" id="8"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/sokodrag/cursor.gd" id="9"]
+[ext_resource type="Script" path="res://addons/PuzzleTree/core/LDTKTiles.gd" id="9_ote55"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/sokodrag/grass.gd" id="10_oayge"]
+[ext_resource type="Script" path="res://addons/PuzzleTree/core/LDTKEntities.gd" id="11_3mpm5"]
+[ext_resource type="Script" path="res://addons/PuzzleTree/examples/sokodrag/cursor_visual.gd" id="11_ed3ma"]
+[ext_resource type="Script" path="res://addons/PuzzleTree/examples/sokodrag/fence.gd" id="11_lnhnt"]
+[ext_resource type="Texture2D" uid="uid://cshulfl2uk41i" path="res://addons/PuzzleTree/examples/sokodrag/annotations.png" id="14_d82h7"]
+[ext_resource type="Script" path="res://addons/PuzzleTree/examples/sokodrag/arrows.gd" id="14_gv38x"]
 
-[node name="PTGame" type="Node2D"]
+[node name="root" type="Node2D"]
 texture_filter = 1
 scale = Vector2(10, 10)
+script = ExtResource("1_5d6ls")
+
+[node name="Sokodrag" type="Node2D" parent="."]
 script = ExtResource("1")
-ldtk_project_resource = ExtResource("7")
+puzzletree_project = ExtResource("3_umyl8")
 starting_level = 1
 enable_mouse_turns = true
 key_repeat_interval = 0.1
 again_interval = 0.03
 
-[node name="BG" type="Node2D" parent="."]
+[node name="BG" type="Node2D" parent="Sokodrag"]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-script = ExtResource("3_lc2a7")
+script = ExtResource("9_ote55")
 texture = ExtResource("2")
 
-[node name="Reach" type="Node2D" parent="."]
+[node name="Reach" type="Node2D" parent="Sokodrag"]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-script = ExtResource("3_lc2a7")
+script = ExtResource("9_ote55")
 texture = ExtResource("2")
 
-[node name="Grid" type="Node2D" parent="."]
+[node name="Grid" type="Node2D" parent="Sokodrag"]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-script = ExtResource("3_lc2a7")
+script = ExtResource("9_ote55")
 texture = ExtResource("2")
 
-[node name="Lines" type="Node2D" parent="."]
+[node name="Lines" type="Node2D" parent="Sokodrag"]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-script = ExtResource("3_lc2a7")
+script = ExtResource("9_ote55")
 texture = ExtResource("2")
 
-[node name="Start" type="Node2D" parent="."]
+[node name="Start" type="Node2D" parent="Sokodrag"]
 unique_name_in_owner = true
-script = ExtResource("5_3wsuk")
-entities = Array[Dictionary]([{
+script = ExtResource("11_3mpm5")
+entities = [{
 "cell": Vector2i(6, 3),
 "height": 1.0,
 "id": "Start",
 "width": 1.0
-}])
+}]
 
-[node name="PTCamera" type="Camera2D" parent="."]
+[node name="PTCamera" type="Camera2D" parent="Sokodrag"]
 offset = Vector2(0.5, 0.5)
-zoom = Vector2(0.000660066, 0.000660066)
+zoom = Vector2(1530, 1530)
 script = ExtResource("4")
 tile_size = 50
 
-[node name="cursor" type="Node2D" parent="."]
+[node name="cursor" type="Node2D" parent="Sokodrag"]
 script = ExtResource("9")
 
-[node name="drag" type="Node2D" parent="cursor"]
+[node name="drag" type="Node2D" parent="Sokodrag/cursor"]
 script = ExtResource("8")
 
-[node name="grass" type="Node2D" parent="."]
+[node name="cursor_visual" type="Node2D" parent="Sokodrag/cursor"]
+script = ExtResource("11_ed3ma")
+
+[node name="grass" type="Node2D" parent="Sokodrag"]
 script = ExtResource("10_oayge")
+
+[node name="Arrows" type="Node2D" parent="."]
+script = ExtResource("1")
+clear_color = Color(0.745098, 0.745098, 0.745098, 0)
+enable_mouse_turns = true
+
+[node name="cursor" type="Node2D" parent="Arrows"]
+script = ExtResource("9")
+
+[node name="arrow" type="Node2D" parent="Arrows"]
+script = ExtResource("14_gv38x")
+
+[node name="arrows" type="Node2D" parent="Arrows/arrow"]
+scale = Vector2(0.3125, 0.3125)
+script = ExtResource("3")
+texture = ExtResource("14_d82h7")
+tile_size = Vector2i(16, 16)
+
+[node name="cursor_visual" type="Node2D" parent="Arrows/arrow"]
+script = ExtResource("11_ed3ma")
+PLAIN = 5
+ACTIVE = 6
+
+[node name="Fences" type="Node2D" parent="."]
+script = ExtResource("1")
+clear_color = Color(0.745098, 0.745098, 0.745098, 0)
+enable_mouse_turns = true
+
+[node name="cursor" type="Node2D" parent="Fences"]
+script = ExtResource("9")
+
+[node name="fence" type="Node2D" parent="Fences"]
+script = ExtResource("11_lnhnt")
+
+[node name="fences" type="Node2D" parent="Fences/fence"]
+scale = Vector2(0.3125, 0.3125)
+script = ExtResource("3")
+texture = ExtResource("14_d82h7")
+tile_size = Vector2i(16, 16)
+
+[node name="cursor_visual" type="Node2D" parent="Fences/fence"]
+script = ExtResource("11_ed3ma")
+PLAIN = 10
+ACTIVE = 11

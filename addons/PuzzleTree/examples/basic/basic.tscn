@@ -1,39 +1,39 @@
 [gd_scene load_steps=10 format=3 uid="uid://cqkait8bljy7b"]
 
 [ext_resource type="Script" path="res://addons/PuzzleTree/core/PTGame.gd" id="2"]
+[ext_resource type="Resource" uid="uid://b7p64w7wenrdq" path="res://addons/PuzzleTree/examples/basic/basic.ldtk" id="2_o4kqm"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/utils/PTCamera.gd" id="3"]
+[ext_resource type="Script" path="res://addons/PuzzleTree/core/LDTKTiles.gd" id="3_logao"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/utils/PTPlayer.gd" id="4"]
-[ext_resource type="Texture2D" uid="uid://bar2ohd068573" path="res://addons/PuzzleTree/examples/basic/basic.png" id="5_hecp3"]
+[ext_resource type="Texture2D" uid="uid://bar2ohd068573" path="res://addons/PuzzleTree/examples/basic/basic.png" id="4_eq104"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/utils/PTMovement.gd" id="6"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/basic/pushcrates.gd" id="7"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/basic/wincheck.gd" id="8"]
-[ext_resource type="Script" path="res://addons/PuzzleTree/core/LDTKTiles.gd" id="8_6i7da"]
-[ext_resource type="Resource" uid="uid://bena6rl8l4ulk" path="res://addons/PuzzleTree/examples/basic/basic.ldtk" id="9"]
 
 [node name="PTGame" type="Node2D"]
 texture_filter = 1
 scale = Vector2(10, 10)
 script = ExtResource("2")
-ldtk_project_resource = ExtResource("9")
+puzzletree_project = ExtResource("2_o4kqm")
 clear_color = Color(0.117647, 0.541176, 0.298039, 1)
 
 [node name="Background" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-script = ExtResource("8_6i7da")
-texture = ExtResource("5_hecp3")
+script = ExtResource("3_logao")
+texture = ExtResource("4_eq104")
 
 [node name="Targets" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-script = ExtResource("8_6i7da")
-texture = ExtResource("5_hecp3")
+script = ExtResource("3_logao")
+texture = ExtResource("4_eq104")
 
 [node name="Colliders" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-script = ExtResource("8_6i7da")
-texture = ExtResource("5_hecp3")
+script = ExtResource("3_logao")
+texture = ExtResource("4_eq104")
 
 [node name="PTPlayer" type="Node2D" parent="."]
 script = ExtResource("4")

@@ -2,7 +2,7 @@
 extends RefCounted
 class_name PTLayers
 
-var ldtk_project_data = null
+var ptproject:PuzzleTreeProject = null
 var root_node: Node2D
 var tilesets_by_uid = {}
 
@@ -97,54 +97,31 @@ func clear_layers():
 		layer.clear_map()
 
 func load_level_layers(level_def):
-	var offsetX = 0
-	var offsetY = 0
-	if level_def.worldX != -1:
-		offsetX = level_def.worldX
-	if level_def.worldY != -1:
-		offsetY = level_def.worldY
-	
-	for layer in level_def.layerInstances:
-		var layer_def = get_layer_def(layer.layerDefUid)
+	for layer in level_def.layers.values():
+		var layer_def = get_layer_def(layer.identifier)
 		if layer_def.type == "Entities":
-			var layer_node = root_node.get_node("%" + layer.__identifier) as PTEntities
-			layer_node.load_level(layer, level_def)
+			var layer_node = root_node.get_node("%" + layer.identifier) as PTEntities
+			layer_node.entities.append_array(layer.entities)
 			continue
 		else:
-			var layer_node = root_node.get_node("%" + layer.__identifier) as PTTiles
-			if layer.has("gridTiles"):
-				for tile in layer.gridTiles:
-					var cell = Vector2i((tile.px[0] + offsetX)/layer_def.gridSize, (tile.px[1] + offsetY)/layer_def.gridSize)
-					layer_node.stack_tile_at_cell(tile.t, cell)
-			if layer.has("autoLayerTiles"):
-				for tile in layer.autoLayerTiles:
-					var cell = Vector2i((tile.px[0] + offsetX)/layer_def.gridSize, (tile.px[1] + offsetY)/layer_def.gridSize)
-					layer_node.stack_tile_at_cell(tile.t, cell)
+			var layer_node = root_node.get_node("%" + layer.identifier) as PTTiles
+			for cell in layer.used_cells.keys():
+				var tiles = layer.used_cells[cell]
+				for tile in tiles:
+					layer_node.stack_tile_at_cell(tile, cell)
 
-func get_layer_def(uid):
-	for layer in ldtk_project_data.defs.layers:
-		if layer.uid == uid:
+func get_layer_def(identifier):
+	for layer in ptproject.grid_layers:
+		if layer.identifier == identifier:
 			return layer
 	return null
 
 # --------------------------------------------------------------------------------------------------
 
-func set_ldtk_project(pldtk_project):
-	ldtk_project_data = pldtk_project
-	if ldtk_project_data != null and Engine.is_editor_hint():
-		var path = ldtk_project_data.path
-		var rel_base = path.substr(0,path.rfind("/")+1)
-		parse_tilesets(rel_base)
+func set_pt_project(ptproject_):
+	ptproject = ptproject_
+	if ptproject != null and Engine.is_editor_hint():
 		parse_layers()
-
-func parse_tilesets(ldtk_project_location):
-	tilesets_by_uid.clear()
-	
-	for tileset_def in ldtk_project_data.defs.tilesets:
-		var texture = load(ldtk_project_location + tileset_def.relPath)
-		var tile_size = Vector2i(tileset_def.tileGridSize, tileset_def.tileGridSize)
-
-		tilesets_by_uid[tileset_def.uid] = {texture=texture, tile_size=tile_size}
 
 func get_ldtk_layers():
 	var layers = []
@@ -159,8 +136,7 @@ func get_ldtk_layers():
 func parse_layers():
 	var layers = get_ldtk_layers()
 	
-	for x in ldtk_project_data.defs.layers.size():
-		var layer_def = ldtk_project_data.defs.layers[-x-1]
+	for layer_def in ptproject.grid_layers:
 		if layer_def.type == "Entities":
 			var layer = create_entities_layer(layer_def)
 			layers.erase(layer)
@@ -174,13 +150,17 @@ func parse_layers():
 
 func create_layer(layer_def):
 	var new_layer: PTTiles
-	var existing_layer = root_node.get_node("%"+layer_def.identifier)
+	var existing_layer = null
+	if root_node.has_node("%"+layer_def.identifier):
+		existing_layer = root_node.get_node("%"+layer_def.identifier)
 	if existing_layer != null and existing_layer is PTTiles:
 		new_layer = existing_layer as PTTiles
 	else:
 		new_layer = LDTKTiles.new()
 		new_layer.name = layer_def.identifier
 		new_layer.unique_name_in_owner = true
+		
+		# TODO this offset code needs to run after tile size gets set
 		
 		# adjust tilemap to fix bug with odd grid sizes
 		# https://github.com/godotengine/godot/issues/62911
@@ -191,8 +171,9 @@ func create_layer(layer_def):
 		root_node.add_child(new_layer)
 		new_layer.set_owner(root_node.get_tree().get_edited_scene_root())
 	
-	var tileset = tilesets_by_uid[layer_def.tilesetDefUid]
-	new_layer.set_tileset_from_texture(tileset.texture, tileset.tile_size)
+	var texture = load(layer_def.texture)
+	var tile_size = layer_def.tile_size
+	new_layer.set_tileset_from_texture(texture, tile_size)
 	
 	return new_layer
 

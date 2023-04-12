@@ -19,7 +19,7 @@ var state_to_save = null
 
 var root: Node2D
 var game_state: PTGameState
-var ldtk_project_data = null
+var ptproject: PuzzleTreeProject = null
 
 const MAX_FRAMES_PER_PROCESS = 4
 # ---------------------------------------------------------
@@ -429,8 +429,8 @@ func get_tree_nodes_recursive(node: Node, collected_nodes: Array[Node]):
 
 func set_level(id):
 	var levels_size = 1
-	if ldtk_project_data != null:
-		levels_size = ldtk_project_data.levels.size()
+	if ptproject != null:
+		levels_size = ptproject.levels.size()
 	if id >= levels_size:
 		id = levels_size-1
 	if id < 0:
@@ -456,7 +456,7 @@ func prev_level():
 
 func initialize(pRoot: Node2D, layers: PTLayers):
 	root = pRoot
-	ldtk_project_data = layers.ldtk_project_data
+	ptproject = layers.ptproject
 	game_state = PTGameState.new()
 	game_state.initialize(layers)
 	var _err = game_state.connect("state_loaded",_on_game_state_state_loaded)

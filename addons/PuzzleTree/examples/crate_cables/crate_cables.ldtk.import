@@ -1,7 +1,7 @@
 [remap]
 
-importer="ldtk.project"
-type="Resource"
+importer="puzzletree.project"
+type="PuzzleTreeProject"
 uid="uid://35ugbs8lhq4d"
 path="res://.godot/imported/crate_cables.ldtk-eb61149928a971cdf3969e95ced1f809.tres"
 

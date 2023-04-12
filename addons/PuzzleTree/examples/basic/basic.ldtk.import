@@ -1,8 +1,8 @@
 [remap]
 
-importer="ldtk.project"
-type="Resource"
-uid="uid://bena6rl8l4ulk"
+importer="puzzletree.project"
+type="PuzzleTreeProject"
+uid="uid://b7p64w7wenrdq"
 path="res://.godot/imported/basic.ldtk-9984a213ff6b4fed5b39cf598565bd35.tres"
 
 [deps]

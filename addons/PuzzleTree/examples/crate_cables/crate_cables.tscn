@@ -19,7 +19,7 @@
 texture_filter = 1
 scale = Vector2(10, 10)
 script = ExtResource("2")
-ldtk_project_resource = ExtResource("13")
+puzzletree_project = ExtResource("13")
 clear_color = Color(0.6, 0.733333, 0.6, 1)
 
 [node name="Floor" type="Node2D" parent="."]
@@ -61,7 +61,7 @@ texture = ExtResource("5_acyst")
 [node name="Gates" type="Node2D" parent="."]
 unique_name_in_owner = true
 script = ExtResource("5_rrwea")
-entities = Array[Dictionary]([{
+entities = [{
 "cell": Vector2i(5, 0),
 "height": 1.0,
 "id": "Gate",
@@ -181,7 +181,7 @@ entities = Array[Dictionary]([{
 "id": "Gate",
 "points": [Vector2i(1, -208), Vector2i(1, -207), Vector2i(1, -206), Vector2i(2, -206), Vector2i(2, -207), Vector2i(3, -208), Vector2i(3, -207), Vector2i(3, -206), Vector2i(5, -208), Vector2i(5, -207), Vector2i(5, -206), Vector2i(8, -208), Vector2i(7, -208), Vector2i(7, -207), Vector2i(7, -206), Vector2i(9, -207), Vector2i(9, -206)],
 "width": 1.0
-}])
+}]
 
 [node name="Numbers" type="Node2D" parent="."]
 unique_name_in_owner = true

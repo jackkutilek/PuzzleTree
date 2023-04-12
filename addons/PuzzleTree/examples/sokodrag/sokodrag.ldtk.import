@@ -1,8 +1,8 @@
 [remap]
 
-importer="ldtk.project"
-type="Resource"
-uid="uid://bm2te1x3abicm"
+importer="puzzletree.project"
+type="PuzzleTreeProject"
+uid="uid://boeugfnk42q87"
 path="res://.godot/imported/sokodrag.ldtk-17294d11ab58be65353bc2c26cbc0f60.tres"
 
 [deps]

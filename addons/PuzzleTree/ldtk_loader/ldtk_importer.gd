@@ -9,7 +9,7 @@ func _get_visible_name():
 	return "PuzzleTree Project"
 
 func _get_recognized_extensions():
-	return ["ldtk"]
+	return ["ldtk", "ptp"]
 
 func _get_import_options(preset, index):
 	return []
@@ -41,7 +41,7 @@ func _import(source_file: String, save_path: String, options: Dictionary, platfo
 		"ldtk":
 			project = _import_ldtk(file_text, rel_base)
 		"ptp":
-			project = _import_ptp(file_text)
+			project = _import_ptp(file_text, rel_base)
 	assert(project != null, "invalid file type passed to PTP import")
 	
 	var filename = save_path + "." + _get_save_extension()
@@ -110,7 +110,6 @@ func _import_ldtk(file_text:String, relative_base:String)->PuzzleTreeProject:
 			if layer_def.type == "Entities":
 				ptp_layer.entities = get_entities(layer, level_def)
 			else:
-				ptp_layer.identifier = layer.__identifier
 				ptp_layer.used_cells = {}
 				
 				if layer.has("gridTiles"):
@@ -180,7 +179,200 @@ func get_entities(layer_def, level_def):
 	
 	return entities
 
-func _import_ptp(file_text:String)->PuzzleTreeProject:
+func _import_ptp(file_text:String, relative_base:String)->PuzzleTreeProject:
 	var project = PuzzleTreeProject.new()
+	
+	var sections = parse_sections(file_text)
+	
+	assert(sections.has('TILESET'), "ptp file must have TILESET section")
+	var tileset = parse_tileset(sections['TILESET'])
+	
+	assert(sections.has('TILES'), "ptp file must have TILES section")
+	var tiles = parse_tiles(sections['TILES'])
+	
+	assert(sections.has('LAYERS'), "ptp file must have LAYERS section")
+	var layers = parse_layers(sections['LAYERS'])
+	
+	assert(sections.has('LEGEND'), "ptp file must have LEGEND section")
+	var legend = parse_legend(sections['LEGEND'], layers, tiles)
+	
+	assert(sections.has('LEVELS'), "ptp file must have LEVELS section")
+	var levels = parse_levels(sections['LEVELS'])
+	
+	
+	project.base_grid_size = tileset.tile_size
+	project.world_layout = "series"
+	
+	project.grid_layers = [] as Array[Dictionary]
+	for layer_def in layers:
+		var layer = {}
+		layer.type = "Tiles"
+		layer.identifier = layer_def.name
+		layer.tile_size = tileset.tile_size
+		layer.tile_spacing = tileset.tile_spacing
+		layer.padding = tileset.padding
+		layer.texture = relative_base + tileset.texture
+		print(layer.texture)
+		project.grid_layers.push_back(layer)
+	
+	project.levels = [] as Array[Dictionary]
+	for level_def in levels:
+		var level = {}
+		level.offsetX = level_def.offsetX
+		level.offsetY = level_def.offsetY
+		level.width = level_def.width
+		level.height = level_def.height
+		level.layers = {}
+		
+		for layer_def in layers:
+			if layer_def.default.size() > 0:
+				if not level.layers.has(layer_def.name):
+					level.layers[layer_def.name] = {identifier=layer_def.name, used_cells={}}
+				for y in range(level.height):
+					for x in range(level.width):
+						var cell = Vector2i(x,y)
+						if not level.layers[layer_def.name].used_cells.has(cell):
+							level.layers[layer_def.name].used_cells[cell] = []
+						for tile in layer_def.default:
+							level.layers[layer_def.name].used_cells[cell].push_back(tiles[tile])
+		
+		for y in range(level_def.lines.size()):
+			var line = level_def.lines[y]
+			for x in range(line.length()):
+				var cell = Vector2i(x,y)
+				var cell_token = line[x]
+				if cell_token == ' ':
+					continue
+				var layer_defs = legend.get(cell_token)
+				for layer_def in layer_defs:
+					if not level.layers.has(layer_def.layer):
+						level.layers[layer_def.layer] = {identifier=layer_def.layer, used_cells={}}
+					for tile in layer_def.tiles:
+						if not level.layers[layer_def.layer].used_cells.has(cell):
+							level.layers[layer_def.layer].used_cells[cell] = []
+						level.layers[layer_def.layer].used_cells[cell].push_back(tiles[tile])
+
+		print(level)
+		project.levels.push_back(level)
+	
 	return project
 	
+func parse_sections(file_text:String)->Dictionary:
+	var lines = file_text.split('\n')
+	var sections = {}
+	
+	const SECTION_NAMES = ['TILESET', 'TILES', 'LAYERS', 'LEGEND', 'LEVELS']
+	
+	var section_indices = []
+	var index = 0
+	while index < lines.size():
+		var line = lines[index]
+		if SECTION_NAMES.has(line):
+			var name = line
+			var section_lines = []
+			index += 1
+			while index < lines.size() and not SECTION_NAMES.has(lines[index]):
+				section_lines.push_back(lines[index])
+				index += 1
+				
+			sections[name] = section_lines
+	return sections
+
+func parse_tileset(lines: Array):
+	assert(lines.size() >= 2, "tileset section must have two lines")
+	var texture = lines[0]
+	var size = lines[1]
+	var coords = size.split(' ')
+	assert(coords.size() == 2, "expected two coordinates for tile set in tileset: " + size)
+	var tile_size = Vector2i(int(coords[0]), int(coords[1]))
+	return {texture=texture, tile_size=tile_size, tile_spacing=0, padding=0}
+	
+func parse_tiles(lines: Array):
+	var tiles = {}
+	for line in lines:
+		if line == '':
+			continue
+		var index = tiles.size()
+		tiles[line] = index
+	return tiles
+
+func parse_layers(lines: Array):
+	var layers = []
+	for line in lines:
+		if line == '':
+			continue
+		var layer = {}
+		var tokens = line.split('|')
+		assert(tokens.size() <= 2, "layer definition can only have one | character: " + line)
+		layer.name = tokens[0]
+		layer.default = []
+		if tokens.size() > 1:
+			layer.default.push_back(tokens[1])
+		layers.push_back(layer)
+	return layers
+
+func parse_legend(lines: Array, layers: Array, tile_defs: Dictionary):
+	var legend = {}
+	for line in lines:
+		if line == '':
+			continue
+		var tokens = line.split('=')
+		assert(tokens.size() == 2, "LEGEND: cell definition must have one = character: " + line)
+		var key = tokens[0].lstrip(' ').rstrip(' ')
+		var rhs = tokens[1]
+		var layer_tokens = rhs.split(']')
+		assert(layer_tokens.size() >= 2, "LEGEND: cell description must have at least one ] character: " + rhs)
+		var layer_defs = []
+		for layer_token in layer_tokens:
+			if layer_token == '':
+				continue
+			var cell_tokens = layer_token.split('[')
+			assert(cell_tokens.size() == 2, "LEGEND: layer description must have one [ character: " + layer_token)
+			var layer = cell_tokens[0].lstrip(' ').rstrip(' ')
+			assert(has_layer(layers, layer), "LEGEND: invalid layer name " + layer)
+			var tiles_string = cell_tokens[1].lstrip(' ').rstrip(' ')
+			var tiles = tiles_string.split(' ')
+			for tile in tiles:
+				assert(tile_defs.has(tile), "LEGEND: invalid tile specified (" + key + ") at " + rhs)
+			layer_defs.push_back({layer=layer, tiles=tiles})
+		legend[key] = layer_defs
+	return legend
+	
+	
+func has_layer(layers:Array, name:String):
+	for layer in layers:
+		if layer.name == name:
+			return true
+	return false
+
+func parse_levels(lines: Array):
+	var levels = []
+	
+	var level
+	var index = 0
+	while index < lines.size():
+		level = {}
+		level.offsetX = 0
+		level.offsetY = 0
+		
+		var level_lines = []
+		while lines[index] == '':
+			index += 1
+		level.name = lines[index]
+		index += 1
+		if index >= lines.size():
+			break
+		var width = 0
+		while lines[index] != '':
+			var line = lines[index]
+			width = max(line.length(), width)
+			level_lines.push_back(line)
+			index += 1
+			if index >= lines.size():
+				break
+		level.lines = level_lines
+		level.width = width
+		level.height = level.lines.size()
+		levels.push_back(level)
+	
+	return levels

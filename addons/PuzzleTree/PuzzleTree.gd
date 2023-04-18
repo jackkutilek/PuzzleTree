@@ -7,7 +7,7 @@ func full_path(rel_path:String):
 	return str(self.get_script().get_path().get_base_dir(), "/", rel_path)
 
 func _enter_tree() -> void:
-	import_plugin = load(full_path("ldtk_loader/ldtk_importer.gd")).new()
+	import_plugin = load(full_path("project_loader/ptproject_importer.gd")).new()
 	add_import_plugin(import_plugin)
 	
 	add_autoload_singleton("Directions", full_path("utils/directions.gd"))

@@ -5,7 +5,7 @@ extends Node2D
 class_name PTGame
 
 @export var puzzletree_project: PuzzleTreeProject : set = set_project
-@export var reload_ldtk_project = false : set = reload_project
+@export var reload_pt_project = false : set = reload_project
 @export var base_tile_size: Vector2i = Vector2i(5,5)
 @export var starting_level: int = 0 : set = set_level
 @export var clear_color: Color = Color.GRAY
@@ -28,40 +28,40 @@ func set_project(value):
 		
 	if Engine.is_editor_hint():
 		if puzzletree_project != null:
-			puzzletree_project.disconnect("changed",ldtk_changed)
+			puzzletree_project.disconnect("changed",ptp_changed)
 			
 	puzzletree_project = value
 	if puzzletree_project == null:
 		return
 	
 	if Engine.is_editor_hint():
-		if not puzzletree_project.is_connected("changed",ldtk_changed):
-			puzzletree_project.connect("changed",ldtk_changed)
-			print("#-- Watching for changes to LDTK project at ", puzzletree_project.resource_path, " --#")
+		if not puzzletree_project.is_connected("changed",ptp_changed):
+			puzzletree_project.connect("changed",ptp_changed)
+			print("#-- Watching for changes to PuzzleTree project at ", puzzletree_project.resource_path, " --#")
 	
 	if Engine.is_editor_hint() and is_ready:
-		print("#-- LDTK project set --#")
+		print("#-- PuzzleTree project set --#")
 		load_project()
 
 func reload_project(value):
 	if Engine.is_editor_hint() and value:
-		print("#-- triggered LDTK project reload at ", Time.get_datetime_string_from_system(false, true) ," --#")
+		print("#-- triggered PuzzleTree project reload at ", Time.get_datetime_string_from_system(false, true) ," --#")
 		load_project()
 
-func ldtk_changed():
-	print("#-- LDTK project changes detected at ", Time.get_datetime_string_from_system(false, true) ,"... reloading project --#")
+func ptp_changed():
+	print("#-- PuzzleTree project changes detected at ", Time.get_datetime_string_from_system(false, true) ,"... reloading project --#")
 	load_project()
 
 func load_project():
 	if not is_ready or get_tree() == null:
-		print("#-- !! cannot load LDTK project !! --#")
+		print("#-- !! cannot load PuzzleTree project !! --#")
 		return
 	
 	if puzzletree_project != null:
 		var resource_path = puzzletree_project.resource_path
-		print("#-- loading LDTK project at ", resource_path, " --#")
+		print("#-- loading PuzzleTree project at ", resource_path, " --#")
 	else:
-		print("#-- loading non-LDTK project --#")
+		print("#-- loading game with no project --#")
 	
 	initialize_layers_node()
 	initialize_engine()

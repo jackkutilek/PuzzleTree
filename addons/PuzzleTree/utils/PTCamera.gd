@@ -87,7 +87,7 @@ func update_target(context):
 
 func update_level_size(context):
 	if not context.has("_level_width"):
-		print("camera error: switch camera settings or change ldtk layout")
+		print("camera error: switch camera settings or change PuzzleTree project layout")
 		return
 	
 	var width = context._level_width * tile_size

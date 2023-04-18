@@ -214,6 +214,9 @@ func _get_stack_at_cell(cell: Vector2i, layer:int, stack_string: String):
 func set_tileset_from_texture(texture:Texture2D, tile_size: Vector2i):
 	self.texture = texture
 	self.tile_size = tile_size
+	if texture == null:
+		tile_map = null
+		return
 	if tile_map == null:
 		_init_tilemap()
 	if Engine.is_editor_hint():

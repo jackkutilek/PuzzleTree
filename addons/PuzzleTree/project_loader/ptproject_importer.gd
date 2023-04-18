@@ -55,6 +55,7 @@ func _import_ldtk(file_text:String, relative_base:String)->PuzzleTreeProject:
 	var data = json_conv.get_data()
 	
 	var project = PuzzleTreeProject.new()
+	project.suspend_emit = true
 	
 	var base_size = data.defaultGridSize
 	project.base_grid_size = Vector2i(base_size, base_size)
@@ -128,6 +129,7 @@ func _import_ldtk(file_text:String, relative_base:String)->PuzzleTreeProject:
 		levels.push_back(level)
 	project.levels = levels
 	
+	project.suspend_emit = false
 	return project
 
 
@@ -181,6 +183,7 @@ func get_entities(layer_def, level_def):
 
 func _import_ptp(file_text:String, relative_base:String)->PuzzleTreeProject:
 	var project = PuzzleTreeProject.new()
+	project.suspend_emit = true
 	
 	var sections = parse_sections(file_text)
 	
@@ -212,7 +215,6 @@ func _import_ptp(file_text:String, relative_base:String)->PuzzleTreeProject:
 		layer.tile_spacing = tileset.tile_spacing
 		layer.padding = tileset.padding
 		layer.texture = relative_base + tileset.texture
-		print(layer.texture)
 		project.grid_layers.push_back(layer)
 	
 	project.levels = [] as Array[Dictionary]
@@ -252,9 +254,9 @@ func _import_ptp(file_text:String, relative_base:String)->PuzzleTreeProject:
 							level.layers[layer_def.layer].used_cells[cell] = []
 						level.layers[layer_def.layer].used_cells[cell].push_back(tiles[tile])
 
-		print(level)
 		project.levels.push_back(level)
 	
+	project.suspend_emit = false
 	return project
 	
 func parse_sections(file_text:String)->Dictionary:
@@ -324,6 +326,7 @@ func parse_legend(lines: Array, layers: Array, tile_defs: Dictionary):
 		assert(layer_tokens.size() >= 2, "LEGEND: cell description must have at least one ] character: " + rhs)
 		var layer_defs = []
 		for layer_token in layer_tokens:
+			layer_token = layer_token.lstrip(' ').rstrip(' ')
 			if layer_token == '':
 				continue
 			var cell_tokens = layer_token.split('[')

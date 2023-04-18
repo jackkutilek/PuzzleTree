@@ -1,25 +1,25 @@
-[gd_scene load_steps=15 format=3 uid="uid://xql4sn7w568g"]
+[gd_scene load_steps=15 format=3 uid="uid://btqhqvuicbv36"]
 
 [ext_resource type="Script" path="res://addons/PuzzleTree/core/PTTiles.gd" id="1"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/core/PTGame.gd" id="2"]
+[ext_resource type="Resource" uid="uid://35ugbs8lhq4d" path="res://addons/PuzzleTree/examples/crate_cables/crate_cables.ldtk" id="2_f78u0"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/utils/PTCamera.gd" id="3"]
-[ext_resource type="Script" path="res://addons/PuzzleTree/core/LDTKTiles.gd" id="3_owyiq"]
+[ext_resource type="Script" path="res://addons/PuzzleTree/core/PTSyncedTiles.gd" id="3_owyiq"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/utils/PTPlayer.gd" id="4"]
 [ext_resource type="Texture2D" uid="uid://4ql8ye3aplf3" path="res://addons/PuzzleTree/examples/crate_cables/spritesheet.png" id="5_acyst"]
-[ext_resource type="Script" path="res://addons/PuzzleTree/core/LDTKEntities.gd" id="5_rrwea"]
+[ext_resource type="Script" path="res://addons/PuzzleTree/core/PTSyncedEntities.gd" id="5_rrwea"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/utils/PTMovement.gd" id="7"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/crate_cables/trails.gd" id="8"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/crate_cables/wiring.gd" id="9"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/crate_cables/push_crates.gd" id="10"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/crate_cables/pull_crates.gd" id="11"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/crate_cables/checkpoint.gd" id="12"]
-[ext_resource type="Resource" uid="uid://35ugbs8lhq4d" path="res://addons/PuzzleTree/examples/crate_cables/crate_cables.ldtk" id="13"]
 
 [node name="PTGame" type="Node2D"]
 texture_filter = 1
 scale = Vector2(10, 10)
 script = ExtResource("2")
-puzzletree_project = ExtResource("13")
+puzzletree_project = ExtResource("2_f78u0")
 clear_color = Color(0.6, 0.733333, 0.6, 1)
 
 [node name="Floor" type="Node2D" parent="."]

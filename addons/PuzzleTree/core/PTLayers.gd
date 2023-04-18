@@ -123,18 +123,18 @@ func set_pt_project(ptproject_):
 	if ptproject != null and Engine.is_editor_hint():
 		parse_layers()
 
-func get_ldtk_layers():
+func get_synced_layers():
 	var layers = []
 	var to_check = root_node.get_children()
 	while(to_check.size() > 0):
 		var check = to_check.pop_back()
-		if check is LDTKEntities or check is LDTKTiles:
+		if check is PTSyncedEntities or check is PTSyncedTiles:
 			layers.push_back(check)
 		to_check.append_array(check.get_children())
 	return layers
 
 func parse_layers():
-	var layers = get_ldtk_layers()
+	var layers = get_synced_layers()
 	
 	for layer_def in ptproject.grid_layers:
 		if layer_def.type == "Entities":
@@ -144,7 +144,7 @@ func parse_layers():
 			var layer = create_layer(layer_def)
 			layers.erase(layer)
 	
-	# remove layers that no longer exist in LDTK
+	# remove layers that no longer exist in PTP
 	for layer in layers:
 		root_node.remove_child(layer)
 
@@ -156,7 +156,7 @@ func create_layer(layer_def):
 	if existing_layer != null and existing_layer is PTTiles:
 		new_layer = existing_layer as PTTiles
 	else:
-		new_layer = LDTKTiles.new()
+		new_layer = PTSyncedTiles.new()
 		new_layer.name = layer_def.identifier
 		new_layer.unique_name_in_owner = true
 		
@@ -183,7 +183,7 @@ func create_entities_layer(layer_def):
 	if existing_layer != null and existing_layer is PTEntities:
 		new_layer = existing_layer
 	else:
-		new_layer = LDTKEntities.new()
+		new_layer = PTSyncedEntities.new()
 		new_layer.name = layer_def.identifier
 		new_layer.unique_name_in_owner = true
 		root_node.add_child(new_layer)

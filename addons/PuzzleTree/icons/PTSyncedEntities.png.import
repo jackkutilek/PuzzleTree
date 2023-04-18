@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cocry5hjpoawn"
-path="res://.godot/imported/LDTKTiles.png-65b2cc27a916f11bc60f35149131bd2a.ctex"
+uid="uid://dwt87p28dgt35"
+path="res://.godot/imported/PTSyncedEntities.png-40ecc6702d880087ad9c1ea69bfa8d46.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/PuzzleTree/icons/LDTKTiles.png"
-dest_files=["res://.godot/imported/LDTKTiles.png-65b2cc27a916f11bc60f35149131bd2a.ctex"]
+source_file="res://addons/PuzzleTree/icons/PTSyncedEntities.png"
+dest_files=["res://.godot/imported/PTSyncedEntities.png-40ecc6702d880087ad9c1ea69bfa8d46.ctex"]
 
 [params]
 

@@ -1,9 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://cqkait8bljy7b"]
+[gd_scene load_steps=10 format=3 uid="uid://dlb1v2kp2fq7n"]
 
 [ext_resource type="Script" path="res://addons/PuzzleTree/core/PTGame.gd" id="2"]
 [ext_resource type="Resource" uid="uid://b7p64w7wenrdq" path="res://addons/PuzzleTree/examples/basic/basic.ldtk" id="2_o4kqm"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/utils/PTCamera.gd" id="3"]
-[ext_resource type="Script" path="res://addons/PuzzleTree/core/LDTKTiles.gd" id="3_logao"]
+[ext_resource type="Script" path="res://addons/PuzzleTree/core/PTSyncedTiles.gd" id="3_logao"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/utils/PTPlayer.gd" id="4"]
 [ext_resource type="Texture2D" uid="uid://bar2ohd068573" path="res://addons/PuzzleTree/examples/basic/basic.png" id="4_eq104"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/utils/PTMovement.gd" id="6"]

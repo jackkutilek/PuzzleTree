@@ -42,7 +42,11 @@ func _import(source_file: String, save_path: String, options: Dictionary, platfo
 			project = _import_ldtk(file_text, rel_base)
 		"ptp":
 			project = _import_ptp(file_text, rel_base)
-	assert(project != null, "invalid file type passed to PTP import")
+		_:
+			assert(false, "invalid file type passed to PTP import")
+	
+	if project == null:
+		return PuzzleTreeProject.new()
 	
 	var filename = save_path + "." + _get_save_extension()
 	var result = ResourceSaver.save(project, filename)
@@ -189,18 +193,28 @@ func _import_ptp(file_text:String, relative_base:String)->PuzzleTreeProject:
 	
 	assert(sections.has('TILESET'), "ptp file must have TILESET section")
 	var tileset = parse_tileset(sections['TILESET'])
+	if tileset == null:
+		return null
 	
 	assert(sections.has('TILES'), "ptp file must have TILES section")
 	var tiles = parse_tiles(sections['TILES'])
+	if tiles == null:
+		return null
 	
 	assert(sections.has('LAYERS'), "ptp file must have LAYERS section")
 	var layers = parse_layers(sections['LAYERS'])
+	if layers == null:
+		return null
 	
 	assert(sections.has('LEGEND'), "ptp file must have LEGEND section")
 	var legend = parse_legend(sections['LEGEND'], layers, tiles)
+	if legend == null:
+		return null
 	
 	assert(sections.has('LEVELS'), "ptp file must have LEVELS section")
 	var levels = parse_levels(sections['LEVELS'])
+	if levels == null:
+		return null
 	
 	
 	project.base_grid_size = tileset.tile_size
@@ -260,11 +274,12 @@ func _import_ptp(file_text:String, relative_base:String)->PuzzleTreeProject:
 	return project
 	
 func parse_sections(file_text:String)->Dictionary:
-	var lines = file_text.split('\n')
+	var lines = file_text.split('\r\n')
+	if lines.size() == 1:
+		lines = file_text.split('\n')
 	var sections = {}
 	
 	const SECTION_NAMES = ['TILESET', 'TILES', 'LAYERS', 'LEGEND', 'LEVELS']
-	
 	var section_indices = []
 	var index = 0
 	while index < lines.size():
@@ -278,6 +293,8 @@ func parse_sections(file_text:String)->Dictionary:
 				index += 1
 				
 			sections[name] = section_lines
+		else:
+			index += 1
 	return sections
 
 func parse_tileset(lines: Array):

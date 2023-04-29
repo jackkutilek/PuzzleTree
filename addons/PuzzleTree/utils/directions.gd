@@ -99,6 +99,12 @@ func shift_cell(cell, dir):
 		RIGHT:
 			return Vector2i(cell.x+1,cell.y)
 
+func shift_cells(cell, dirs):
+	var cells = []
+	for dir in dirs:
+		cells.push_back(shift_cell(cell, dir))
+	return cells
+
 func get_neighbor_cells(cell):
 	return {
 		left=shift_cell(cell, LEFT),

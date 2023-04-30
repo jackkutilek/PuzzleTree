@@ -14,6 +14,7 @@ class_name PTGame
 @export var enable_mouse_turns = false
 @export var key_repeat_interval:float = .2 : set = set_key_repeat_interval
 @export var again_interval:float = .1 : set = set_again_interval
+@export var realtime_interval:float = 0.0 : set = set_realtime_interval
 @export var log_level:int = 0 : set = set_log_level
 
 var is_ready = false
@@ -81,6 +82,7 @@ func initialize_engine():
 	engine.run_turns_on_keyup = run_turns_on_keyup
 	engine.enable_mouse_turns = enable_mouse_turns
 	engine.again_interval = again_interval
+	engine.realtime_interval = realtime_interval
 	engine.key_repeat_interval = key_repeat_interval
 	engine.base_tile_size = base_tile_size
 	engine.set_level(starting_level)
@@ -169,6 +171,11 @@ func set_again_interval(value):
 	again_interval = value
 	if engine != null:
 		engine.again_interval = value
+
+func set_realtime_interval(value):
+	realtime_interval = value
+	if engine != null:
+		engine.realtime_interval = value
 
 func set_log_level(value):
 	log_level = value

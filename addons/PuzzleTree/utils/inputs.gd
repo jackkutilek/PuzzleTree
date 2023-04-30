@@ -19,6 +19,7 @@ const MOUSE_UP = 'mouse up'
 const MOUSE_MOVE = 'mouse move'
 
 const AGAIN = 'again'
+const REALTIME = 'realtime'
 
 # --------------------------------------------------------------------------------------------------
 

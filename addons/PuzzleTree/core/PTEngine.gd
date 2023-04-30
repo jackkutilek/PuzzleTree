@@ -11,9 +11,14 @@ var mouse_is_down = false
 var enable_mouse_turns = false
 
 var base_tile_size:Vector2i = Vector2i(5,5)
+
 var again_interval := 1.0
 var time_since_last_frame := 0.0
 var againing := false
+
+var realtime_interval := 0.0
+var time_since_last_realtime_frame := 0.0
+
 var turn_start_state = null
 var state_to_save = null
 
@@ -233,6 +238,8 @@ func _process(delta:float):
 			game_state.context.is_repeat_turn = false
 			update_key_state_in_context()
 			run_frame(next)
+			if next == Inputs.REALTIME:
+				time_since_last_realtime_frame = 0.0
 		elif pressed_keys.size() > 0:
 			# check for key repeat turn
 			var last_press = pressed_keys.back()
@@ -244,6 +251,10 @@ func _process(delta:float):
 				update_key_state_in_context()
 				run_frame(Inputs.get_pressed_key(last_press))
 				time_since_last_press = 0
+		
+		if time_since_last_realtime_frame > realtime_interval:
+			queue_input(Inputs.REALTIME)
+		time_since_last_realtime_frame += delta
 
 func run_again_frame(frame_time):
 	if logger.log_level > 0:

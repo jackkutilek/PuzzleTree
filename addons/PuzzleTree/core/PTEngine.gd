@@ -252,9 +252,10 @@ func _process(delta:float):
 				run_frame(Inputs.get_pressed_key(last_press))
 				time_since_last_press = 0
 		
-		if time_since_last_realtime_frame > realtime_interval:
-			queue_input(Inputs.REALTIME)
-		time_since_last_realtime_frame += delta
+		if realtime_interval > 0:
+			if time_since_last_realtime_frame > realtime_interval:
+				queue_input(Inputs.REALTIME)
+			time_since_last_realtime_frame += delta
 
 func run_again_frame(frame_time):
 	if logger.log_level > 0:

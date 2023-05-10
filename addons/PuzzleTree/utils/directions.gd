@@ -77,6 +77,23 @@ func rotate_ccw(dir):
 
 # --------------------------------------------------------------------------------------------------
 
+func vector_to_dir(vector: Vector2i):
+	return get_dir_from_cell_to_cell(Vector2i.ZERO, vector)
+
+func get_dir_from_cell_to_cell(start: Vector2i, end: Vector2i):
+	if start.x == end.x:
+		if start.y < end.y:
+			return DOWN
+		elif start.y > end.y:
+			return UP
+	elif start.y == end.y:
+		if start.x < end.x:
+			return RIGHT
+		elif start.x > end.x:
+			return LEFT
+	assert(false)
+
+
 func shift_coords(x,y,dir):
 	match dir:
 		UP:

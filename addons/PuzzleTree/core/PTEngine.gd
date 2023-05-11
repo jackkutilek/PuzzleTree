@@ -339,9 +339,14 @@ func run_frame(frame_key):
 		force_release_keys(Directions.ALL_DIRS)
 		force_release_mouse()
 		queued.clear()
-		await root.get_tree().create_timer(1).timeout
-		context.winning = false
-		next_level()
+		context.again = false
+		againing = false 
+		if has_next_level():
+			await root.get_tree().create_timer(1).timeout
+			context.winning = false
+			next_level()
+		else:
+			context.winning = false
 	
 	again_interval = context.again_interval
 	key_repeat_interval = context.key_repeat_interval
@@ -449,6 +454,7 @@ func set_level(id):
 		id = 0
 	
 	if game_state.current_level_id != id:
+		print("switch to level ", id)
 		game_state.set_level(id)
 		if not Engine.is_editor_hint():
 			if logger.log_level > 0:
@@ -463,6 +469,12 @@ func next_level():
 	
 func prev_level():
 	set_level(game_state.current_level_id-1)
+
+func has_next_level():
+	var levels_size = 1
+	if ptproject != null:
+		levels_size = ptproject.levels.size()
+	return game_state.current_level_id+1 < levels_size
 
 # ---------------------------------------------------------
 

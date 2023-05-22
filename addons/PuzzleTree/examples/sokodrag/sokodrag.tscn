@@ -1,20 +1,19 @@
 [gd_scene load_steps=10 format=3 uid="uid://deqtbigt5dp0n"]
 
 [ext_resource type="Script" path="res://addons/PuzzleTree/core/PTGame.gd" id="1"]
-[ext_resource type="Texture2D" uid="uid://cmipbvry7t13s" path="res://addons/PuzzleTree/examples/sokodrag/tileset.png" id="2"]
-[ext_resource type="Script" path="res://addons/PuzzleTree/core/LDTKTiles.gd" id="3_lc2a7"]
-[ext_resource type="Script" path="res://addons/PuzzleTree/utils/PTCamera.gd" id="4"]
-[ext_resource type="Script" path="res://addons/PuzzleTree/core/LDTKEntities.gd" id="5_3wsuk"]
-[ext_resource type="Resource" uid="uid://bm2te1x3abicm" path="res://addons/PuzzleTree/examples/sokodrag/sokodrag.ldtk" id="7"]
+[ext_resource type="Resource" uid="uid://boeugfnk42q87" path="res://addons/PuzzleTree/examples/sokodrag/sokodrag.ldtk" id="2_0jwr0"]
+[ext_resource type="Script" path="res://addons/PuzzleTree/core/PTSyncedTiles.gd" id="3_omtnn"]
+[ext_resource type="Texture2D" uid="uid://cmipbvry7t13s" path="res://addons/PuzzleTree/examples/sokodrag/tileset.png" id="4_5t7c1"]
+[ext_resource type="Script" path="res://addons/PuzzleTree/core/PTSyncedEntities.gd" id="5_e5swk"]
+[ext_resource type="Script" path="res://addons/PuzzleTree/utils/PTCamera.gd" id="5_g311p"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/sokodrag/drag.gd" id="8"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/sokodrag/cursor.gd" id="9"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/examples/sokodrag/grass.gd" id="10_oayge"]
 
 [node name="PTGame" type="Node2D"]
 texture_filter = 1
-scale = Vector2(10, 10)
 script = ExtResource("1")
-ldtk_project_resource = ExtResource("7")
+puzzletree_project = ExtResource("2_0jwr0")
 starting_level = 1
 enable_mouse_turns = true
 key_repeat_interval = 0.1
@@ -23,42 +22,47 @@ again_interval = 0.03
 [node name="BG" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-script = ExtResource("3_lc2a7")
-texture = ExtResource("2")
+scale = Vector2(1, 1)
+script = ExtResource("3_omtnn")
+texture = ExtResource("4_5t7c1")
 
 [node name="Reach" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-script = ExtResource("3_lc2a7")
-texture = ExtResource("2")
+scale = Vector2(1, 1)
+script = ExtResource("3_omtnn")
+texture = ExtResource("4_5t7c1")
 
 [node name="Grid" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-script = ExtResource("3_lc2a7")
-texture = ExtResource("2")
+scale = Vector2(1, 1)
+script = ExtResource("3_omtnn")
+texture = ExtResource("4_5t7c1")
 
 [node name="Lines" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-script = ExtResource("3_lc2a7")
-texture = ExtResource("2")
+scale = Vector2(1, 1)
+script = ExtResource("3_omtnn")
+texture = ExtResource("4_5t7c1")
 
 [node name="Start" type="Node2D" parent="."]
 unique_name_in_owner = true
-script = ExtResource("5_3wsuk")
-entities = Array[Dictionary]([{
+scale = Vector2(1, 1)
+script = ExtResource("5_e5swk")
+entities = [{
 "cell": Vector2i(6, 3),
 "height": 1.0,
 "id": "Start",
 "width": 1.0
-}])
+}]
 
 [node name="PTCamera" type="Camera2D" parent="."]
+scale = Vector2(1, 1)
 offset = Vector2(0.5, 0.5)
-zoom = Vector2(0.000660066, 0.000660066)
-script = ExtResource("4")
-tile_size = 50
+zoom = Vector2(657, 657)
+script = ExtResource("5_g311p")
 
 [node name="cursor" type="Node2D" parent="."]
 script = ExtResource("9")

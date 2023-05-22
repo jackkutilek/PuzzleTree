@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bar2ohd068573"
-path="res://.godot/imported/basic.png-266f9e12bb5ed8e72ffed96e08fbe002.ctex"
+path="res://.godot/imported/basic.png-37a209afeb75fb51271d8b50258d64f7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/PuzzleTree/examples/basic/basic.png"
-dest_files=["res://.godot/imported/basic.png-266f9e12bb5ed8e72ffed96e08fbe002.ctex"]
+source_file="res://examples/basic/basic.png"
+dest_files=["res://.godot/imported/basic.png-37a209afeb75fb51271d8b50258d64f7.ctex"]
 
 [params]
 

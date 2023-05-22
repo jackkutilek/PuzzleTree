@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://4ql8ye3aplf3"
-path="res://.godot/imported/spritesheet.png-92b25b4d4e72d11b33e6d41654142b3d.ctex"
+uid="uid://cmipbvry7t13s"
+path="res://.godot/imported/tileset.png-c0e0b9c7920b1a3e04d3a3fe56692e0e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/PuzzleTree/examples/crate_cables/spritesheet.png"
-dest_files=["res://.godot/imported/spritesheet.png-92b25b4d4e72d11b33e6d41654142b3d.ctex"]
+source_file="res://examples/sokodrag/tileset.png"
+dest_files=["res://.godot/imported/tileset.png-c0e0b9c7920b1a3e04d3a3fe56692e0e.ctex"]
 
 [params]
 

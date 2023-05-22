@@ -1,0 +1,14 @@
+[remap]
+
+importer="puzzletree.project"
+type="PuzzleTreeProject"
+uid="uid://35ugbs8lhq4d"
+path="res://.godot/imported/crate_cables.ldtk-24344a15e079608fcb6f33bcd7cc3846.tres"
+
+[deps]
+
+source_file="res://examples/crate_cables/crate_cables.ldtk"
+dest_files=["res://.godot/imported/crate_cables.ldtk-24344a15e079608fcb6f33bcd7cc3846.tres"]
+
+[params]
+

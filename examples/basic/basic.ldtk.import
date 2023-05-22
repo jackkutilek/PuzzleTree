@@ -1,0 +1,14 @@
+[remap]
+
+importer="puzzletree.project"
+type="PuzzleTreeProject"
+uid="uid://b7p64w7wenrdq"
+path="res://.godot/imported/basic.ldtk-9e296b15bd6ef531363cf8c1f3400aab.tres"
+
+[deps]
+
+source_file="res://examples/basic/basic.ldtk"
+dest_files=["res://.godot/imported/basic.ldtk-9e296b15bd6ef531363cf8c1f3400aab.tres"]
+
+[params]
+

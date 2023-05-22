@@ -1,0 +1,55 @@
+[gd_scene load_steps=10 format=3 uid="uid://chbsbialwwfqg"]
+
+[ext_resource type="Script" path="res://addons/PuzzleTree/core/PTGame.gd" id="1_v1s5f"]
+[ext_resource type="Resource" uid="uid://b7p64w7wenrdq" path="res://examples/basic/basic.ldtk" id="2_ciyph"]
+[ext_resource type="Script" path="res://addons/PuzzleTree/core/PTSyncedTiles.gd" id="3_fxluk"]
+[ext_resource type="Texture2D" uid="uid://bar2ohd068573" path="res://examples/basic/basic.png" id="4_o43b6"]
+[ext_resource type="Script" path="res://addons/PuzzleTree/utils/PTPlayer.gd" id="5_i6rf7"]
+[ext_resource type="Script" path="res://examples/basic/pushcrates.gd" id="6_crp8p"]
+[ext_resource type="Script" path="res://addons/PuzzleTree/utils/PTCamera.gd" id="7_y7kmi"]
+[ext_resource type="Script" path="res://addons/PuzzleTree/utils/PTMovement.gd" id="8_snlbe"]
+[ext_resource type="Script" path="res://examples/basic/wincheck.gd" id="9_0b80j"]
+
+[node name="PTGame" type="Node2D"]
+texture_filter = 1
+scale = Vector2(10, 10)
+script = ExtResource("1_v1s5f")
+puzzletree_project = ExtResource("2_ciyph")
+clear_color = Color(0.117647, 0.541176, 0.298039, 1)
+
+[node name="Background" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-0.5, -0.5)
+script = ExtResource("3_fxluk")
+texture = ExtResource("4_o43b6")
+
+[node name="Targets" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-0.5, -0.5)
+script = ExtResource("3_fxluk")
+texture = ExtResource("4_o43b6")
+
+[node name="Colliders" type="Node2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-0.5, -0.5)
+script = ExtResource("3_fxluk")
+texture = ExtResource("4_o43b6")
+
+[node name="PTPlayer" type="Node2D" parent="."]
+script = ExtResource("5_i6rf7")
+PlayerTile = 3
+PlayerLayer = "Colliders"
+
+[node name="pushcrates" type="Node2D" parent="."]
+script = ExtResource("6_crp8p")
+
+[node name="PTCamera" type="Camera2D" parent="."]
+script = ExtResource("7_y7kmi")
+tile_size = 50
+
+[node name="PTMovement" type="Node2D" parent="."]
+unique_name_in_owner = true
+script = ExtResource("8_snlbe")
+
+[node name="wincheck" type="Node2D" parent="."]
+script = ExtResource("9_0b80j")

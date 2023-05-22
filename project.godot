@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="PuzzleTree"
-run/main_scene="res://addons/PuzzleTree/examples/basic/basic.tscn"
+run/main_scene="res://examples/basic/basic.tscn"
 config/features=PackedStringArray("4.0")
 config/icon="res://addons/PuzzleTree/icons/icon.png"
 
@@ -30,6 +30,8 @@ gdscript/warnings/unsafe_method_access=1
 
 window/size/viewport_width=1000
 window/size/viewport_height=1000
+window/size/window_width_override=800
+window/size/window_height_override=800
 window/stretch/mode="viewport"
 
 [editor]

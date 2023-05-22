@@ -1,14 +1,14 @@
-[gd_scene load_steps=10 format=3 uid="uid://deqtbigt5dp0n"]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://addons/PuzzleTree/core/PTGame.gd" id="1"]
-[ext_resource type="Resource" uid="uid://boeugfnk42q87" path="res://addons/PuzzleTree/examples/sokodrag/sokodrag.ldtk" id="2_0jwr0"]
+[ext_resource type="Resource" uid="uid://boeugfnk42q87" path="res://examples/sokodrag/sokodrag.ldtk" id="2_0jwr0"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/core/PTSyncedTiles.gd" id="3_omtnn"]
-[ext_resource type="Texture2D" uid="uid://cmipbvry7t13s" path="res://addons/PuzzleTree/examples/sokodrag/tileset.png" id="4_5t7c1"]
+[ext_resource type="Texture2D" uid="uid://cmipbvry7t13s" path="res://examples/sokodrag/tileset.png" id="4_5t7c1"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/core/PTSyncedEntities.gd" id="5_e5swk"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/utils/PTCamera.gd" id="5_g311p"]
-[ext_resource type="Script" path="res://addons/PuzzleTree/examples/sokodrag/drag.gd" id="8"]
-[ext_resource type="Script" path="res://addons/PuzzleTree/examples/sokodrag/cursor.gd" id="9"]
-[ext_resource type="Script" path="res://addons/PuzzleTree/examples/sokodrag/grass.gd" id="10_oayge"]
+[ext_resource type="Script" path="res://examples/sokodrag/drag.gd" id="8"]
+[ext_resource type="Script" path="res://examples/sokodrag/cursor.gd" id="9"]
+[ext_resource type="Script" path="res://examples/sokodrag/grass.gd" id="10_oayge"]
 
 [node name="PTGame" type="Node2D"]
 texture_filter = 1

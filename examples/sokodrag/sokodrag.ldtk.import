@@ -1,0 +1,14 @@
+[remap]
+
+importer="puzzletree.project"
+type="PuzzleTreeProject"
+uid="uid://boeugfnk42q87"
+path="res://.godot/imported/sokodrag.ldtk-3a2b84fc88caee98933825433a073166.tres"
+
+[deps]
+
+source_file="res://examples/sokodrag/sokodrag.ldtk"
+dest_files=["res://.godot/imported/sokodrag.ldtk-3a2b84fc88caee98933825433a073166.tres"]
+
+[params]
+

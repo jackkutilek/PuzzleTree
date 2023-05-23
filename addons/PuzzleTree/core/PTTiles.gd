@@ -39,8 +39,8 @@ func _remove_tile_from_cell(tile:int, cell:Vector2i, dir:String, layer:int):
 			print("trying to remove tile from a tilemap that doesn't have it")
 		return
 	
-	var tile_match = _get_tile_at_cell(cell, layer) == tile
-	var dir_match = dir == "any" or _get_dir_at_cell(cell, layer) == dir
+	var tile_match = get_tile_at_cell(cell, layer) == tile
+	var dir_match = dir == "any" or get_dir_at_cell(cell, layer) == dir
 	if tile_match and dir_match:
 		_set_tile_at_cell(-1, cell, "any", layer)
 		_settle_cell_stack(cell, layer)
@@ -69,7 +69,7 @@ func get_tiles_at_cell(cell:Vector2i)->Array[int]:
 	_get_tiles_at_cell_recursive(cell, tiles, 0)
 	return tiles
 func _get_tiles_at_cell_recursive(cell:Vector2i, tiles:Array, layer:int)->Array[int]:
-	var tile = _get_tile_at_cell(cell, layer)
+	var tile = get_tile_at_cell(cell, layer)
 	if tile != -1:
 		tiles.append(tile)
 		_get_tiles_at_cell_recursive(cell, tiles, layer+1)
@@ -78,8 +78,8 @@ func _get_tiles_at_cell_recursive(cell:Vector2i, tiles:Array, layer:int)->Array[
 func get_tile_dir_at_cell(tile:int, cell:Vector2i):
 	var layer = 0
 	while is_layer_valid(layer):
-		if _get_tile_at_cell(cell, layer) == tile:
-			return _get_dir_at_cell(cell, layer)
+		if get_tile_at_cell(cell, layer) == tile:
+			return get_dir_at_cell(cell, layer)
 		layer += 1
 	return null
 
@@ -92,10 +92,10 @@ func any_tile_at_cell(cell:Vector2i):
 func has_tile_at_cell(tile: int, cell:Vector2i, dir:String = "any"):
 	var layer = 0
 	while is_layer_valid(layer):
-		if _get_tile_at_cell(cell, layer) == tile:
+		if get_tile_at_cell(cell, layer) == tile:
 			if dir == "any":
 				return true
-			var tile_dir = _get_dir_at_cell(cell, layer)
+			var tile_dir = get_dir_at_cell(cell, layer)
 			if tile_dir == dir:
 				return true
 		layer += 1
@@ -114,6 +114,17 @@ func _get_cells_with_tile_recursive(atlas: Vector2i, layer:int, cells: Array[Vec
 	if is_layer_valid(layer+1):
 		_get_cells_with_tile_recursive(atlas, layer+1, cells)
 
+func get_tile_at_cell(cell:Vector2i, layer:int=0)->int:
+	if not is_layer_valid(layer):
+		return -1
+	var atlas_id = tile_map.get_cell_atlas_coords(layer, cell)
+	var tile = _atlas_to_tile(atlas_id)
+	return tile
+
+func get_dir_at_cell(cell:Vector2i, layer:int=0)->String:
+	var alt_id = tile_map.get_cell_alternative_tile(layer, cell)
+	return Directions.ALL_DIRS[alt_id]
+
 var _changed_cells: Dictionary
 
 func get_changed_cells():
@@ -124,6 +135,9 @@ func get_all_used_cells():
 
 func local_to_map(local:Vector2)->Vector2i:
 	return tile_map.local_to_map(local)
+	
+func map_to_local(map:Vector2i)->Vector2i:
+	return tile_map.map_to_local(map)
 
 # --------------------------------------------------------------------------------------------------
 
@@ -133,18 +147,7 @@ func reset_changed_cells():
 # --------------------------------------------------------------------------------------------------
 
 func _is_cell_taken(cell:Vector2i, layer:int)->bool:
-	return _get_tile_at_cell(cell, layer) != -1
-
-func _get_tile_at_cell(cell:Vector2i, layer:int)->int:
-	if not is_layer_valid(layer):
-		return -1
-	var atlas_id = tile_map.get_cell_atlas_coords(layer, cell)
-	var tile = _atlas_to_tile(atlas_id)
-	return tile
-
-func _get_dir_at_cell(cell:Vector2i, layer:int)->String:
-	var alt_id = tile_map.get_cell_alternative_tile(layer, cell)
-	return Directions.ALL_DIRS[alt_id]
+	return get_tile_at_cell(cell, layer) != -1
 
 func _set_tile_at_cell(tile:int, cell:Vector2i, dir:String, layer:int)->void:
 	assert(is_layer_valid(layer))
@@ -164,8 +167,8 @@ func _settle_cell_stack(cell:Vector2i, layer:int):
 		return
 	if not _is_cell_taken(cell, layer):
 		if _is_cell_taken(cell, layer+1):
-			var next_tile = _get_tile_at_cell(cell, layer+1)
-			var next_dir = _get_dir_at_cell(cell, layer+1)
+			var next_tile = get_tile_at_cell(cell, layer+1)
+			var next_dir = get_dir_at_cell(cell, layer+1)
 			_set_tile_at_cell(next_tile, cell, next_dir, layer)
 			_set_tile_at_cell(-1, cell, "any", layer+1)
 	_settle_cell_stack(cell, layer+1)
@@ -200,8 +203,8 @@ func get_stack_at_cell(cell: Vector2i):
 func _get_stack_at_cell(cell: Vector2i, layer:int, stack_string: String):
 	if not is_layer_valid(layer):
 		return stack_string
-	var tile = _get_tile_at_cell(cell, layer)
-	var dir = _get_dir_at_cell(cell, layer)
+	var tile = get_tile_at_cell(cell, layer)
+	var dir = get_dir_at_cell(cell, layer)
 	if tile != -1:
 		var new_string = stack_string + String.num(tile) + "." + dir + " "
 		return _get_stack_at_cell(cell, layer+1, new_string)

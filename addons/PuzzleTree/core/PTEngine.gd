@@ -121,6 +121,11 @@ func queue_input(input: String):
 	if game_state.context.winning:
 		return	# don't queue input during win wait time
 	
+	if Inputs.is_released_key(input) and not pressed_keys.has(Inputs.get_key_dir(input)):
+		return
+	if input == Inputs.MOUSE_UP and not mouse_is_down:
+		return
+		
 	if Inputs.is_pressed_key(input):
 		note_key_press(input)
 	elif Inputs.is_released_key(input):
@@ -132,10 +137,6 @@ func queue_input(input: String):
 	if not enable_mouse_turns and Inputs.is_mouse_key(input):
 		return
 	
-	if Inputs.is_released_key(input) and not pressed_keys.has(Inputs.get_key_dir(input)):
-		return
-	if input == Inputs.MOUSE_UP and not mouse_is_down:
-		return
 	
 	if input == Inputs.MOUSE_DOWN:
 		mouse_is_down = true

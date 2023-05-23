@@ -85,7 +85,7 @@ func _import_ldtk(file_text:String, relative_base:String)->PuzzleTreeProject:
 			layer.tile_spacing = tileset.tile_spacing
 			layer.padding = tileset.padding
 			layer.texture = tileset.texture
-		layers.push_back(layer)
+		layers.push_front(layer)
 	project.grid_layers = layers
 	
 	var levels: Array[Dictionary] = []

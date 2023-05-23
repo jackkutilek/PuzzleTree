@@ -136,7 +136,7 @@ func get_all_used_cells():
 func local_to_map(local:Vector2)->Vector2i:
 	return tile_map.local_to_map(local)
 	
-func map_to_local(map:Vector2i)->Vector2i:
+func map_to_local(map:Vector2i)->Vector2:
 	return tile_map.map_to_local(map)
 
 # --------------------------------------------------------------------------------------------------

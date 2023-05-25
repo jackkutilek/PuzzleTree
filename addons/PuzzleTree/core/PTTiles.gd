@@ -114,6 +114,20 @@ func _get_cells_with_tile_recursive(atlas: Vector2i, layer:int, cells: Array[Vec
 	if is_layer_valid(layer+1):
 		_get_cells_with_tile_recursive(atlas, layer+1, cells)
 
+func get_cells_with_tiles(tiles: Array[int]):
+	var atlases: Array = tiles.map(func (t): return _tile_to_atlas(t))
+	var cells: Array[Vector2i] = []
+	_get_cells_with_tiles_recursive(atlases, 0, cells)
+	return cells
+func _get_cells_with_tiles_recursive(atlases: Array, layer:int, cells: Array[Vector2i]):
+	for atlas in atlases:
+		var layer_cells = tile_map.get_used_cells_by_id(layer, 0, atlas)
+		for layer_cell in layer_cells:
+			if not cells.has(layer_cell):
+				cells.push_back(layer_cell)
+	if is_layer_valid(layer+1):
+		_get_cells_with_tiles_recursive(atlases, layer+1, cells)
+
 func get_tile_at_cell(cell:Vector2i, layer:int=0)->int:
 	if not is_layer_valid(layer):
 		return -1

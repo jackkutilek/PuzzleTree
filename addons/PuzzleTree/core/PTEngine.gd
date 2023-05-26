@@ -111,7 +111,7 @@ func _unhandled_input(event: InputEvent):
 
 func update_mouse_cell():
 	var global = root.get_global_mouse_position()
-	var local = root.to_local(global) - Vector2(.5,.5)
+	var local = root.to_local(global)
 	mouse_cell = local_to_map(local)
 
 func local_to_map(local:Vector2)->Vector2i:

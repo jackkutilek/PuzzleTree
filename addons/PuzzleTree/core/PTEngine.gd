@@ -214,6 +214,15 @@ func get_count_of_queued_presses():
 	return count
 
 func _process(delta:float):
+	if game_state.context.stop_for > 0:
+		var time_to_stop = min(delta, game_state.context.stop_for)
+		game_state.context.stop_for -= time_to_stop
+		delta -= time_to_stop
+	
+	if delta < .0001:
+		print("no update becuase stopped")
+		return
+	
 	time_since_last_frame += delta
 	time_since_last_press += delta
 	
@@ -229,6 +238,9 @@ func _process(delta:float):
 				run_again_frame(frame_time)
 				again_time += frame_time
 				count += 1
+				if game_state.context.stop_for > 0:
+					return
+				#TODO check if stopped and consume stop time if delta has time remaining
 	else:
 		var next = get_queued_input()
 		if next != null:
@@ -364,6 +376,7 @@ func reset_control_flags(context):
 	context.force_release_keys = []
 	context.force_release_mouse = false
 	
+	context.stop_for = 0
 	context.again_interval = again_interval
 	context.key_repeat_interval = key_repeat_interval
 

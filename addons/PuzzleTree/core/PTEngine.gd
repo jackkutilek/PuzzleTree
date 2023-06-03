@@ -441,7 +441,7 @@ func get_tree_nodes_recursive(node: Node, collected_nodes: Array[Node]):
 
 # ---------------------------------------------------------
 
-func set_level(id):
+func switch_to_level(id:int):
 	var levels_size = 1
 	if ptproject != null:
 		levels_size = ptproject.levels.size()
@@ -452,18 +452,23 @@ func set_level(id):
 	
 	if game_state.current_level_id != id:
 		print("switch to level ", id)
-		game_state.set_level(id)
-		if not Engine.is_editor_hint():
-			logger.log(1, str("init update"))
-			init_update()
-			game_state.save_state(game_state.gather_state())
-			logger.log(1, str("init update saved"))
+		load_level(id)
+
+func load_level(id:int, initial_context={}):
+	print("switch to level ", id)
+	game_state.load_level(id, initial_context)
+	
+	if not Engine.is_editor_hint():
+		logger.log(1, str("init update"))
+		init_update()
+		game_state.save_state(game_state.gather_state())
+		logger.log(1, str("init update saved"))
 
 func next_level():
-	set_level(game_state.current_level_id+1)
+	switch_to_level(game_state.current_level_id+1)
 
 func prev_level():
-	set_level(game_state.current_level_id-1)
+	switch_to_level(game_state.current_level_id-1)
 
 func has_next_level():
 	var levels_size = 1

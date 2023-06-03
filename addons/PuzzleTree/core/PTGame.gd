@@ -4,18 +4,18 @@
 extends Node2D
 class_name PTGame
 
-@export var puzzletree_project: PuzzleTreeProject : set = set_project
-@export var reload_pt_project = false : set = reload_project
+@export var puzzletree_project: PuzzleTreeProject : set = _set_project
+@export var reload_pt_project = false : set = _reload_project
 @export var base_tile_size: Vector2i = Vector2i(5,5)
-@export var starting_level: int = 0 : set = set_level
+@export var starting_level: int = 0 : set = _set_starting_level
 @export var clear_color: Color = Color.GRAY
 
 @export var run_turns_on_keyup = false
 @export var enable_mouse_turns = false
-@export var key_repeat_interval:float = .2 : set = set_key_repeat_interval
-@export var again_interval:float = .1 : set = set_again_interval
-@export var realtime_interval:float = 0.0 : set = set_realtime_interval
-@export var log_level:int = 0 : set = set_log_level
+@export var key_repeat_interval:float = .2 : set = _set_key_repeat_interval
+@export var again_interval:float = .1 : set = _set_again_interval
+@export var realtime_interval:float = 0.0 : set = _set_realtime_interval
+@export var log_level:int = 0 : set = _set_log_level
 
 var is_ready = false
 var engine: PTEngine
@@ -23,37 +23,42 @@ var layers: PTLayers
 
 # --------------------------------------------------------------------------------------------------
 
-func set_project(value):
+func load_level(id:int, initial_context={}):
+	engine.load_level(id, initial_context)
+
+# --------------------------------------------------------------------------------------------------
+
+func _set_project(value):
 	if puzzletree_project == value:
 		return
 		
 	if Engine.is_editor_hint():
 		if puzzletree_project != null:
-			puzzletree_project.disconnect("changed",ptp_changed)
+			puzzletree_project.disconnect("changed",_ptp_changed)
 			
 	puzzletree_project = value
 	if puzzletree_project == null:
 		return
 	
 	if Engine.is_editor_hint():
-		if not puzzletree_project.is_connected("changed",ptp_changed):
-			puzzletree_project.connect("changed",ptp_changed)
+		if not puzzletree_project.is_connected("changed",_ptp_changed):
+			puzzletree_project.connect("changed",_ptp_changed)
 			print("#-- Watching for changes to PuzzleTree project at ", puzzletree_project.resource_path, " --#")
 	
 	if Engine.is_editor_hint() and is_ready:
 		print("#-- PuzzleTree project set --#")
-		load_project()
+		_load_project()
 
-func reload_project(value):
+func _reload_project(value):
 	if Engine.is_editor_hint() and value:
 		print("#-- triggered PuzzleTree project reload at ", Time.get_datetime_string_from_system(false, true) ," --#")
-		load_project()
+		_load_project()
 
-func ptp_changed():
+func _ptp_changed():
 	print("#-- PuzzleTree project changes detected at ", Time.get_datetime_string_from_system(false, true) ,"... reloading project --#")
-	load_project()
+	_load_project()
 
-func load_project():
+func _load_project():
 	if not is_ready or get_tree() == null:
 		print("#-- !! cannot load PuzzleTree project !! --#")
 		return
@@ -64,19 +69,19 @@ func load_project():
 	else:
 		print("#-- loading game with no project --#")
 	
-	initialize_layers_node()
-	initialize_engine()
-	initialize_camera_node()
-	engine.set_level(starting_level)
+	_initialize_layers_node()
+	_initialize_engine()
+	_initialize_camera_node()
+	engine.switch_to_level(starting_level)
 
 # --------------------------------------------------------------------------------------------------
 
-func initialize_layers_node():
+func _initialize_layers_node():
 	layers = PTLayers.new()
 	layers.root_node = self
 	layers.set_pt_project(puzzletree_project)
 
-func initialize_engine():
+func _initialize_engine():
 	engine = PTEngine.new()
 	engine.initialize(self, layers)
 	engine.run_turns_on_keyup = run_turns_on_keyup
@@ -85,15 +90,15 @@ func initialize_engine():
 	engine.realtime_interval = realtime_interval
 	engine.key_repeat_interval = key_repeat_interval
 	engine.base_tile_size = base_tile_size
-	engine.set_level(starting_level)
+	engine.switch_to_level(starting_level)
 
-func initialize_camera_node():
+func _initialize_camera_node():
 	if Engine.is_editor_hint():
 		if get_viewport().get_camera_2d() != null:
 			print("#-- active camera already exists, will not create PTCamera --#")
 			return
 		
-		for node in get_tree_nodes():
+		for node in _get_tree_nodes():
 			if node.get_class() == "Camera2D":
 				print("#-- camera node already exists, will not create PTCamera --#")
 				node.make_current()
@@ -110,10 +115,11 @@ func initialize_camera_node():
 
 # --------------------------------------------------------------------------------------------------
 
-func set_level(value):
+func _set_starting_level(value):
 	if puzzletree_project == null or engine == null:
 		starting_level = value
 		return
+	
 	if value >= puzzletree_project.levels.size():
 		value = puzzletree_project.levels.size()-1
 	if value < 0:
@@ -121,19 +127,19 @@ func set_level(value):
 	
 	if starting_level != value:
 		starting_level = value
-		engine.set_level(starting_level)
+		engine.switch_to_level(starting_level)
 
 # --------------------------------------------------------------------------------------------------
 
-func get_tree_nodes():
+func _get_tree_nodes():
 	var nodes = []
-	get_tree_nodes_recursive(self, nodes)
+	_get_tree_nodes_recursive(self, nodes)
 	return nodes
 
-func get_tree_nodes_recursive(node, collected_nodes):
+func _get_tree_nodes_recursive(node, collected_nodes):
 	collected_nodes.push_back(node)
 	for child in node.get_children():
-		get_tree_nodes_recursive(child, collected_nodes)
+		_get_tree_nodes_recursive(child, collected_nodes)
 
 # --------------------------------------------------------------------------------------------------
 
@@ -141,7 +147,7 @@ func _ready():
 	is_ready = true
 		
 	print("#-- game ready, loading project --#")
-	load_project()
+	_load_project()
 
 func _process(delta):
 	if not Engine.is_editor_hint():
@@ -162,21 +168,21 @@ func _unhandled_input(event):
 			get_viewport().set_input_as_handled()
 	
 
-func set_key_repeat_interval(value):
+func _set_key_repeat_interval(value):
 	key_repeat_interval = value
 	if engine != null:
 		engine.key_repeat_interval = value
 		
-func set_again_interval(value):
+func _set_again_interval(value):
 	again_interval = value
 	if engine != null:
 		engine.again_interval = value
 
-func set_realtime_interval(value):
+func _set_realtime_interval(value):
 	realtime_interval = value
 	if engine != null:
 		engine.realtime_interval = value
 
-func set_log_level(value):
+func _set_log_level(value):
 	log_level = value
 	logger.log_level = value

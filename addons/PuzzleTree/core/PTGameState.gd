@@ -14,12 +14,13 @@ signal state_loaded
 
 # --------------------------------------------------------------------------------------------------
 
-func set_level(id:int):
+func load_level(id:int, initial_context = {}):
 	current_level_id = id
 	
 	if ptproject == null:
 		return
 	
+	context = initial_context
 	undo_stack.clear()
 	redo_stack.clear()
 	layers.clear_layers()

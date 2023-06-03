@@ -35,8 +35,7 @@ func remove_tile_from_cell(tile: int, cell:Vector2i, dir:String = "any"):
 	_remove_tile_from_cell(tile, cell, dir, 0)
 func _remove_tile_from_cell(tile:int, cell:Vector2i, dir:String, layer:int):
 	if not is_layer_valid(layer):
-		if logger.log_level > 2:
-			print("trying to remove tile from a tilemap that doesn't have it")
+		logger.log(3, "trying to remove tile from a tilemap that doesn't have it")
 		return
 	
 	var tile_match = get_tile_at_cell(cell, layer) == tile

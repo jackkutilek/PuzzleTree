@@ -11,36 +11,6 @@ class_name PTEntities
 func clear_map():
 	entities.clear()
 
-func load_level(layer_def, level_def):
-	var tile_offset := Vector2i(level_def.worldX/layer_def.__gridSize, level_def.worldY/layer_def.__gridSize)
-	
-	for entity in layer_def.entityInstances:
-		var new_entity = {}
-		new_entity.id = entity.__identifier
-		new_entity.cell = Vector2i(entity.__grid[0], entity.__grid[1]) + tile_offset
-		new_entity.width = entity.width/layer_def.__gridSize
-		new_entity.height = entity.height/layer_def.__gridSize
-		for fi in entity.fieldInstances:
-			if ["cell","width","height"].has(fi.__identifier):
-				print("don't name an entity field '", fi.__identifier, "' - it is a reserved name!")
-				continue
-			var field_id = fi.__identifier
-			match fi.__type:
-				"Bool", "Int", "Float", "String":
-					new_entity[field_id] = fi.__value
-				"Array<Bool>", "Array<Int>", "Array<Float>", "Array<String>":
-					new_entity[field_id] = []
-					for p in fi.__value:
-						new_entity[field_id].push_back(p)
-				"Point":
-					new_entity[field_id] = Vector2i(fi.__value.cx, fi.__value.cy)
-				"Array<Point>":
-					new_entity[field_id] = []
-					for p in fi.__value:
-						new_entity[field_id].push_back(Vector2i(p.cx, p.cy)+tile_offset)
-			
-		entities.push_back(new_entity)
-
 func deep_clone(dict):
 	if dict is int or dict is float or dict is bool or dict is String:
 		return dict

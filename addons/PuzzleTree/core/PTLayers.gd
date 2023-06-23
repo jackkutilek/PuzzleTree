@@ -58,10 +58,11 @@ func serialize_tilemaps():
 		for layer in range(map.layer_count):
 			var layer_data = {}
 			map_data[layer] = layer_data
-			for cell in map.tile_map.get_used_cells(layer):
-				var tile = map.tile_map.get_cell_atlas_coords(layer, cell)
-				var alt = map.tile_map.get_cell_alternative_tile(layer, cell)
-				layer_data[cell] = [tile, alt]
+			if map.tile_map != null:
+				for cell in map.tile_map.get_used_cells(layer):
+					var tile = map.tile_map.get_cell_atlas_coords(layer, cell)
+					var alt = map.tile_map.get_cell_alternative_tile(layer, cell)
+					layer_data[cell] = [tile, alt]
 		serialized_data[map.get_path()] = map_data
 	
 	for entities in get_entity_layers().values():

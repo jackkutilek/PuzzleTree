@@ -59,7 +59,8 @@ func clear_cell(cell:Vector2i):
 			layer += 1
 
 func clear_map():
-	tile_map.clear()
+	if tile_map != null:
+		tile_map.clear()
 
 # --------------------------------------------------------------------------------------------------
 

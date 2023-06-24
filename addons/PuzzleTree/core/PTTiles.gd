@@ -68,13 +68,32 @@ func get_tiles_at_cell(cell:Vector2i)->Array[int]:
 	var tiles:Array[int] = []
 	_get_tiles_at_cell_recursive(cell, tiles, 0)
 	return tiles
-func _get_tiles_at_cell_recursive(cell:Vector2i, tiles:Array, layer:int)->Array[int]:
+func _get_tiles_at_cell_recursive(cell:Vector2i, tiles:Array[int], layer:int)->Array[int]:
 	var tile = get_tile_at_cell(cell, layer)
 	if tile != -1:
 		tiles.append(tile)
 		_get_tiles_at_cell_recursive(cell, tiles, layer+1)
 	return tiles
 
+func get_cell(cell:Vector2i):
+	var tiles = []
+	_get_cell_recursive(cell, tiles, 0)
+	return tiles
+func _get_cell_recursive(cell:Vector2i, tiles:Array, layer:int)->Array:
+	var tile = get_tile_at_cell(cell, layer)
+	if tile != -1:
+		var dir = get_dir_at_cell(cell, layer)
+		tiles.append({tile=tile, dir=dir})
+		_get_cell_recursive(cell, tiles, layer+1)
+	return tiles
+
+func set_cell(cell:Vector2i, tiles:Array):
+	clear_cell(cell)
+	for tile in tiles:
+		stack_tile_at_cell(tile.tile, cell, tile.dir)
+
+func get_first_tile_dir_at_cell(tile:int, cell:Vector2i):
+	return get_tile_dir_at_cell(tile,cell)
 func get_tile_dir_at_cell(tile:int, cell:Vector2i):
 	var layer = 0
 	while is_layer_valid(layer):
@@ -86,13 +105,17 @@ func get_tile_dir_at_cell(tile:int, cell:Vector2i):
 func is_empty_at_cell(cell:Vector2i):
 	return not _is_cell_taken(cell, 0)
 
+func has_any_tile_at_cell(cell:Vector2i):
+	return _is_cell_taken(cell, 0)
+
 func any_tile_at_cell(cell:Vector2i):
 	return _is_cell_taken(cell, 0)
 
 func has_tile_at_cell(tile: int, cell:Vector2i, dir:String = "any"):
 	var layer = 0
 	while is_layer_valid(layer):
-		if get_tile_at_cell(cell, layer) == tile:
+		var tile_at_cell = get_tile_at_cell(cell, layer)
+		if tile_at_cell == tile or (tile == -1 and tile_at_cell != -1):
 			if dir == "any":
 				return true
 			var tile_dir = get_dir_at_cell(cell, layer)
@@ -100,6 +123,9 @@ func has_tile_at_cell(tile: int, cell:Vector2i, dir:String = "any"):
 				return true
 		layer += 1
 	return false
+
+func has_dir_at_cell(dir:String, cell:Vector2i):
+	return has_tile_at_cell(-1, cell, dir)
 
 func get_cells_with_tile(tile: int):
 	var atlas = _tile_to_atlas(tile)

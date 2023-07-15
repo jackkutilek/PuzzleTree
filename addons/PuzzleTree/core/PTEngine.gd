@@ -224,6 +224,8 @@ func _process(delta:float):
 	time_since_last_frame += delta
 	time_since_last_press += delta
 	
+	var computation_time = 0
+	
 	var queued_press_count = get_count_of_queued_presses()
 	var frame_acceleration = 1.0/(1+queued_press_count)
 	var frame_time = again_interval * frame_acceleration
@@ -233,7 +235,10 @@ func _process(delta:float):
 			var again_time = 0
 			var count = 0
 			while againing and (again_time + frame_time) < available_time and count < MAX_FRAMES_PER_PROCESS:
+				var frame_execution_start = Time.get_ticks_usec()
 				run_again_frame(frame_time)
+				var frame_execution_time = Time.get_ticks_usec() - frame_execution_start
+				computation_time += frame_execution_time
 				again_time += frame_time
 				count += 1
 				if game_state.context.stop_for > 0:

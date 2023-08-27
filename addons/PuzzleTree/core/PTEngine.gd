@@ -118,7 +118,7 @@ func local_to_map(local:Vector2)->Vector2i:
 	return Vector2i(int(local.x/base_tile_size.x), int(local.y/base_tile_size.y))
 
 func queue_input(input: String):
-	if game_state.context.winning:
+	if game_state.context.frame.winning:
 		return	# don't queue input during win wait time
 	
 	if Inputs.is_released_key(input) and not pressed_keys.has(Inputs.get_key_dir(input)):
@@ -212,9 +212,9 @@ func get_count_of_queued_presses():
 	return count
 
 func _process(delta:float):
-	if game_state.context.stop_for > 0:
-		var time_to_stop = min(delta, game_state.context.stop_for)
-		game_state.context.stop_for -= time_to_stop
+	if game_state.context.frame.stop_for > 0:
+		var time_to_stop = min(delta, game_state.context.frame.stop_for)
+		game_state.context.frame.stop_for -= time_to_stop
 		delta -= time_to_stop
 	
 	if delta < .0001:
@@ -241,7 +241,7 @@ func _process(delta:float):
 				computation_time += frame_execution_time
 				again_time += frame_time
 				count += 1
-				if game_state.context.stop_for > 0:
+				if game_state.context.frame.stop_for > 0:
 					return
 				#TODO check if stopped and consume stop time if delta has time remaining
 	else:
@@ -250,7 +250,7 @@ func _process(delta:float):
 			# process the queued input
 			logger.log(1, str("#-- BEGIN TURN ", Inputs.get_key_string(next), " --#"))
 			logger.log(1, str("#-- FIRST FRAME ", Inputs.get_key_string(next), " --#"))
-			game_state.context.is_repeat_turn = false
+			game_state.context.frame.is_repeat_turn = false
 			update_key_state_in_context()
 			run_frame(next)
 			if next == Inputs.REALTIME:
@@ -261,7 +261,7 @@ func _process(delta:float):
 			if time_since_last_press > key_repeat_interval:
 				logger.log(1, str("#-- REPEAT TURN ", last_press, " --#"))
 				logger.log(1, str("#-- FIRST FRAME ", last_press, " --#"))
-				game_state.context.is_repeat_turn = true
+				game_state.context.frame.is_repeat_turn = true
 				update_key_state_in_context()
 				run_frame(Inputs.get_pressed_key(last_press))
 				time_since_last_press = 0
@@ -273,7 +273,7 @@ func _process(delta:float):
 
 func run_again_frame(frame_time):
 	logger.log(1, str("  #-- AGAIN FRAME in ", time_since_last_frame, " -- threshold: ", frame_time, " --#"))
-	game_state.context.is_repeat_turn = false
+	game_state.context.frame.is_repeat_turn = false
 	run_frame(Inputs.AGAIN)
 
 func run_frame(frame_key):
@@ -285,45 +285,45 @@ func run_frame(frame_key):
 	
 	# apply turn reason to frame context
 	reset_control_flags(context)
-	context.frame_key = frame_key
+	context.frame.key = frame_key
 	
 	if not frame_key == Inputs.AGAIN:
 		turn_start_state = game_state.gather_state()
 	
 	if Inputs.is_pressed_key(frame_key) or frame_key == Inputs.MOUSE_DOWN:
-		if not context.nosave:
+		if not context.frame.nosave:
 			state_to_save = turn_start_state
 			logger.log(1, str("turn start state set"))
-		if context.nosave:
+		if context.frame.nosave:
 			logger.log(1, str("nosave reset to false"))
-			context.nosave = false
+			context.frame.nosave = false
 	
 	frame_update(context)
 	
-	context.again = context.again and not context.cancel
-	againing = context.again
+	context.frame.again = context.frame.again and not context.frame.cancel
+	againing = context.frame.again
 	
-	if context.force_release_all_keys:
+	if context.frame.force_release_all_keys:
 		force_release_keys(Directions.ALL_DIRS)
-		context.force_release_all_keys = false
+		context.frame.force_release_all_keys = false
 	
-	if context.force_release_keys.size() > 0:
-		force_release_keys(context.force_release_keys)
-		context.force_release_keys.clear()
+	if context.frame.force_release_keys.size() > 0:
+		force_release_keys(context.frame.force_release_keys)
+		context.frame.force_release_keys.clear()
 	
-	if context.force_release_mouse:
+	if context.frame.force_release_mouse:
 		force_release_mouse()
-		context.force_release_mouse = false
+		context.frame.force_release_mouse = false
 	
-	if context.nosave:
+	if context.frame.nosave:
 		logger.log(1, str("no save"))
 	
-	if context.cancel:
+	if context.frame.cancel:
 		game_state.load_state(turn_start_state)
 		logger.log(1, str("#-- CANCEL TURN --#"))
 		logger.log(1, str("#----#"))
 	else:
-		if state_to_save != null and not context.again:
+		if state_to_save != null and not context.frame.again:
 			# end of turn
 			var end_state = game_state.gather_state()
 			var turn_made_changes = state_to_save != end_state
@@ -332,7 +332,7 @@ func run_frame(frame_key):
 				game_state.save_state(state_to_save)
 				logger.log(1, str("state saved"))
 				
-			if context.checkpoint:
+			if context.frame.checkpoint:
 				game_state.set_checkpoint(end_state)
 				logger.log(1, str("checkpoint set"))
 			
@@ -341,45 +341,49 @@ func run_frame(frame_key):
 			logger.log(1, str("#-- END TURN --#"))
 			logger.log(1, str("#----#"))
 	
-	if context.winning:
+	if context.frame.winning:
 		force_release_keys(Directions.ALL_DIRS)
 		force_release_mouse()
 		queued.clear()
-		context.again = false
+		context.frame.again = false
 		againing = false 
 		if has_next_level():
 			await root.get_tree().create_timer(1).timeout
-			context.winning = false
+			context.frame.winning = false
 			next_level()
 		else:
-			context.winning = false
+			context.frame.winning = false
 	
-	again_interval = context.again_interval
-	key_repeat_interval = context.key_repeat_interval
+	again_interval = context.frame.again_interval
+	key_repeat_interval = context.frame.key_repeat_interval
 		
 	time_since_last_frame = 0
 
 func reset_control_flags(context):
-	context.again = false
-	context.cancel = false
-	context.finish_frame_early = false
-	context.winning = false
-	context.checkpoint = false
-	context.force_release_all_keys = false
-	context.force_release_keys = []
-	context.force_release_mouse = false
+	if not context.has('frame'):
+		context.frame = {}
+	var frame = context.frame
 	
-	context.stop_for = 0
-	context.again_interval = again_interval
-	context.key_repeat_interval = key_repeat_interval
+	frame.again = false
+	frame.cancel = false
+	frame.finish_frame_early = false
+	frame.winning = false
+	frame.checkpoint = false
+	frame.force_release_all_keys = false
+	frame.force_release_keys = []
+	frame.force_release_mouse = false
+	
+	frame.stop_for = 0
+	frame.again_interval = again_interval
+	frame.key_repeat_interval = key_repeat_interval
 
 func update_key_state_in_context():
-	var context = game_state.context
-	context.pressed_keys = []
-	context.pressed_keys.append_array(pressed_keys)
+	var frame = game_state.context.frame
+	frame.pressed_keys = []
+	frame.pressed_keys.append_array(pressed_keys)
 	
-	context.mouse_cell = mouse_cell
-	context.mouse_is_down = mouse_is_down
+	frame.mouse_cell = mouse_cell
+	frame.mouse_is_down = mouse_is_down
 	
 
 func _on_game_state_state_loaded():
@@ -389,8 +393,8 @@ func _on_game_state_state_loaded():
 
 func init_update():
 	reset_control_flags(game_state.context)
-	game_state.context.frame_key = null
-	game_state.context.nosave = false
+	game_state.context.frame.key = null
+	game_state.context.frame.nosave = false
 	
 	for node in get_tree_nodes():
 		if node.has_method('init_update'):
@@ -401,7 +405,7 @@ func init_update():
 
 func reset_update():
 	reset_control_flags(game_state.context)
-	game_state.context.frame_key = null
+	game_state.context.frame.key = null
 	
 	for node in get_tree_nodes():
 		if node.has_method('reset_update'):
@@ -412,21 +416,21 @@ func reset_update():
 
 func frame_update(context):
 	for node in get_tree_nodes():
-		if context.cancel:
+		if context.frame.cancel:
 			logger.log(1, str("    cancel"))
 			break
-		if context.finish_frame_early:
+		if context.frame.finish_frame_early:
 			logger.log(1, str("    finish early"))
 			break
 		if node.has_method("frame_update"):
 			node.frame_update(context)
-	if not context.cancel and not context.finish_frame_early:
+	if not context.frame.cancel and not context.frame.finish_frame_early:
 		logger.log(2, str("    #-- run late update --#"))
 		for node in get_tree_nodes():
-			if context.cancel:
+			if context.frame.cancel:
 				logger.log(1, str("    cancel"))
 				break
-			if context.finish_frame_early:
+			if context.frame.finish_frame_early:
 				logger.log(1, str("    finish early"))
 				break
 			if node.has_method("late_frame_update"):

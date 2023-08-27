@@ -10,13 +10,13 @@ const WALL = 4
 
 # Called once during each frame
 func frame_update(context):	
-	if context.dragging and context.frame_key == Inputs.MOUSE_MOVE:
-		if cell_is_free(context.mouse_cell):
+	if context.dragging and context.frame.key == Inputs.MOUSE_MOVE:
+		if cell_is_free(context.frame.mouse_cell):
 			grid.remove_tile_from_cell(CRATE, context.previous_mouse_cell)
-			grid.stack_tile_at_cell(CRATE, context.mouse_cell)
+			grid.stack_tile_at_cell(CRATE, context.frame.mouse_cell)
 			context.next_player_cell = context.previous_mouse_cell
 		else:
-			context.force_release_mouse = true
+			context.frame.force_release_mouse = true
 			context.dragging = false
 	pass
 

@@ -33,8 +33,8 @@ func frame_update(context):
 		return
 	
 	if HandleInput:
-		var pressed = Inputs.is_pressed_key(context.frame_key)
-		var key_dir = Inputs.get_key_dir(context.frame_key)
+		var pressed = Inputs.is_pressed_key(context.frame.key)
+		var key_dir = Inputs.get_key_dir(context.frame.key)
 		if pressed:
 			var movement := get_node("%PTMovement") as PTMovement
 			if movement != null:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=15 format=3 uid="uid://dejdi1vwmcs30"]
 
 [ext_resource type="Script" path="res://addons/PuzzleTree/core/PTTiles.gd" id="1"]
 [ext_resource type="Script" path="res://addons/PuzzleTree/core/PTGame.gd" id="2"]

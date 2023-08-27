@@ -26,7 +26,7 @@ func init_update(context):
 # Called once during each frame
 func frame_update(context):
 	if context.next_player_cell != null:
-		var offset = context.mouse_cell - context.next_player_cell
+		var offset = context.frame.mouse_cell - context.next_player_cell
 		var test_cell = context.next_player_cell - offset
 		
 		context.player_cell = context.next_player_cell
@@ -66,7 +66,7 @@ func late_frame_update(context):
 				next_update.append(neighbor)
 			
 		if next_update.size() > 0:
-			context.again = true
+			context.frame.again = true
 			context.to_update = next_update
 			
 	pass
@@ -79,7 +79,7 @@ func spread_grass(context, from):
 			var has_dirt = reach.has_tile_at_cell(DIRT, neighbor)
 			if not has_crate and has_dirt:
 				reach.set_tile_at_cell(GRASS, neighbor)
-				context.again = true
+				context.frame.again = true
 
 
 func initialize_new_grass(context, start):

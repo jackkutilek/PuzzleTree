@@ -16,14 +16,14 @@ func init_update(context):
 
 # Called once during each frame
 func frame_update(context):
-	if context.frame_key == Inputs.MOUSE_DOWN:
-		if grid.has_tile_at_cell(CRATE, context.mouse_cell):
+	if context.frame.key == Inputs.MOUSE_DOWN:
+		if grid.has_tile_at_cell(CRATE, context.frame.mouse_cell):
 			context.dragging = true
 	
-	if context.frame_key == Inputs.MOUSE_UP:
+	if context.frame.key == Inputs.MOUSE_UP:
 		context.dragging = false
 	
-	if context.frame_key == Inputs.MOUSE_MOVE:
+	if context.frame.key == Inputs.MOUSE_MOVE:
 		context.previous_mouse_cell = context.cursor_cell
 	pass
 

@@ -13,5 +13,5 @@ func late_frame_update(context:Dictionary):
 		if not winning:
 			break
 	
-	context.winning = winning
+	context.frame.winning = winning
 

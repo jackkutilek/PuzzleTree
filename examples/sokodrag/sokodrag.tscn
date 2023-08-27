@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=10 format=3 uid="uid://bwxls5ih1tehd"]
 
 [ext_resource type="Script" path="res://addons/PuzzleTree/core/PTGame.gd" id="1"]
 [ext_resource type="Resource" uid="uid://boeugfnk42q87" path="res://examples/sokodrag/sokodrag.ldtk" id="2_0jwr0"]
@@ -22,34 +22,29 @@ again_interval = 0.03
 [node name="BG" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-scale = Vector2(1, 1)
 script = ExtResource("3_omtnn")
 texture = ExtResource("4_5t7c1")
 
 [node name="Reach" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-scale = Vector2(1, 1)
 script = ExtResource("3_omtnn")
 texture = ExtResource("4_5t7c1")
 
 [node name="Grid" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-scale = Vector2(1, 1)
 script = ExtResource("3_omtnn")
 texture = ExtResource("4_5t7c1")
 
 [node name="Lines" type="Node2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(-0.5, -0.5)
-scale = Vector2(1, 1)
 script = ExtResource("3_omtnn")
 texture = ExtResource("4_5t7c1")
 
 [node name="Start" type="Node2D" parent="."]
 unique_name_in_owner = true
-scale = Vector2(1, 1)
 script = ExtResource("5_e5swk")
 entities = [{
 "cell": Vector2i(6, 3),
@@ -59,7 +54,6 @@ entities = [{
 }]
 
 [node name="PTCamera" type="Camera2D" parent="."]
-scale = Vector2(1, 1)
 offset = Vector2(0.5, 0.5)
 zoom = Vector2(657, 657)
 script = ExtResource("5_g311p")

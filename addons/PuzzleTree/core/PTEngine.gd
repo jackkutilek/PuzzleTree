@@ -34,10 +34,19 @@ func _unhandled_key_input(event: InputEvent):
 		match event.keycode:
 			KEY_Z:
 				abort_turn()
-				game_state.undo()
+				if state_to_save != null:
+					game_state.load_state(state_to_save)
+					state_to_save = null
+					turn_start_state = null
+				else:
+					game_state.undo()
 				return true
 			KEY_R:
 				abort_turn()
+				if state_to_save != null:
+					game_state.load_state(state_to_save)
+					state_to_save = null
+					turn_start_state = null
 				game_state.reset()
 				return true
 			KEY_C:

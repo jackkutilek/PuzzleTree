@@ -11,8 +11,8 @@ const RELEASE_DOWN = 'release down'
 const RELEASE_LEFT = 'release left'
 const RELEASE_RIGHT = 'release right'
 
-const PRESS_ACTION = 'action'
-const RELEASE_ACTION = 'action'
+const PRESS_ACTION = 'press action'
+const RELEASE_ACTION = 'release action'
 
 const MOUSE_DOWN = 'mouse down'
 const MOUSE_UP = 'mouse up'

@@ -93,21 +93,22 @@ func _unhandled_key_input(event: InputEvent):
 	return false
 
 func _unhandled_input(event: InputEvent):
-	if event is InputEventMouseButton:
-		if event.button_index == 1:
+	if enable_mouse_turns:
+		if event is InputEventMouseButton:
+			if event.button_index == 1:
+				update_mouse_cell()
+				if event.is_pressed():
+					queue_input(Inputs.MOUSE_DOWN)
+				else:
+					queue_input(Inputs.MOUSE_UP)
+				return true
+		
+		if event is InputEventMouseMotion:
+			var old_cell = mouse_cell
 			update_mouse_cell()
-			if event.is_pressed():
-				queue_input(Inputs.MOUSE_DOWN)
-			else:
-				queue_input(Inputs.MOUSE_UP)
-			return true
-	
-	if event is InputEventMouseMotion:
-		var old_cell = mouse_cell
-		update_mouse_cell()
-		if old_cell != mouse_cell:
-			# TODO add all cells in between old and new cells
-			queue_input(Inputs.MOUSE_MOVE)
+			if old_cell != mouse_cell:
+				# TODO add all cells in between old and new cells
+				queue_input(Inputs.MOUSE_MOVE)
 
 func update_mouse_cell():
 	var global = root.get_global_mouse_position()

@@ -6,6 +6,7 @@ const UP = 'up'
 const DOWN = 'down'
 
 const ALL_DIRS = [UP, DOWN, LEFT, RIGHT]
+const DIR_VECTORS = [Vector2i.UP, Vector2i.DOWN, Vector2i.LEFT, Vector2i.RIGHT]
 
 # --------------------------------------------------------------------------------------------------
 func dir_from_index(index:int):
@@ -76,6 +77,9 @@ func rotate_ccw(dir):
 			return UP
 
 # --------------------------------------------------------------------------------------------------
+
+func get_dir_vector(dir: String)->Vector2i:
+	return DIR_VECTORS[get_dir_index(dir)]
 
 func vector_to_dir(vector: Vector2i):
 	return get_dir_from_cell_to_cell(Vector2i.ZERO, vector)

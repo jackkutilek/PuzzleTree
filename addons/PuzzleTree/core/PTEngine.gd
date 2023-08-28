@@ -167,9 +167,10 @@ func get_queued_input():
 func note_key_press(input):
 	time_since_last_press = 0
 	var dir = Inputs.get_key_dir(input)
-	if pressed_keys.has(dir):
-		pressed_keys.erase(dir)
-	pressed_keys.push_back(dir)
+	if dir != null:
+		if pressed_keys.has(dir):
+			pressed_keys.erase(dir)
+		pressed_keys.push_back(dir)
 
 func note_key_release(input):
 	var dir = Inputs.get_key_dir(input)

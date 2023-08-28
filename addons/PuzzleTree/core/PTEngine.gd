@@ -35,6 +35,7 @@ func _unhandled_key_input(event: InputEvent):
 			KEY_Z:
 				abort_turn()
 				if state_to_save != null:
+					print("undo: reset from turn start state")
 					game_state.load_state(state_to_save)
 					state_to_save = null
 					turn_start_state = null
@@ -330,7 +331,11 @@ func run_frame(frame_key):
 		logger.log(1, str("no save"))
 	
 	if context.frame.cancel:
+		force_release_keys(Directions.ALL_DIRS)
+		force_release_mouse()
 		game_state.load_state(turn_start_state)
+		turn_start_state = null
+		state_to_save = null
 		logger.log(1, str("#-- CANCEL TURN --#"))
 		logger.log(1, str("#----#"))
 	else:

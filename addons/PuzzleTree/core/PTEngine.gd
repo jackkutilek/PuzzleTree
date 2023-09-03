@@ -218,7 +218,7 @@ func _process(delta:float):
 		delta -= time_to_stop
 	
 	if delta < .0001:
-		print("no update because stopped")
+		#print("no update because stopped")
 		return
 	
 	time_since_last_frame += delta

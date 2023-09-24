@@ -1,6 +1,8 @@
 extends RefCounted
 class_name PTEngine
 
+signal quit
+
 var queued := []
 var pressed_keys := []
 var key_repeat_interval := 1.0
@@ -62,7 +64,7 @@ func _unhandled_key_input(event: InputEvent):
 				next_level()
 				return true
 			KEY_ESCAPE:
-				root.get_tree().quit()
+				emit_signal('quit')
 				return true
 	
 	if event.is_echo():

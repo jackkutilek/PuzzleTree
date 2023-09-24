@@ -4,6 +4,8 @@
 extends Node2D
 class_name PTGame
 
+signal quit
+
 @export var puzzletree_project: PuzzleTreeProject : set = _set_project
 @export var reload_pt_project = false : set = _reload_project
 @export var base_tile_size: Vector2i = Vector2i(5,5)
@@ -84,6 +86,7 @@ func _initialize_layers_node():
 func _initialize_engine():
 	engine = PTEngine.new()
 	engine.initialize(self, layers)
+	engine.connect('quit', _engine_quit)
 	engine.run_turns_on_keyup = run_turns_on_keyup
 	engine.enable_mouse_turns = enable_mouse_turns
 	engine.again_interval = again_interval
@@ -91,6 +94,13 @@ func _initialize_engine():
 	engine.key_repeat_interval = key_repeat_interval
 	engine.base_tile_size = base_tile_size
 	engine.switch_to_level(starting_level)
+
+func _engine_quit():
+	var connections = get_signal_connection_list('quit')
+	if connections.size() > 0:
+		emit_signal('quit')
+	else:
+		get_tree().quit()
 
 func _initialize_camera_node():
 	if Engine.is_editor_hint():

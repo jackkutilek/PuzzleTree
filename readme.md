@@ -20,6 +20,8 @@ The toolkit is built as a plugin for Godot, and is made up of:
 - Input buffering with dynamic execution speed to keep input the queue length short
 - Built-in undo & reset
 
+Read [the wiki](https://github.com/jackkutilek/PuzzleTree/wiki) for more details.
+
 PuzzleTree is a work in progress! I am adding to it as needed to support my current game projects.
 
 # Quick-Start Guide

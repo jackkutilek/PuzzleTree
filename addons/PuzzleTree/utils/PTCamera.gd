@@ -43,7 +43,7 @@ func late_reset_update(context):
 
 # --------------------------------------------------------------------------------------------------
 
-func _process(delta):
+func _physics_process(delta):
 	match mode:
 		"auto":
 			fit_to_level()
